@@ -20,7 +20,7 @@
       "What should I do first for this SEO problem?",
       "Route this site issue to the right SEO module."
     ],
-    "composerIcon": "./.codex-plugin/assets/logo.png",
-    "logo": "./.codex-plugin/assets/logo.png"
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png"
   }
 }
