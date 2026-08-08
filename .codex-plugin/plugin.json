@@ -1,6 +1,6 @@
 {
   "name": "seo-helper",
-  "version": "1.0.0+codex.20260808163539",
+  "version": "1.0.0+codex.20260808171200",
   "description": "Practical SEO decision system with 17 audit skills. Routes traffic drops, GSC issues, topical maps, cannibalization, rendering, and more.",
   "author": {
     "name": "bijay085"
@@ -12,8 +12,8 @@
     "gsc",
     "rankings"
   ],
-  "skills": "../skills/",
-  "mcpServers": "../.mcp.json",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "SEO Helper",
     "shortDescription": "SEO decision system by Bijay.",

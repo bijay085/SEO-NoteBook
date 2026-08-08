@@ -52,6 +52,8 @@ For simple definitions, answer simply. If evidence is missing, say what is missi
 Do not change, remove, rename, or "simplify" the Codex plugin icon files or paths unless the user explicitly asks for an icon change.
 
 - Keep `.codex-plugin/plugin.json` using `interface.composerIcon: "./assets/icon.png"` and `interface.logo: "./assets/logo.png"`.
+- Keep plugin component paths relative to the plugin root, not the .codex-plugin/ folder: use skills: "./skills/" and mcpServers: "./.mcp.json".
+- Do not change those paths to ../skills/ or ../.mcp.json; ChatGPT Desktop/Codex skill discovery expects plugin-root-relative paths.
 - Keep both root fallback files: `assets/icon.png` and `assets/logo.png`.
 - Keep both manifest-local files: `.codex-plugin/assets/icon.png` and `.codex-plugin/assets/logo.png`.
 - Keep `.agents/plugins/marketplace.json` pointing the marketplace card logo to `./assets/logo.png`.
