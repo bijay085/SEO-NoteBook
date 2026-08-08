@@ -1,30 +1,10 @@
-# SEO NoteBook: SEO Helper Plugin + Decision System
+# SEO NoteBook: SEO Helper
 
 SEO Helper is one clean SEO decision plugin by Bijay.
 
 It helps AI tools answer SEO questions with practical decision logic instead of generic advice.
 
-## Start Here
-
-Full setup guide:
-
-```text
-SETUP.md
-```
-
-GitHub users should start there. It has exact steps for:
-
-- ChatGPT Custom GPT
-- ChatGPT Projects
-- Claude Code
-- Claude Projects
-- Codex
-- Cursor
-- other AI tools with file uploads
-- optional MCP setup
-- future updates with `git pull`
-
-## Download
+## Fast Start on Windows
 
 ```powershell
 git clone https://github.com/bijay085/SEO-NoteBook.git
@@ -32,60 +12,64 @@ cd SEO-NoteBook
 START_HERE.bat
 ```
 
-On Windows, double-click `START_HERE.bat` after cloning. It validates the plugin and shows the exact plugin path.
+`START_HERE.bat` is the main setup launcher. It validates the plugin, then lets you choose:
 
-## What This Plugin Does
+- Claude Code plugin setup
+- ChatGPT Custom GPT setup
+- Codex / local skills setup
+- update with `git pull`
+- validate only
 
-SEO Helper is a single installable SEO decision assistant. It helps an AI agent decide what SEO action to take, what evidence to check, and which deeper audit workflow to use.
+## No Required Connectors
 
-It helps with:
+SEO Helper does not require GitHub, Semrush, Cloudflare, Google Drive, Airtable, or any other connector to answer SEO cases.
 
-- SEO decisions for traffic drops, ranking problems, new sites, local SEO, money pages, topical maps, E-E-A-T, technical SEO, AI visibility, and reporting
-- pasted source cleanup, turning Reddit threads, article notes, and observations into compact reusable rules
-- file analysis guidance for GSC exports, crawl files, logs, HTML, reports, and audit evidence
-- audit routing to the right included SEO skill
-- token optimization by loading only the relevant rule, notebook section, or audit skill
-- consistent answers using What, Why, How, Evidence, and Priority
+The core works from:
 
-## One Plugin Folder
+- pasted text
+- uploaded files
+- GSC exports
+- GA4 exports
+- crawl exports
+- screenshots
+- manual notes
+- the built-in HTML knowledgebase
 
-Install only this folder when your AI tool supports plugins:
+Optional connectors are only for live external data. Do not install them unless the workflow actually needs live data.
+
+## What It Does
+
+SEO Helper helps with:
+
+- traffic drops and ranking diagnosis
+- indexed but no impressions
+- local SEO and GBP decisions
+- money pages, service pages, product pages, and location pages
+- internal linking, cannibalization, canonical, robots, rendering, migration, and technical SEO issues
+- AI visibility, AEO, GEO, citations, and brand presence
+- source cleanup from Reddit threads, article notes, and case studies
+- routing to deeper audit skills only when needed
+- token optimization by using only the relevant rule or section
+
+## Main Files
+
+Installable plugin folder:
 
 ```text
 plugins/seo-helper
 ```
 
-The canonical knowledgebase is:
+Canonical knowledgebase:
 
 ```text
 plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
 ```
 
-Do not use copied duplicate HTML files. This is the only decision knowledgebase.
+Do not use duplicate knowledgebase copies. This HTML file is the single source of truth.
 
-## Basic ChatGPT Custom GPT Setup
+## For Maintainers
 
-For a normal custom GPT, upload only this file as Knowledge:
-
-```text
-plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
-```
-
-Use the full instructions in `SETUP.md`.
-
-## How It Works
-
-The AI starts with:
-
-```text
-plugins/seo-helper/skills/seo-router/SKILL.md
-```
-
-Then it reads only the relevant section from the knowledgebase. It loads deeper `seo-*` audit skills only when the question needs measurement, files, or a full audit.
-
-## Updating the Knowledgebase
-
-Maintainers edit only:
+Edit only the canonical knowledgebase for new SEO rules:
 
 ```text
 plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
@@ -94,35 +78,19 @@ plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
 Then run:
 
 ```powershell
-cd plugins\seo-helper
-python scripts\maintain.py rebuild-index
-python scripts\maintain.py validate
+python plugins\seo-helper\scripts\maintain.py rebuild-index
+python plugins\seo-helper\scripts\maintain.py validate
 ```
 
-Existing users update with:
+Users update with:
 
 ```powershell
 git pull
+START_HERE.bat
 ```
 
-If they uploaded files to ChatGPT or Claude Projects, they should upload the new HTML again.
+## Important Reality
 
-## Links
+Claude Code can install the local plugin folder.
 
-Repo:
-
-```text
-https://github.com/bijay085/SEO-NoteBook
-```
-
-Plugin folder:
-
-```text
-https://github.com/bijay085/SEO-NoteBook/tree/main/plugins/seo-helper
-```
-
-Detailed setup:
-
-```text
-SETUP.md
-```
+ChatGPT Custom GPT cannot auto-install a local GitHub repo from a `.bat` file. The launcher opens GPT Builder, selects the exact HTML file, and copies the instructions to the clipboard so setup is as close to plug-and-play as ChatGPT currently allows.
