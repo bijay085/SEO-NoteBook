@@ -122,38 +122,22 @@ if ($RegisterPlugin) {
     # Register seo-helper-router MCP server in Claude Desktop config so the live
     # MCP tools (route_seo_situation, get_decision_section, etc.) are available
     # in both the Home and Code tabs of Claude Desktop.
+    # Python does the JSON merge to avoid PowerShell 5.1 serialization issues.
     $serverScript = Join-Path $Root "server\seo_router_server.py"
-    if (Test-Path $serverScript) {
+    $registerScript = Join-Path $Root "scripts\register_mcp.py"
+    if ((Test-Path $serverScript) -and (Test-Path $registerScript)) {
         $claudeConfigDir = Join-Path $env:APPDATA "Claude"
         $claudeConfigFile = Join-Path $claudeConfigDir "claude_desktop_config.json"
-        New-Item -ItemType Directory -Force -Path $claudeConfigDir | Out-Null
 
         $pythonExe = (Get-Command python -ErrorAction SilentlyContinue)
         $pythonPath = if ($pythonExe) { $pythonExe.Source } else { "python" }
 
-        if (Test-Path $claudeConfigFile) {
-            $config = Get-Content -Raw -Path $claudeConfigFile | ConvertFrom-Json
+        & $pythonPath $registerScript $serverScript $Root $claudeConfigFile --python $pythonPath
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "Restart Claude Desktop to activate MCP tools in all tabs."
         } else {
-            $config = [pscustomobject]@{}
+            Write-Warning "MCP registration failed. Add seo-helper-router manually to $claudeConfigFile"
         }
-
-        if (-not ($config | Get-Member -Name "mcpServers" -MemberType NoteProperty)) {
-            $config | Add-Member -MemberType NoteProperty -Name "mcpServers" -Value ([pscustomobject]@{})
-        }
-        if ($config.mcpServers | Get-Member -Name "seo-helper-router" -MemberType NoteProperty -ErrorAction SilentlyContinue) {
-            $config.mcpServers.PSObject.Properties.Remove("seo-helper-router")
-        }
-        $config.mcpServers | Add-Member -MemberType NoteProperty -Name "seo-helper-router" -Value (
-            [pscustomobject]@{
-                command = $pythonPath
-                args    = @($serverScript)
-                env     = [pscustomobject]@{ SEO_HELPER_ROOT = $Root }
-            }
-        )
-
-        $config | ConvertTo-Json -Depth 20 | Set-Content -Path $claudeConfigFile -Encoding UTF8
-        Write-Host "Registered seo-helper-router MCP in $claudeConfigFile"
-        Write-Host "Restart Claude Desktop to activate MCP tools in all tabs."
     }
 }
 
