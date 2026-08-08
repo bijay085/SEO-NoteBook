@@ -1,6 +1,6 @@
 {
   "name": "seo-helper",
-  "version": "1.0.0+codex.20260808163137",
+  "version": "1.0.0+codex.20260808163539",
   "description": "Practical SEO decision system with 17 audit skills. Routes traffic drops, GSC issues, topical maps, cannibalization, rendering, and more.",
   "author": {
     "name": "bijay085"
@@ -29,7 +29,7 @@
       "What should I do first for this SEO problem?",
       "Route this site issue to the right SEO module."
     ],
-    "composerIcon": "./assets/logo.png",
+    "composerIcon": "./assets/icon.png",
     "logo": "./assets/logo.png"
   }
 }
