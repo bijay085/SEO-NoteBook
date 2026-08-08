@@ -101,17 +101,36 @@ foreach ($t in $Targets) {
     $destRoot = $skillMap[$key]
     New-Item -ItemType Directory -Force -Path $destRoot | Out-Null
 
-    # Remove stale seo-helper/ subfolder namespace from old installs
-    $stale = Join-Path $destRoot "seo-helper"
-    if ((Test-Path $stale) -and -not (Test-Path (Join-Path $stale "SKILL.md"))) {
-        Remove-Item -Recurse -Force $stale
-    }
-
+    # Flat install: seo-gsc-diagnosis/ etc. (for direct /seo-gsc-diagnosis access)
     foreach ($d in $dirs) {
         $dest = Join-Path $destRoot $d.Name
         if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
         Copy-Item -Recurse -Force $d.FullName $dest
         Write-Host "  skill $($d.Name) -> $destRoot"
+    }
+
+    # Namespace install for Claude: seo-helper/gsc-diagnosis/ so /seo-helper:gsc-diagnosis works
+    if ($key -eq "claude") {
+        $nsRoot = Join-Path $destRoot "seo-helper"
+        # Clear old namespace subfolders (keep only what we put there now)
+        if (Test-Path $nsRoot) {
+            Get-ChildItem $nsRoot -Directory | Remove-Item -Recurse -Force
+        }
+        New-Item -ItemType Directory -Force -Path $nsRoot | Out-Null
+        foreach ($d in $dirs) {
+            # Strip leading "seo-" to get the leaf name under the namespace
+            $leaf = $d.Name -replace '^seo-', ''
+            $dest = Join-Path $nsRoot $leaf
+            Copy-Item -Recurse -Force $d.FullName $dest
+            # Rewrite name field in SKILL.md so Claude registers it as leaf name
+            $skillMd = Join-Path $dest "SKILL.md"
+            if (Test-Path $skillMd) {
+                $raw = Get-Content -Raw $skillMd
+                $raw = $raw -replace '(?m)^name: seo-', 'name: '
+                [System.IO.File]::WriteAllText($skillMd, $raw, [System.Text.UTF8Encoding]::new($false))
+            }
+        }
+        Write-Host "  namespace skills -> $nsRoot ($($dirs.Count) skills as /seo-helper:*)"
     }
 }
 
