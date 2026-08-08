@@ -12,7 +12,7 @@ Author credit on reports: **Prepared by Bijay** (text **SEO** mark, no logo).
 ## Layout (this is the plugin root)
 
 ```
-skills-set/                    ← install THIS folder as the plugin
+plugins/seo-teacher/           <- install THIS folder as the plugin
   .claude-plugin/plugin.json   ← Claude Code plugin
   .codex-plugin/plugin.json    ← Codex / GPT plugin
   .mcp.json                    ← MCP for Claude plugin load
@@ -29,28 +29,20 @@ single entry point; audits stay separate so the model only pulls what it needs.
 
 ## Install
 
-**GitHub:** https://github.com/bijay085/SEO-NoteBook/tree/main/skills-set
-
 ### Claude Code (plugin)
 
-```bash
-git clone https://github.com/bijay085/SEO-NoteBook.git
-```
-
-Then in Claude Code:
+From a Claude session (path adjusted to your machine):
 
 ```text
-/plugin install <path-to>/SEO-NoteBook/skills-set
+/plugin install D:\SEO NoteBook\plugins\seo-teacher
 ```
+
+Or add as a local marketplace/plugin directory per Claude Code docs, then enable **seo-teacher**.
 
 ### Cursor / Codex (skills + MCP)
 
-```bash
-git clone https://github.com/bijay085/SEO-NoteBook.git
-cd SEO-NoteBook/skills-set
-```
-
 ```powershell
+cd "D:\SEO NoteBook\plugins\seo-teacher"
 .\install-skills.ps1
 pip install -r requirements.txt
 pip install -r mcp\requirements.txt
@@ -85,3 +77,4 @@ In any agent:
 ## Optional DataForSEO
 
 See `mcp-servers.json` / `mcp-hosts.example.json`. Env names only — no secrets in the pack.
+

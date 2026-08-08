@@ -1,0 +1,20 @@
+{
+  "name": "seo-notebook",
+  "interface": {
+    "displayName": "SEO NoteBook"
+  },
+  "plugins": [
+    {
+      "name": "seo-teacher",
+      "source": {
+        "source": "local",
+        "path": "./plugins/seo-teacher"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

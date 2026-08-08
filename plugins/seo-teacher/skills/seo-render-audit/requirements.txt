@@ -1,0 +1,13 @@
+# Claude-native render audit — deterministic deps only.
+# No google-generativeai / openai (Claude does the reasoning in-context).
+# No streamlit / python-dotenv / tenacity (no GUI, no keys, no API retries).
+# Playwright is OPTIONAL — only if you want the script to render locally instead
+# of supplying a rendered-DOM file from the browser MCP.
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=5.0.0
+openpyxl>=3.1.0
+jinja2>=3.1.0
+pydantic>=2.0.0
+# optional local renderer (skip if rendering via the browser / Playwright tool):
+# playwright>=1.44.0   then: playwright install chromium
