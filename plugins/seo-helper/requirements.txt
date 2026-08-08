@@ -27,4 +27,4 @@ statsmodels
 
 # Optional, seo-render-audit only -- skip unless you want local JS rendering
 # instead of supplying a rendered-DOM file via the browser / Playwright tool:
-# playwright>=1.44.0   (then: playwright install chromium)
+# playwright>=1.44.0 (then: playwright install chromium)
