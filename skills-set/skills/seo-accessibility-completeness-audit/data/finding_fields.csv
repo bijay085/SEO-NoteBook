@@ -1,0 +1,22 @@
+field_name,required_for,description,example
+verification_level,all findings,"Evidence stage: source, rendered DOM, computed tree, interaction, keyboard, or assistive technology.",computed tree
+computed_role,"SEM-006, SEM-014, SEM-016, SEM-020",Browser-computed accessibility role.,link
+computed_name,"SEM-006, SEM-017",Browser-computed accessible name.,Read more about retirement planning
+computed_description,SEM-017,Browser-computed accessible description.,Opens the full service guide
+computed_state,"SEM-019, SEM-020",Relevant state properties before and after interaction.,expanded=false -> expanded=true
+ignored_status,SEM-018,Whether the node is ignored or excluded from the accessibility tree.,ignored
+ignored_reason,SEM-018,Browser-provided ignored-node reason where available.,aria-hidden ancestor
+focusable,"SEM-018, SEM-020",Whether the node receives keyboard focus.,true
+keyboard_result,"SEM-020, SEM-022","Result of Tab, Enter, Space, arrow-key, or Escape testing.",Enter and Space activate
+interaction_state,SEM-019,Visible component state before and after activation.,collapsed -> open
+dom_order,"SEM-015, SEM-021",Relevant source-order position or sequence.,3 of 6
+visual_order,SEM-021,Relevant visual position or sequence at the tested viewport.,1 of 6
+focus_order,"SEM-020, SEM-021",Keyboard focus sequence.,2 of 8
+viewport,"SEM-015, SEM-021",Viewport or responsive breakpoint used for the finding.,390x844
+browser_name,computed-tree findings,Browser used for computed evidence.,Chrome
+browser_version,computed-tree findings,Browser version used for computed evidence.,Version recorded at audit time
+assistive_technology,SEM-022,Assistive technology used for manual verification.,NVDA
+evidence_reference,all findings,"Screenshot, DOM selector, exported tree node, recording, or issue link.",#read-more-2
+dom_node_count,PERF-DOM,total rendered DOM nodes,1720
+max_depth,PERF-DOM,max element nesting depth,38
+max_children,PERF-DOM,max children under one parent,74

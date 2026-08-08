@@ -1,0 +1,53 @@
+{
+  "client": "<Client Name>",
+  "domain": "example.com",
+  "period": "<Month Year>",
+  "output_dir": "./Affiliate-Review-Audit/",
+  "inputs": {
+    "review_pages": [
+      "https://example.com/best-electrolytes/",
+      "https://example.com/protein-bars-review/"
+    ],
+    "sitemap": "https://example.com/sitemap_index.xml",
+    "outbound_link_export": "",
+    "gsc_account": "business",
+    "gsc_property": "sc-domain:example.com",
+    "affiliate_dashboard_export": "",
+    "prior_deliverables_dir": ""
+  },
+  "taxonomy": {
+    "affiliate_networks": {
+      "fullscript": ["fullscript.com", "us.fullscript.com"],
+      "amazon": ["amazon.com", "amzn.to"],
+      "wellevate_legacy": ["wellevate.me"],
+      "shareasale": ["shareasale.com"],
+      "impact": ["impact.com", "impactradius"],
+      "cj": ["anrdoezrs.net", "dpbolvw.net", "cj.com"],
+      "iherb": ["iherb.com"]
+    },
+    "amazon_tag_param": "tag",
+    "required_rel": ["sponsored", "nofollow"],
+    "review_url_pattern": "(review|best|vs|top-|guide)",
+    "disclosure_markers": ["affiliate", "commission", "we earn", "we may earn", "sponsored"]
+  },
+  "apis": {
+    "gsc": true,
+    "dataforseo": true,
+    "scrapingbee_fallback": true,
+    "clarity": false
+  },
+  "env_file": "project `.env` / host environment variables",
+  "brand": {
+    "name": "Bijay",
+    "yellow": "#F5C518",
+    "black": "#0A0A0A",
+    "dark": "#1A1A1A",
+    "green": "#2ECC71",
+    "red": "#E74C3C",
+    "orange": "#E67E22",
+    "blue": "#3498DB",
+    "font_xlsx": "Arial",
+    "font_html": "Inter",
+    "logo_url": ""
+  }
+}

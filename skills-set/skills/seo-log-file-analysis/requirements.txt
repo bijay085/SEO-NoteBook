@@ -1,0 +1,4 @@
+# The analysis engine (analyze_logs.py and everything it imports) is PURE STDLIB —
+# no third-party package is needed to parse, classify or detect.
+# openpyxl is required only to render the XLSX deliverable.
+openpyxl>=3.1

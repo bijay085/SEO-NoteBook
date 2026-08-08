@@ -1,0 +1,17 @@
+{
+  "name": "seo-teacher",
+  "version": "1.0.0",
+  "description": "SEO teacher + decision system and audit skills by Bijay. Routes what to do next from the Action Decision notebook, then runs focused seo-* audits.",
+  "author": {
+    "name": "Bijay"
+  },
+  "keywords": [
+    "seo",
+    "audit",
+    "decision",
+    "gsc",
+    "teacher",
+    "rankings"
+  ],
+  "mcpServers": "./.mcp.json"
+}

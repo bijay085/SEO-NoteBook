@@ -1,0 +1,26 @@
+{
+  "client": "<Client Name>",
+  "domain": "example.com",
+  "period": "<16-month window ending YYYY-MM-DD>",
+  "output_dir": "./Cannibalization-Audit/",
+
+  "inputs": {
+    "gsc_account": "<label from list_accounts — REQUIRED when more than one account is connected>",
+    "gsc_property": "sc-domain:example.com",
+    "include_urls": [],
+    "exclude_url_patterns": ["/tag/", "/category/", "/product-tag/", "/product-category/"],
+    "brand_tokens": []
+  },
+
+  "thresholds": {
+    "max_urls": 400
+  },
+
+  "_notes": {
+    "gsc_property": "Prefer the sc-domain property — it covers all subdomains and protocols. Fall back to the https://example.com/ URL-prefix property on 'insufficient permission'.",
+    "include_urls": "Empty = analyse every URL with impressions in the window, subject to max_urls. Populate to scope the run to a specific page set.",
+    "exclude_url_patterns": "Substring match. Clear this if the site uses /category/ or /product/ as real content paths — the defaults assume WordPress/WooCommerce archives.",
+    "brand_tokens": "Empty = auto-detected from the domain. Set explicitly when people search a brand that differs from the domain. Brand terms are NORMALISED, not dropped: 'acme celpip mock test' becomes 'celpip mock test' so branded and non-branded variants merge. Only a pure-brand query is dropped.",
+    "thresholds": "Any key from scripts/cannib_config.py DEFAULT_CFG. An unknown key is a hard error, not a silent ignore. Read references/methodology.md 'Tuning' before changing any of them — several exist purely to prevent a destructive 301."
+  }
+}
