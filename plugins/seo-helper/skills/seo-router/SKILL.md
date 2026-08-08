@@ -42,7 +42,7 @@ Compact index: `references/section-index.md`
 1. **Route the situation**
    - Prefer MCP: `route_seo_situation` then `get_decision_section`.
    - If no MCP: read `references/section-index.md`, then open only the matching HTML section from `../../knowledge/SEO_Action_Decision_System.html`.
-2. **Apply only the relevant section** : do not paste or read the whole notebook for a narrow question.
+2. **Apply only the relevant section** : do not paste or read the whole notebook for a narrow question. Prefer if/then decision logic over generic best practices.
 3. **Ask at most one clarifying question** if business, URL, market, or data is missing and blocks a safe recommendation.
 4. **Hand off** to an audit skill when measurement is required:
 
