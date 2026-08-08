@@ -11,11 +11,26 @@ That is the setup app.
 ## Choose By Goal
 
 ```text
-1. Install globally on this computer - use in future projects
-2. Use in one project or Custom GPT
+1. Recommended: Install once on this computer
+   Choose this if you want SEO Helper available in future projects.
+   What happens: copies SEO skills to your user-level Codex, Claude, and Cursor skill folders.
+
+2. Use only in one project or Custom GPT
+   Choose this for ChatGPT GPT Builder, Claude Project, another account, or one-time sharing.
+   What happens: opens/selects the single HTML knowledge file and copies ready instructions.
+
 3. Update SEO Helper everywhere
+   Choose this after Bijay pushes new rules or fixes.
+   What happens: runs git pull, validates, then re-syncs global skills.
+
 4. Advanced: Claude Code plugin install
-5. Validate only
+   Choose this only if you specifically use Claude Code plugin commands.
+   What happens: copies the /plugin install command and tries to open Claude Code.
+
+5. Check setup only
+   Choose this if you only want to confirm the plugin works.
+   What happens: exits after validation; nothing is installed or changed.
+
 0. Exit
 ```
 
