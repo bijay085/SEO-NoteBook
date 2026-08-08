@@ -18,6 +18,8 @@
     "defaultPrompt": [
       "What should I do first for this SEO problem?",
       "Route this site issue to the right SEO module."
-    ]
+    ],
+    "composerIcon": "./assets/logo.svg",
+    "logo": "./assets/logo.svg"
   }
 }
