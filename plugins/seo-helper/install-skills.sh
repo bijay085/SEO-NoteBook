@@ -40,27 +40,17 @@ for t in $TARGETS; do
   fi
   mkdir -p "$dest_root"
 
-  if [[ "$t" == "codex" ]]; then
-    # Codex: install into seo-helper/ subfolder so /seo-helper shows only our skills
-    ns_root="$dest_root/seo-helper"
-    mkdir -p "$ns_root"
-    # Remove old flat seo-* folders from previous installs
-    for old in "$dest_root"/seo-*/; do rm -rf "$old"; done
-    for d in "${dirs[@]}"; do
-      name="$(basename "$d")"
-      short="${name#seo-}"
-      rm -rf "$ns_root/$short"
-      cp -R "$d" "$ns_root/$short"
-      echo "Installed $name -> seo-helper/$short"
-    done
-  else
-    for d in "${dirs[@]}"; do
-      name="$(basename "$d")"
-      rm -rf "$dest_root/$name"
-      cp -R "$d" "$dest_root/$name"
-      echo "Installed $name -> $dest_root/$name"
-    done
+  # Flat seo-* layout for all targets. Namespacing via name: field in SKILL.md.
+  # Remove stale seo-helper/ subfolder namespace from previous install attempt.
+  if [[ -d "$dest_root/seo-helper" ]] && [[ ! -f "$dest_root/seo-helper/SKILL.md" ]]; then
+    rm -rf "$dest_root/seo-helper"
   fi
+  for d in "${dirs[@]}"; do
+    name="$(basename "$d")"
+    rm -rf "$dest_root/$name"
+    cp -R "$d" "$dest_root/$name"
+    echo "Installed $name -> $dest_root/$name"
+  done
 
   if [[ -d "$cmd_src" ]]; then
     cmd_root="$(cmd_root_for "$t" || true)"
