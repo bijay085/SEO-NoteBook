@@ -1,6 +1,7 @@
 # Install seo-* Agent Skills into common host folders (Windows).
 param(
-    [string[]]$Targets = @("claude", "cursor", "codex")
+    [string[]]$Targets = @("claude", "cursor", "codex"),
+    [switch]$SkipPythonPackages
 )
 
 $ErrorActionPreference = "Stop"
@@ -18,7 +19,7 @@ $Targets = @(
 $map = @{
     "claude" = Join-Path $env:USERPROFILE ".claude\skills"
     "cursor" = Join-Path $env:USERPROFILE ".cursor\skills"
-    "codex"  = Join-Path $env:USERPROFILE ".codex\skills"
+    "codex" = Join-Path $env:USERPROFILE ".codex\skills"
 }
 
 $dirs = Get-ChildItem -Path $SkillsSrc -Directory | Where-Object { $_.Name -like "seo-*" }

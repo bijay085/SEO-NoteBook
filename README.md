@@ -15,6 +15,9 @@ cd SEO-NoteBook
 START_HERE.bat
 ```
 
+
+If Python is missing, the launcher asks before installing Python for the current Windows user with `winget`.
+
 Choose by goal, not by confusing tool names:
 
 ```text
@@ -49,7 +52,7 @@ For most people, choose:
 1. Install globally on this computer
 ```
 
-That syncs the SEO skills into common local AI skill folders for this Windows user:
+That installs required Python packages and syncs the SEO skills into common local AI skill folders for this Windows user:
 
 ```text
 %USERPROFILE%\.codex\skills
@@ -77,7 +80,7 @@ Choose:
 3. Update SEO Helper everywhere
 ```
 
-It pulls the latest repo, validates, and syncs the global skills again.
+It pulls the latest repo, validates, installs/updates Python packages, and syncs the global skills again.
 
 If you uploaded the HTML into a Custom GPT or an AI project, upload the updated HTML again because those systems keep their own copy.
 

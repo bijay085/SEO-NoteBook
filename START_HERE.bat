@@ -7,19 +7,90 @@ set "PLUGIN=%ROOT%\plugins\seo-helper"
 set "KB=%PLUGIN%\knowledge\SEO_Action_Decision_System.html"
 set "GPT_INSTRUCTIONS=%TEMP%\seo-helper-gpt-instructions.txt"
 set "GLOBAL_NOTE=%TEMP%\seo-helper-global-note.txt"
+set "PYTHON_CMD="
 
 title SEO Helper Setup
 
-goto validate
+goto find_python
+
+:find_python
+set "PYTHON_CMD="
+python --version >nul 2>nul
+if not errorlevel 1 set "PYTHON_CMD=python"
+if defined PYTHON_CMD goto validate
+py -3 --version >nul 2>nul
+if not errorlevel 1 set "PYTHON_CMD=py -3"
+if defined PYTHON_CMD goto validate
+goto python_missing
+
+:python_missing
+cls
+echo SEO Helper
+echo ==========
+echo.
+echo Python is required and was not found on this computer.
+echo.
+echo SEO Helper can install Python for this Windows user using winget.
+echo This will also add Python to PATH/global environment for future terminals.
+echo.
+set /p install_python="Install Python now? Choose Y or N: "
+if /i "%install_python%"=="Y" goto install_python
+if /i "%install_python%"=="YES" goto install_python
+echo.
+echo Python was not installed. Install Python 3, then run START_HERE.bat again.
+echo.
+pause
+exit /b 1
+
+:install_python
+cls
+echo Installing Python...
+echo.
+where winget >nul 2>nul
+if errorlevel 1 (
+  echo winget was not found on this computer.
+  echo Install Python manually from https://www.python.org/downloads/ and enable "Add python.exe to PATH".
+  echo Then run START_HERE.bat again.
+  echo.
+  pause
+  exit /b 1
+)
+winget install --id Python.Python.3.12 --source winget --scope user --accept-package-agreements --accept-source-agreements
+if errorlevel 1 (
+  echo.
+  echo Python install failed or was cancelled.
+  echo Install Python manually, then run START_HERE.bat again.
+  echo.
+  pause
+  exit /b 1
+)
+echo.
+echo Refreshing Python path for this setup window...
+set "PATH=%LOCALAPPDATA%\Programs\Python\Python312\;%LOCALAPPDATA%\Programs\Python\Python312\Scripts\;%PATH%"
+goto find_python
+
+:install_python_packages
+echo.
+echo Installing SEO Helper Python packages...
+echo.
+%PYTHON_CMD% -m pip install --upgrade pip
+if errorlevel 1 exit /b 1
+%PYTHON_CMD% -m pip install -r "%PLUGIN%\requirements.txt"
+if errorlevel 1 exit /b 1
+if exist "%PLUGIN%\server\requirements.txt" (
+  %PYTHON_CMD% -m pip install -r "%PLUGIN%\server\requirements.txt"
+  if errorlevel 1 exit /b 1
+)
+exit /b 0
 
 :write_gpt_instructions
 > "%GPT_INSTRUCTIONS%" echo You are SEO Helper, a practical SEO decision assistant.
->> "%GPT_INSTRUCTIONS%"echo.
+>> "%GPT_INSTRUCTIONS%" echo.
 >> "%GPT_INSTRUCTIONS%" echo Use the uploaded SEO_Action_Decision_System.html file as the main knowledgebase.
 >> "%GPT_INSTRUCTIONS%" echo Answer the exact SEO question. Do not give generic SEO advice unless the user asks for basics.
 >> "%GPT_INSTRUCTIONS%" echo Use only the relevant section. Do not read, dump, or summarize the whole knowledgebase unless needed.
 >> "%GPT_INSTRUCTIONS%" echo Prefer direct decisions, checks, priorities, and next actions.
->> "%GPT_INSTRUCTIONS%"echo.
+>> "%GPT_INSTRUCTIONS%" echo.
 >> "%GPT_INSTRUCTIONS%" echo Default answer format:
 >> "%GPT_INSTRUCTIONS%" echo Mode:
 >> "%GPT_INSTRUCTIONS%" echo What:
@@ -27,7 +98,7 @@ goto validate
 >> "%GPT_INSTRUCTIONS%" echo How:
 >> "%GPT_INSTRUCTIONS%" echo Evidence:
 >> "%GPT_INSTRUCTIONS%" echo Priority:
->> "%GPT_INSTRUCTIONS%"echo.
+>> "%GPT_INSTRUCTIONS%" echo.
 >> "%GPT_INSTRUCTIONS%" echo If the user pastes Reddit threads, articles, notes, or files, extract only reusable decision rules. Ignore spam, insults, repeated opinions, and unsupported shortcuts.
 >> "%GPT_INSTRUCTIONS%" echo If evidence is missing, say what data is needed instead of guessing. Keep answers concise and actionable.
 exit /b 0
@@ -37,21 +108,26 @@ cls
 echo SEO Helper
 echo ==========
 echo.
+echo Python found:
+%PYTHON_CMD% --version
+echo.
 echo Checking the plugin...
 echo.
-python "%PLUGIN%\scripts\maintain.py" validate
+%PYTHON_CMD% "%PLUGIN%\scripts\maintain.py" validate
 if errorlevel 1 goto validation_failed
 
 echo.
 echo OK. SEO Helper is ready.
 echo.
 
+goto menu
+
 :menu
 echo What do you want?
 echo.
 echo   1. Recommended: Install once on this computer
 echo      Choose this if you want SEO Helper available in future projects.
-echo      What happens: copies SEO skills to your user-level Codex, Claude, and Cursor skill folders.
+echo      What happens: installs Python packages and copies SEO skills to user-level Codex, Claude, and Cursor folders.
 echo.
 echo   2. Use only in one project or Custom GPT
 echo      Choose this for ChatGPT GPT Builder, Claude Project, another account, or one-time sharing.
@@ -59,7 +135,7 @@ echo      What happens: opens/selects the single HTML knowledge file and copies 
 echo.
 echo   3. Update SEO Helper everywhere
 echo      Choose this after Bijay pushes new rules or fixes.
-echo      What happens: runs git pull, validates, then re-syncs global skills.
+echo      What happens: runs git pull, validates, installs packages, then re-syncs global skills.
 echo.
 echo   4. Advanced: Claude Code plugin install
 echo      Choose this only if you specifically use Claude Code plugin commands.
@@ -89,17 +165,25 @@ cls
 echo Global Install
 echo ==============
 echo.
-echo This installs SEO Helper skills for this Windows user.
+echo This installs SEO Helper for this Windows user.
 echo After this, supported local AI tools can use SEO Helper in any project.
+echo.
+call :install_python_packages
+if errorlevel 1 (
+  echo.
+  echo Python package install failed. Check internet/Python, then try again.
+  pause
+  goto menu
+)
 echo.
 echo Installing to common skill folders:
 echo   %%USERPROFILE%%\.codex\skills
 echo   %%USERPROFILE%%\.claude\skills
 echo   %%USERPROFILE%%\.cursor\skills
 echo.
-powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1" -Targets codex,claude,cursor
+powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1" -Targets codex,claude,cursor -SkipPythonPackages
 if errorlevel 1 (
- echo.
+  echo.
   echo Global install had a problem. The repo plugin is still valid.
   pause
   goto menu
@@ -135,7 +219,11 @@ echo.
 echo Choose project type:
 echo.
 echo   1. ChatGPT Custom GPT
+echo      Opens GPT Builder, selects the HTML file, and copies instructions.
+echo.
 echo   2. Claude/ChatGPT project file upload
+echo      Selects the HTML file and copies instructions for a single project.
+echo.
 echo   0. Back
 echo.
 set /p pchoice="Choose 1, 2, or 0: "
@@ -200,20 +288,40 @@ echo Pulling latest repo changes...
 echo.
 git pull
 if errorlevel 1 (
- echo.
+  echo.
   echo Update failed. Check Git or internet, then try again.
   pause
   goto menu
 )
+goto find_python_after_update
+
+:find_python_after_update
+set "PYTHON_CMD="
+python --version >nul 2>nul
+if not errorlevel 1 set "PYTHON_CMD=python"
+if defined PYTHON_CMD goto update_validate
+py -3 --version >nul 2>nul
+if not errorlevel 1 set "PYTHON_CMD=py -3"
+if defined PYTHON_CMD goto update_validate
+goto python_missing
+
+:update_validate
 echo.
 echo Validating latest files...
-python "%PLUGIN%\scripts\maintain.py" validate
+%PYTHON_CMD% "%PLUGIN%\scripts\maintain.py" validate
 if errorlevel 1 goto validation_failed
+call :install_python_packages
+if errorlevel 1 (
+  echo.
+  echo Python package install failed. Repo update is done, but global setup is incomplete.
+  pause
+  goto menu
+)
 echo.
 echo Syncing global skills again...
-powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1" -Targets codex,claude,cursor
+powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1" -Targets codex,claude,cursor -SkipPythonPackages
 if errorlevel 1 (
- echo.
+  echo.
   echo Repo updated and validated, but global skill sync had a problem.
   pause
   goto menu
@@ -258,7 +366,7 @@ exit /b 0
 echo.
 echo SEO Helper is not ready yet.
 echo.
-echo Most common fix: install Python 3, then run START_HERE.bat again.
+echo If Python exists, this usually means the repo files are incomplete or damaged.
 echo Plugin folder:
 echo %PLUGIN%
 echo.

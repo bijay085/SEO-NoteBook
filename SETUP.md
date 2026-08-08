@@ -6,7 +6,7 @@ Run one file:
 START_HERE.bat
 ```
 
-That is the setup app.
+That is the setup app. If Python is missing, the launcher asks before installing Python for the current Windows user with `winget`.
 
 ## Choose By Goal
 
@@ -38,7 +38,7 @@ That is the setup app.
 
 Use this if you want SEO Helper available again and again without setting it up for every project.
 
-It installs/syncs SEO Helper skills into common local skill folders for this Windows user:
+It installs required Python packages and syncs SEO Helper skills into common local skill folders for this Windows user:
 
 ```text
 %USERPROFILE%\.codex\skills
