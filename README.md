@@ -24,19 +24,18 @@ Install **one plugin folder**: `plugins/seo-helper`. Inside it, the agent starts
 | Path | What it is |
 |---|---|
 | [`plugins/seo-helper/knowledge/SEO_Action_Decision_System.html`](./plugins/seo-helper/knowledge/SEO_Action_Decision_System.html) | Canonical editable knowledgebase used by the plugin |
-| [`SEO_Action_Decision_System.html`](./SEO_Action_Decision_System.html) | Generated standalone share/export copy (open in browser) |
 | [`plugins/seo-helper/`](./plugins/seo-helper/) | **Plugin root** : install this folder in Claude / Codex; includes skills + optional MCP |
 | [`AGENTS.md`](./AGENTS.md) | Notes for agents working in this repo |
 
 ## Updating the Knowledgebase
 
-Edit the plugin knowledgebase first:
+Edit only one HTML file:
 
 ```text
 plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
 ```
 
-Then refresh the root `SEO_Action_Decision_System.html` share copy in the same change. Do not add more copies.
+Use that same file for plugin knowledge and direct sharing. Do not add root/export copies.
 ## Share / install links
 
 **Repo:** https://github.com/bijay085/SEO-NoteBook  

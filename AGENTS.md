@@ -10,7 +10,7 @@ This directory is a local mirror of the ChatGPT project "My Notes".
 
 This project is an SEO notebook. When the user pastes SEO information, Reddit discussions, article notes, Google/Search Console observations, or other source material and asks to edit/add/update:
 
-- The canonical editable knowledgebase is `plugins/seo-helper/knowledge/SEO_Action_Decision_System.html`. The root `SEO_Action_Decision_System.html` is only a standalone share/export copy for people who do not use AI tools. Do not create any extra notebook copies inside skills. When updating SEO rules, edit the canonical plugin knowledgebase first, then refresh the root share copy from it in the same change.
+- The only SEO decision HTML is `plugins/seo-helper/knowledge/SEO_Action_Decision_System.html`. Use this one file for both plugin knowledge and direct sharing. Do not create root/export copies or extra notebook copies inside skills.
 - First check the canonical plugin notebook and place the update in the most relevant existing section instead of creating a confusing duplicate section.
 - Treat pasted sources as practitioner input unless they are official documentation. Convert them into concise operational rules, checklists, tables, or decision logic.
 - Keep additions compact and low-token: summarize the useful idea, remove navigation/noise, avoid long quotes, and do not paste raw source text unless the user explicitly asks.

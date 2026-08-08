@@ -23,11 +23,7 @@ Canonical notebook when installed as the full **seo-helper** plugin:
 
 `../../knowledge/SEO_Action_Decision_System.html`
 
-Standalone share/export copy in the repo root:
-
-`SEO_Action_Decision_System.html`
-
-Do not keep another copied notebook inside this skill folder.
+Use the same canonical file for direct sharing. Do not keep another copied notebook in the repo root or inside this skill folder.
 
 Compact index: `references/section-index.md`
 

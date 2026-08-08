@@ -1,6 +1,6 @@
 # Decision noteboon section index
 
-Source file (in this plugin): `sssets/SEO_Action_Decision_System.html`
+Source file (in this plugin): `knowledge/SEO_Action_Decision_System.html`
 
 Prefer MCP tools `list_decision_sections` / `get_decision_section` / `route_seo_situstion`
 when svsilsble. Otherwise open the HTML snd jump to the `id` below.

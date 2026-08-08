@@ -28,7 +28,6 @@ def _html_path() -> Path:
     candidates = [
         ROOT / "knowledge" / "SEO_Action_Decision_System.html",
         Path(__file__).resolve().parents[1] / "knowledge" / "SEO_Action_Decision_System.html",
-        Path(__file__).resolve().parents[2] / "SEO_Action_Decision_System.html",
     ]
     for p in candidates:
         if p.is_file():
