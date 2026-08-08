@@ -141,25 +141,29 @@ echo   4. Advanced: Claude Code plugin install
 echo      Choose this only if you specifically use Claude Code plugin commands.
 echo      What happens: copies the /plugin install command and tries to open Claude Code.
 echo.
-echo   5. Check setup only
+echo   5. Where can I use this?
+echo      Choose this if you want GPT, Claude, Cursor, Antigravity, and other setup paths.
+echo      What happens: shows which option to use for each AI app.
+echo.
+echo   6. Check setup only
 echo      Choose this if you only want to confirm the plugin works.
 echo      What happens: exits after validation; nothing is installed or changed.
 echo.
 echo   0. Exit
 echo.
-set /p choice="Choose 1, 2, 3, 4, 5, or 0: "
+set /p choice="Choose 1, 2, 3, 4, 5, 6, or 0: "
 
 if "%choice%"=="1" goto global
 if "%choice%"=="2" goto project
 if "%choice%"=="3" goto update_everywhere
 if "%choice%"=="4" goto claude_plugin
-if "%choice%"=="5" goto done
+if "%choice%"=="5" goto where_use
+if "%choice%"=="6" goto done
 if "%choice%"=="0" exit /b 0
 cls
 echo Please choose a number from the menu.
 echo.
 goto menu
-
 :global
 cls
 echo Global Install
@@ -333,6 +337,48 @@ echo.
 pause
 goto menu
 
+:where_use
+cls
+echo Where You Can Use SEO Helper
+echo ============================
+echo.
+echo GPT classic / normal ChatGPT chat:
+echo   Use option 2. Upload or attach the HTML knowledge file when files are supported.
+echo.
+echo New GPT with Codex integrated:
+echo   Use option 1 for Codex skills. Use option 2 if the GPT side needs uploaded knowledge.
+echo.
+echo GPT web / GPT cowork / shared GPT project:
+echo   Use option 2. Web/shared chats cannot install this local folder globally.
+echo.
+echo New GPT Codex:
+echo   Use option 1. It syncs to %%USERPROFILE%%\.codex\skills.
+echo.
+echo Claude web chat:
+echo   Use option 2. Upload the HTML knowledge file.
+echo.
+echo Claude web Project / cowork:
+echo   Use option 2. Upload the HTML to the project/workspace.
+echo.
+echo Claude desktop app chat:
+echo   Try option 1. If Claude does not detect local skills, use option 2.
+echo.
+echo Claude Code:
+echo   Use option 4 for plugin install, or option 1 for global skills.
+echo.
+echo Cursor:
+echo   Use option 1. It syncs to %%USERPROFILE%%\.cursor\skills.
+echo.
+echo Antigravity or other AI coding tools:
+echo   If it supports local skills, point it to the skills folder. If not, use option 2.
+echo.
+echo Any AI with file upload:
+echo   Use option 2 and upload SEO_Action_Decision_System.html.
+echo.
+echo Rule: local tool = option 1 or 4. Web/shared/other account = option 2.
+echo.
+pause
+goto menu
 :claude_plugin
 cls
 echo Claude Code Plugin Install

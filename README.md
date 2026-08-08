@@ -84,6 +84,34 @@ It pulls the latest repo, validates, installs/updates Python packages, and syncs
 
 If you uploaded the HTML into a Custom GPT or an AI project, upload the updated HTML again because those systems keep their own copy.
 
+## Where You Can Use SEO Helper
+
+SEO Helper can be used in different places, but the setup method depends on what the app supports.
+
+| Place | Best Method | Notes |
+|---|---|---|
+| GPT classic / normal ChatGPT chat | One-project file upload | Upload or attach `SEO_Action_Decision_System.html` when the chat/project supports files. |
+| New GPT with Codex integrated | Global install for Codex + project file when needed | Use option 1 for Codex skills; use option 2 if the GPT side needs the HTML uploaded. |
+| New GPT normal chat | One-project file upload | Use option 2. ChatGPT chats cannot install local skill folders globally. |
+| GPT cowork / collaborative project | One-project file upload | Use option 2 and upload the HTML to that shared project/workspace. |
+| New GPT Codex | Global install | Use option 1. It syncs to `%USERPROFILE%\.codex\skills`. |
+| GPT web | Custom GPT or project upload | Use option 2. For Custom GPT, upload the HTML as Knowledge. |
+| GPT web cowork | Project upload | Use option 2 and upload the HTML to the shared project/workspace. |
+| Claude web chat | One-project file upload | Use option 2. Claude web chat cannot use local Windows skill folders directly. |
+| Claude web Project / cowork | Project upload | Use option 2 and upload the HTML to the project. |
+| Claude desktop app chat | Global install if the app reads local skills, otherwise project/file upload | Use option 1 first; if not detected by Claude, use option 2. |
+| Claude desktop cowork | Project/file upload | Use option 2 unless that workspace supports local skills. |
+| Claude Code desktop/local | Claude Code plugin or global skills | Use option 4 for `/plugin install`, or option 1 for skill folders. |
+| Claude web Claude Code | Claude Code plugin path if supported; otherwise project upload | Use option 4 when Claude Code accepts plugin commands. |
+| Cursor | Global install | Use option 1. It syncs to `%USERPROFILE%\.cursor\skills`. |
+| Antigravity or other AI coding tools | Local skill folder or one-file knowledge upload | If it supports local skills, point it to `plugins/seo-helper/skills` or copied global skills. If not, use the HTML file. |
+| Any AI with file upload | One-file knowledge upload | Upload `plugins/seo-helper/knowledge/SEO_Action_Decision_System.html`. |
+
+Rule of thumb:
+
+- If the tool supports local skills/plugins, use option 1 or option 4.
+- If the tool is web chat, shared project, cowork, or another account, use option 2.
+- If you want updates with less stress, keep the repo and use option 3.
 ## No Required Connectors
 
 SEO Helper does not require GitHub, Semrush, Cloudflare, Google Drive, Airtable, or any other connector to answer SEO cases.
