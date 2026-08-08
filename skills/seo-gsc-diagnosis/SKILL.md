@@ -1,5 +1,5 @@
-﻿---
-name: seo-helper : gsc-diagnosis
+---
+name: seo-gsc-diagnosis
 description: >-
   Fact-first SEO diagnosis for ecommerce stores (especially Shopify) that leads with first-party
   Google Search Console data plus HTTP/canonical verification BEFORE any web research. Use this

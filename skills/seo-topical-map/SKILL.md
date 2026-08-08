@@ -1,5 +1,5 @@
-﻿---
-name: seo-helper : topical-map
+---
+name: seo-topical-map
 description: >-
   Build a topical authority map AND a demand-gated page plan around ONE central
   entity : entity ontology with salience layers + a 13-bucket attribute map, then

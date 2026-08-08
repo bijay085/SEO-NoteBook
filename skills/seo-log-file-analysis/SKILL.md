@@ -1,5 +1,5 @@
-﻿---
-name: seo-helper : log-file-analysis
+---
+name: seo-log-file-analysis
 description: >-
   Run a config-driven SEO forensic analysis of raw server ACCESS LOGS : what search
   crawlers and visitors actually requested, what status they got back, and where crawl

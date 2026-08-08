@@ -1,5 +1,5 @@
-﻿---
-name: seo-helper : after-foundational-setup-audit
+---
+name: seo-after-foundational-setup-audit
 description: >-
   Run a comprehensive, per-page FORENSIC SEO + technical + content + performance
   audit of a live website after its foundational setup is complete, and produce a

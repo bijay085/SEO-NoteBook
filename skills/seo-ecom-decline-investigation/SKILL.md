@@ -1,5 +1,5 @@
-﻿---
-name: seo-helper : ecom-decline-investigation
+---
+name: seo-ecom-decline-investigation
 description: >-
   Rigorous, statistics-first investigation of an ecommerce/inventory-driven site's organic decline : 
   multi-period GSC decomposition, live technical + schema audit, backend/inventory architecture audit,
