@@ -2,10 +2,10 @@
 
 **One plugin** for Claude, Cursor, Codex/GPT, and chat UIs:
 
-1. **`seo-decision-helper`** — SEO helper / “what should I do next?” coach  
-2. **Decision notebook** — `assets/SEO_Action_Decision_System.html`  
-3. **15 audit skills** — `skills/seo-*` (GSC, CRO, render, topical map, …)  
-4. **Optional MCP** — `mcp/decision_server.py` (section lookup + situation router)
+1. **`seo-decision-helper`** : SEO helper / “what should I do next?” coach  
+2. **Canonical decision notebook** : `assets/SEO_Action_Decision_System.html`  
+3. **15 audit skills** : `skills/seo-*` (GSC, CRO, render, topical map, …)  
+4. **Optional MCP** : `mcp/decision_server.py` (section lookup + situation router)
 
 Author credit on reports: **Prepared by Bijay** (text **SEO** mark, no logo).
 
@@ -24,25 +24,26 @@ Use it for:
 
 ## How It Works
 
-The installed plugin has one entry point: `seo-decision-helper`. The agent uses it to understand the situation, consults `assets/SEO_Action_Decision_System.html` for decision rules, and then loads a specific `seo-*` audit skill only if the task needs deeper analysis. If the MCP server is connected, it can list sections, fetch a notebook section, and route a short SEO situation to the most relevant audit skills.
+The installed plugin has one entry point: `seo-decision-helper`. The agent first routes the situation, then consults only the relevant part of `assets/SEO_Action_Decision_System.html`, and loads one specific `seo-*` audit skill only when the task needs deeper proof. If the MCP server is connected, it can list sections, fetch a notebook section, and route a short SEO situation to the most relevant audit skill. The goal is speed, accuracy, and low token use: exact answer first, related context only when it helps the decision.
 
 ## Layout (this is the plugin root)
 
 ```
-plugins/seo-helper/           <- install THIS folder as the plugin
-  .claude-plugin/plugin.json   ← Claude Code plugin
-  .codex-plugin/plugin.json    ← Codex / GPT plugin
-  .mcp.json                    ← MCP for Claude plugin load
+plugins/seo-helper/ <- install THIS folder as the plugin
+  .claude-plugin/plugin.json ← Claude Code plugin
+  .codex-plugin/plugin.json ← Codex / GPT plugin
+  .mcp.json ← MCP for Claude plugin load
   assets/SEO_Action_Decision_System.html
   mcp/decision_server.py
   skills/
-    seo-decision-helper/      ← start here for teaching / decisions
+    seo-decision-helper/ ← start here for routing / decisions
     seo-gsc-diagnosis/
     ...
 ```
 
-Why not one flat file? Agents load **skills by folder**. The decision helper skill is the
-single entry point; audits stay separate so the model only pulls what it needs.
+Notebook rule: `assets/SEO_Action_Decision_System.html` is the plugin source of truth. The repo root `SEO_Action_Decision_System.html` is only a standalone share/export copy for people who do not use AI tools. Do not add another copied notebook inside a skill folder.
+
+Why not one flat file? Agents load **skills by folder**. The decision helper skill is the single entry point; audits stay separate so the model only pulls what it needs.
 
 ## Install
 
@@ -89,9 +90,9 @@ python mcp\decision_server.py --self-test
 
 In any agent:
 
-> Load seo-decision-helper. Traffic dropped on my Shopify store — what should I do first?
+> Load seo-decision-helper. Traffic dropped on my Shopify store : what should I do first?
 
 ## Optional DataForSEO
 
-See `mcp-servers.json` / `mcp-hosts.example.json`. Env names only — no secrets in the pack.
+See `mcp-servers.json` / `mcp-hosts.example.json`. Env names only : no secrets in the pack.
 

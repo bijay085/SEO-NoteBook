@@ -5,7 +5,7 @@
       "command": "python",
       "args": ["ROOT/mcp/decision_server.py"],
       "env": {
-        "SEO_TEACHER_ROOT": "ROOT"
+        "SEO_HELPER_ROOT": "ROOT"
       }
     },
     "dataforseo": {

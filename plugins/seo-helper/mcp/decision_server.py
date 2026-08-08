@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SEO Decision MCP — query the Action Decision System notebook by section.
+"""SEO Decision MCP : query the Action Decision System notebook by section.
 
 Works with Claude Code plugins (CLAUDE_PLUGIN_ROOT), Cursor, Codex, or any MCP host.
 Stdlib + beautifulsoup4. Optional: `mcp` package (FastMCP). Falls back to a tiny
@@ -15,20 +15,20 @@ from pathlib import Path
 
 try:
     from bs4 import BeautifulSoup
-except ImportError:  # pragma: no cover
+except ImportError: # pragma: no cover
     print("beautifulsoup4 required: pip install beautifulsoup4", file=sys.stderr)
     sys.exit(1)
 
 ROOT = Path(
-    os.environ.get("SEO_TEACHER_ROOT")
+    os.environ.get("SEO_HELPER_ROOT")
     or os.environ.get("CLAUDE_PLUGIN_ROOT")
     or Path(__file__).resolve().parents[1]
 )
 def _html_path() -> Path:
     candidates = [
         ROOT / "assets" / "SEO_Action_Decision_System.html",
-        ROOT / "skills" / "seo-decision-helper" / "assets" / "SEO_Action_Decision_System.html",
         Path(__file__).resolve().parents[1] / "assets" / "SEO_Action_Decision_System.html",
+        Path(__file__).resolve().parents[2] / "SEO_Action_Decision_System.html",
     ]
     for p in candidates:
         if p.is_file():
@@ -111,7 +111,7 @@ def get_section(section_id: str, max_chars: int = 12000) -> dict:
     h = sec.find(["h2", "h1"])
     text = sec.get_text("\n", strip=True)
     if len(text) > max_chars:
-        text = text[:max_chars] + "\n\n[truncated — ask for a narrower subsection or raise max_chars]"
+        text = text[:max_chars] + "\n\n[truncated : ask for a narrower subsection or raise max_chars]"
     return {
         "id": section_id,
         "title": h.get_text(" ", strip=True) if h else section_id,
@@ -132,7 +132,7 @@ def route_situation(situation: str) -> dict:
         return {
             "mode": "simple-or-clarify",
             "section_id": "decision-router",
-            "reason": "No strong match — open the Action Decision Router and ask one clarifying question if needed.",
+            "reason": "No strong match : open the Action Decision Router and ask one clarifying question if needed.",
             "suggested_skills": [],
             "next_step": "Call get_section('decision-router') then answer with What/Why/How/Evidence/Priority.",
         }
@@ -144,7 +144,7 @@ def route_situation(situation: str) -> dict:
         "suggested_skills": skills,
         "next_step": (
             f"Load section `{section_id}` via get_section, apply its rules, "
-            f"then optionally run skills: {', '.join(skills) if skills else '(none — teach from notebook only)'}."
+            f"then optionally run skills: {', '.join(skills) if skills else '(none : answer from notebook only)'}."
         ),
     }
 
@@ -160,7 +160,7 @@ def list_audit_skills() -> list[dict]:
             continue
         text = skill_md.read_text(encoding="utf-8", errors="ignore")
         desc = ""
-        m = re.search(r"description:\s*>?-?\s*\n((?:  .*\n)+)", text)
+        m = re.search(r"description:\s*>?-?\s*\n((?: .*\n)+)", text)
         if m:
             desc = " ".join(line.strip() for line in m.group(1).splitlines())
         else:
@@ -292,7 +292,7 @@ def _run_minimal_stdio() -> None:
                 reply(msg_id, {
                     "content": [{"type": "text", "text": json.dumps(result, ensure_ascii=False, indent=2)}],
                 })
-            except Exception as e:  # noqa: BLE001
+            except Exception as e: # noqa: BLE001
                 reply(msg_id, error={"code": -32000, "message": str(e)})
         elif method == "ping":
             reply(msg_id, {})
