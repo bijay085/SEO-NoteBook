@@ -1,5 +1,5 @@
----
-name: seo-sandbox-effect-analysis
+﻿---
+name: seo-helper : sandbox-effect-analysis
 description: >-
   Diagnose why a site that has ALREADY had SEO work done is indexed but NOT graduating : impressions
   accumulate while rankings, clicks, and leads stay flat : then produce a branded SEO deliverable (INTERNAL HTML + 3-format CLIENT report + master XLSX) with a measured graduation plan.

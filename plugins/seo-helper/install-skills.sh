@@ -39,12 +39,28 @@ for t in $TARGETS; do
     continue
   fi
   mkdir -p "$dest_root"
-  for d in "${dirs[@]}"; do
-    name="$(basename "$d")"
-    rm -rf "$dest_root/$name"
-    cp -R "$d" "$dest_root/$name"
-    echo "Installed $name -> $dest_root/$name"
-  done
+
+  if [[ "$t" == "codex" ]]; then
+    # Codex: install into seo-helper/ subfolder so /seo-helper shows only our skills
+    ns_root="$dest_root/seo-helper"
+    mkdir -p "$ns_root"
+    # Remove old flat seo-* folders from previous installs
+    for old in "$dest_root"/seo-*/; do rm -rf "$old"; done
+    for d in "${dirs[@]}"; do
+      name="$(basename "$d")"
+      short="${name#seo-}"
+      rm -rf "$ns_root/$short"
+      cp -R "$d" "$ns_root/$short"
+      echo "Installed $name -> seo-helper/$short"
+    done
+  else
+    for d in "${dirs[@]}"; do
+      name="$(basename "$d")"
+      rm -rf "$dest_root/$name"
+      cp -R "$d" "$dest_root/$name"
+      echo "Installed $name -> $dest_root/$name"
+    done
+  fi
 
   if [[ -d "$cmd_src" ]]; then
     cmd_root="$(cmd_root_for "$t" || true)"

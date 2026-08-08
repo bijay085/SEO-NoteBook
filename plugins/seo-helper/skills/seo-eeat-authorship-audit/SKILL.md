@@ -1,5 +1,5 @@
----
-name: seo-eeat-authorship-audit
+﻿---
+name: seo-helper : eeat-authorship-audit
 description: >-
   Audit a live page (or a page spec) for E-E-A-T and Authorship gaps and produce a
   branded SEO deliverable: every one of the 42 checks in the E-E-A-T/Authorship Checklist evaluated against the real page, each with a

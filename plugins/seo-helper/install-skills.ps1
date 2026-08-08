@@ -35,11 +35,28 @@ foreach ($t in $Targets) {
     }
     $destRoot = $map[$key]
     New-Item -ItemType Directory -Force -Path $destRoot | Out-Null
-    foreach ($d in $dirs) {
-        $dest = Join-Path $destRoot $d.Name
-        if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
-        Copy-Item -Recurse -Force $d.FullName $dest
-        Write-Host "Installed $($d.Name) -> $dest"
+
+    # Codex: install into seo-helper/ subfolder so /seo-helper shows only our skills.
+    # Claude/Cursor: keep flat seo-* layout (command files reference these paths).
+    if ($key -eq "codex") {
+        $nsRoot = Join-Path $destRoot "seo-helper"
+        New-Item -ItemType Directory -Force -Path $nsRoot | Out-Null
+        # Remove old flat seo-* skill folders left from previous installs
+        Get-ChildItem -Path $destRoot -Directory | Where-Object { $_.Name -like "seo-*" } | Remove-Item -Recurse -Force
+        foreach ($d in $dirs) {
+            $shortName = $d.Name -replace '^seo-', ''
+            $dest = Join-Path $nsRoot $shortName
+            if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
+            Copy-Item -Recurse -Force $d.FullName $dest
+            Write-Host "Installed $($d.Name) -> seo-helper/$shortName"
+        }
+    } else {
+        foreach ($d in $dirs) {
+            $dest = Join-Path $destRoot $d.Name
+            if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
+            Copy-Item -Recurse -Force $d.FullName $dest
+            Write-Host "Installed $($d.Name) -> $dest"
+        }
     }
 }
 $CommandsNsSrc = Join-Path $CommandsSrc "seo-helper"

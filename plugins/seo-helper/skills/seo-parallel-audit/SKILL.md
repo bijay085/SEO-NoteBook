@@ -1,5 +1,5 @@
----
-name: seo-parallel-audit
+﻿---
+name: seo-helper : parallel-audit
 description: >
   Run MULTIPLE SEO audits in PARALLEL on any target (a page or a whole site),
   for any client, in any session. Auto-selects the right audit bundle by page type, or

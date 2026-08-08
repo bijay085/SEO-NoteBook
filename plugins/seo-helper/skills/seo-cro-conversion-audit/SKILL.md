@@ -1,5 +1,5 @@
----
-name: seo-cro-conversion-audit
+﻿---
+name: seo-helper : cro-conversion-audit
 description: >-
   Run a competitor-benchmarked, behavior-corroborated CRO (conversion rate
   optimization) audit for ANY website. Scores the site vs named competitors
