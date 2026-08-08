@@ -137,28 +137,33 @@ echo   3. Update SEO Helper everywhere
 echo      Choose this after Bijay pushes new rules or fixes.
 echo      What happens: runs git pull, validates, installs packages, re-syncs skills, and refreshes picker registration.
 echo.
-echo   4. Advanced: Claude Code plugin install
+echo   4. Register SEO Helper in Claude Desktop app
+echo      Choose this to add the MCP server so Claude Desktop can use SEO Helper tools.
+echo      What happens: writes the MCP server entry to Claude Desktop config and copies skills.
+echo.
+echo   5. Advanced: Claude Code plugin install
 echo      Choose this only if you specifically use Claude Code plugin commands.
 echo      What happens: copies the /plugin install command and tries to open Claude Code.
 echo.
-echo   5. Where can I use this?
+echo   6. Where can I use this?
 echo      Choose this if you want GPT, Claude, Cursor, Antigravity, and other setup paths.
 echo      What happens: shows which option to use for each AI app.
 echo.
-echo   6. Check setup only
+echo   7. Check setup only
 echo      Choose this if you only want to confirm the plugin works.
 echo      What happens: exits after validation; nothing is installed or changed.
 echo.
 echo   0. Exit
 echo.
-set /p choice="Choose 1, 2, 3, 4, 5, 6, or 0: "
+set /p choice="Choose 1, 2, 3, 4, 5, 6, 7, or 0: "
 
 if "%choice%"=="1" goto global
 if "%choice%"=="2" goto project
 if "%choice%"=="3" goto update_everywhere
-if "%choice%"=="4" goto claude_plugin
-if "%choice%"=="5" goto where_use
-if "%choice%"=="6" goto done
+if "%choice%"=="4" goto claude_desktop
+if "%choice%"=="5" goto claude_plugin
+if "%choice%"=="6" goto where_use
+if "%choice%"=="7" goto done
 if "%choice%"=="0" exit /b 0
 cls
 echo Please choose a number from the menu.
@@ -362,10 +367,10 @@ echo Claude web Project / cowork:
 echo   Use option 2. Upload the HTML to the project/workspace.
 echo.
 echo Claude desktop app chat:
-echo   Try option 1. If Claude does not detect local skills, use option 2.
+echo   Use option 4 to register the MCP server and skills. Then restart Claude Desktop.
 echo.
 echo Claude Code:
-echo   Use option 4 for plugin install, or option 1 for global skills.
+echo   Use option 5 for plugin install, or option 1 for global skills.
 echo.
 echo Cursor:
 echo   Use option 1. It syncs to %%USERPROFILE%%\.cursor\skills.
@@ -380,6 +385,62 @@ echo Rule: local tool = option 1 or 4. Web/shared/other account = option 2.
 echo.
 pause
 goto menu
+:claude_desktop
+cls
+echo Register SEO Helper in Claude Desktop App
+echo ==========================================
+echo.
+echo This registers the SEO Helper MCP server in Claude Desktop so the
+echo AI tools are available in every chat. Skills are also copied.
+echo.
+
+if not defined PYTHON_CMD (
+  echo Python was not found. Run option 1 first to install Python.
+  pause
+  goto menu
+)
+
+set "CLAUDE_CFG=%APPDATA%\Claude\claude_desktop_config.json"
+set "SERVER=%PLUGIN%\server\seo_router_server.py"
+set "REG=%PLUGIN%\scripts\register_mcp.py"
+
+if not exist "%SERVER%" (
+  echo Server script not found: %SERVER%
+  pause
+  goto menu
+)
+if not exist "%REG%" (
+  echo Register script not found: %REG%
+  pause
+  goto menu
+)
+
+echo Copying skills to %%USERPROFILE%%\.claude\skills ...
+powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install.ps1" -Targets claude -SkipPythonPackages
+if errorlevel 1 (
+  echo Skills copy had a problem.
+  pause
+  goto menu
+)
+
+echo.
+echo Registering MCP server in Claude Desktop config...
+%PYTHON_CMD% "%REG%" claude "%SERVER%" "%PLUGIN%" "%CLAUDE_CFG%"
+if errorlevel 1 (
+  echo MCP registration failed.
+  pause
+  goto menu
+)
+
+echo.
+echo Done. Restart Claude Desktop for the changes to take effect.
+echo.
+echo In Claude Desktop you will see SEO Helper tools in the MCP section.
+echo Skills are also available under Settings ^> Skills.
+echo.
+pause
+goto menu
+
 :claude_plugin
 cls
 echo Claude Code Plugin Install
