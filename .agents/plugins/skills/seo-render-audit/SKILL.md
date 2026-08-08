@@ -1,5 +1,5 @@
-﻿---
-name: seo-helper : render-audit
+---
+name: render-audit
 description: >-
   Render audit for one or more URLs : diffs the raw HTML (what a crawler sees
   before JS) against the rendered DOM (after JS), checks robots.txt / llms.txt

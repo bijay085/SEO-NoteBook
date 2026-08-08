@@ -1,5 +1,5 @@
-﻿---
-name: seo-helper : initial-analysis
+---
+name: initial-analysis
 description: >-
   Run the first-engagement SEO analysis for a new client and produce the branded
   SEO "initial analysis" deliverable set : Business-Understanding, live

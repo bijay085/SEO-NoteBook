@@ -1,5 +1,5 @@
-﻿---
-name: seo-helper : off-page-audit
+---
+name: off-page-audit
 description: >-
   Run a standalone, config-driven OFF-PAGE / link audit of a website : everything about
   the links between this domain and the rest of the web, in both directions: the INBOUND

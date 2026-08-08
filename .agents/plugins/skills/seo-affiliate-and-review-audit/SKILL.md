@@ -1,5 +1,5 @@
-﻿---
-name: seo-helper : affiliate-and-review-audit
+---
+name: affiliate-and-review-audit
 description: >-
   Run a standalone, config-driven audit of an AFFILIATE + REVIEW-content site : the
   two things that actually make a review site money: the outbound affiliate money-path
