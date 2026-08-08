@@ -14,7 +14,12 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Productivity"
+      "category": "Productivity",
+      "interface": {
+        "displayName": "SEO Helper",
+        "shortDescription": "SEO decision system by Bijay.",
+        "logo": "https://raw.githubusercontent.com/bijay085/SEO-NoteBook/main/.codex-plugin/assets/logo.svg"
+      }
     }
   ]
 }
