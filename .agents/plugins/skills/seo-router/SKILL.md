@@ -8,10 +8,6 @@ description: >
   notebook (What / Why / How / Evidence / Priority). Hands off to seo-* audit skills
   when deep measurement is needed. Triggers: "what should I do", "SEO helper",
   "decision system", "prioritize SEO", "which audit", "help me decide".
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. Uses optional MCP
-  server seo-helper-router. See pack AGENT_RUNTIME.md + INSTALL.md.
 ---
 
 # SEO Router

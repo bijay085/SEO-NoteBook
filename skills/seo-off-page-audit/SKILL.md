@@ -16,11 +16,6 @@ description: >-
   backlinks MCP + client CSV exports (Ahrefs/Semrush) : NOT a direct Ahrefs/Semrush API
   (those keys are unset). Requests missing exports or pulls live via DataForSEO. Reuse
   built-in report branding (brand_lib / report_kit) for styling.
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # Off-Page / Link Audit

@@ -7,11 +7,6 @@ description: >
   across audits, and emits ONE branded HTML+XLSX. Use when the user says: "run
   all audits", "parallel audit", "run multiple audits", "full audit on <url>", "audit
   everything for <client>", "run render + a11y + cro on X", or invokes /seo-parallel-audit.
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # SEO Parallel Audit Orchestrator

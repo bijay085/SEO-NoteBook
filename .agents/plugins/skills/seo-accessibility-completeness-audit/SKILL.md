@@ -16,11 +16,6 @@ description: >-
   Deliverables: an A to F findings report AND a Miro-or-equivalent annotated
   wireframe. Merges the former "Accessibility Tree and Semantic HTML 5" and
   "Visual-Semantics-Research" engines.
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # Accessibility & Completeness Audit

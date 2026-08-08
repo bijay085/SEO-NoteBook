@@ -13,12 +13,6 @@ description: >-
   the noise", or "add keyword data / search volume to my topical map". CLAUDE-NATIVE:
   Claude does all reasoning in-context (no OpenAI/Gemini/Anthropic API) : the only
   external calls are DataForSEO via its MCP (real volumes + SERP) and WebFetch.
-version: 4.0.0
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # Topical Map (Claude-native) : ontology → demand-gated page plan

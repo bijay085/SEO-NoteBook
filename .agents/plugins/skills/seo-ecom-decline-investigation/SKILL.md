@@ -13,11 +13,6 @@ description: >-
   degrades gracefully and actively queries GSC/DataForSEO/WebSearch to fill gaps rather than assuming.
   CLAUDE-NATIVE: no OpenAI/Gemini/Anthropic API calls for reasoning : Claude does the analysis and
   authoring itself; the only external calls are real data-fetch tools (GSC, DataForSEO, WebSearch).
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # Ecommerce Decline Investigation

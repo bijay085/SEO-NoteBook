@@ -10,11 +10,6 @@ description: >-
   says the words "GSC" or "Search Console". The skill enforces checking real data and HTTP status
   codes before making any claim, which is the whole point: it prevents expensive false reports and
   stops you from burning tokens on broad research sweeps for things first-party data already answers.
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # SEO GSC Diagnosis (fact-first)

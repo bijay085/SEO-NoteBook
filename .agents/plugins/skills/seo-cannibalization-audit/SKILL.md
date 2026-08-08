@@ -12,11 +12,6 @@ description: >-
   onto. Every semantic judgment (topic grouping, page taxonomy, intent, duplicate calls) is made by
   Claude in-session : NO Gemini/OpenAI/embedding API. GSC comes from the connected Search Console
   MCP. Ported from a prior cannibalization-analysis app. Industry-agnostic and config-driven.
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # Keyword Cannibalization Audit

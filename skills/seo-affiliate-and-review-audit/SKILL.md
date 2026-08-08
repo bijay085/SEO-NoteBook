@@ -17,11 +17,6 @@ description: >-
   affiliate/review client. Requests missing access (page list, outbound-link export,
   GSC, DataForSEO) before running, and can crawl/query live to fill gaps. Reuse
   built-in report branding (brand_lib / report_kit) for styling.
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # Affiliate & Review-Site Audit

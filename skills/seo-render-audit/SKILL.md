@@ -11,12 +11,6 @@ description: >-
   rendering. CLAUDE-NATIVE: Claude does the reading / analysis / solution / writing
   reasoning itself in-context (no Gemini/OpenAI key). The only external need is
   rendering the DOM, done via the browser / Playwright tool (Playwright optional).
-version: 2.0.0
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # Render Audit (Claude-native)

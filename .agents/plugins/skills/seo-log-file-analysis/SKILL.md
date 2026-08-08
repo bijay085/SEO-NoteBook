@@ -17,11 +17,6 @@ description: >-
   Runtime needs NO API keys : the only network calls are the public search-engine IP
   range files, which are cached and can be skipped with --offline. Optional sitemap and
   GSC exports add crawl-coverage cross-reference. Reuse built-in report branding (brand_lib / report_kit).
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # Log-File Analysis

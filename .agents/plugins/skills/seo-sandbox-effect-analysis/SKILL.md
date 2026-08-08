@@ -15,11 +15,6 @@ description: >-
   actively pulls from GSC / DataForSEO / Clarity and requests what's missing rather than assuming.
   CLAUDE-NATIVE: Claude does all reasoning and authoring itself : no Gemini/OpenAI/Anthropic API
   calls (Claude Max); the only external calls are real data-fetch tools verified present here.
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # Sandbox-Effect Analysis

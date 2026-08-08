@@ -15,11 +15,6 @@ description: >-
   Evidence · Solution · Execution. Industry- and niche-agnostic; config-driven so
   it works for ANY client. Requests missing access (GSC, Clarity, page list,
   DataForSEO) before running. Reuse built-in report branding (brand_lib / report_kit) for styling.
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # After Foundational Setup Audit

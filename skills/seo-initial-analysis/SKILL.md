@@ -17,11 +17,6 @@ description: >-
   phase. It is config-driven so it works for ANY client, and EVERY input is
   optional : it runs on whatever is provided, from a full folder down to just a
   domain or an entity brief, and degrades gracefully.
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # Initial Analysis (New-Client First Engagement)

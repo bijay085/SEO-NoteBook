@@ -16,11 +16,6 @@ description: >-
   via the DataForSEO, Google Search Console, and Microsoft Clarity MCP connectors
   when needed. Claude-native: no OpenAI / Gemini key : Claude does the reasoning
   itself. Final brand polish via built-in report branding.
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # CRO / Conversion Audit

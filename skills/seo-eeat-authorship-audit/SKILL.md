@@ -11,11 +11,6 @@ description: >-
   review. Config-driven, industry-agnostic. Companion to (not a replacement for)
   the Checklist/Dos-and-Donts/CSV in `EEAT and Authorship/` and the
   research companion at `Authorship-Algorithm-EEAT-Research-Companion.html`.
-compatibility: >-
-  Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
-  Gemini CLI, Copilot, and chat UIs via project upload. See pack
-  AGENT_RUNTIME.md + INSTALL.md.
-
 ---
 
 # E-E-A-T & Authorship Audit
