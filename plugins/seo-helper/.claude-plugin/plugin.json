@@ -1,7 +1,7 @@
 {
   "name": "seo-helper",
   "version": "1.0.0",
-  "description": "SEO helper, decision system, source cleaner, and audit skills by Bijay. Routes SEO questions, pasted sources, files, and site issues into focused next actions.",
+  "description": "SEO helper, SEO router, source cleaner, knowledgebase, and audit modules by Bijay. Routes SEO questions, pasted sources, files, and site issues into focused next actions.",
   "author": {
     "name": "Bijay"
   },
@@ -10,7 +10,6 @@
     "audit",
     "decision",
     "gsc",
-    "teacher",
     "rankings"
   ],
   "mcpServers": "./.mcp.json"

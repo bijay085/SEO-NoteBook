@@ -1,6 +1,6 @@
 # SEO Helper Plugin Setup
 
-This repo contains Bijay's SEO Helper plugin: SEO decision rules, audit skills, and an optional local MCP decision server.
+This repo contains Bijay's SEO Helper plugin: SEO router, knowledgebase, audit modules, and an optional local MCP router server.
 
 ## 1. Clone or Update the Repo
 
@@ -70,7 +70,7 @@ If an AI tool supports Agent Skills but not plugins, copy every folder under:
 plugins/seo-helper/skills
 ```
 
-into that tool's skills folder.
+into that tool's skills folder. For seo-router, also provide plugins/seo-helper/knowledge/SEO_Action_Decision_System.html, because the knowledgebase is intentionally not duplicated inside the skill folder.
 
 Common personal skill folders:
 
@@ -92,7 +92,7 @@ cd "D:\SEO NoteBook\plugins\seo-helper"
 The local MCP server is:
 
 ```text
-plugins/seo-helper/mcp/decision_server.py
+plugins/seo-helper/server/seo_router_server.py
 ```
 
 Install Python requirements:
@@ -100,7 +100,7 @@ Install Python requirements:
 ```bash
 cd plugins/seo-helper
 pip install -r requirements.txt
-pip install -r mcp/requirements.txt
+pip install -r server/requirements.txt
 ```
 
 Then add the MCP config from:
@@ -114,7 +114,7 @@ Set the root/path value to your local `plugins/seo-helper` folder.
 Smoke test:
 
 ```bash
-python mcp/decision_server.py --self-test
+python server/seo_router_server.py --self-test
 ```
 
 ## 6. What to Ask After Install
@@ -122,7 +122,7 @@ python mcp/decision_server.py --self-test
 Try:
 
 ```text
-Load seo-decision-helper. Traffic dropped on my Shopify store. What should I do first?
+Load seo-router. Traffic dropped on my Shopify store. What should I do first?
 ```
 
 Or:

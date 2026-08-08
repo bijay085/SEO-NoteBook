@@ -1,9 +1,9 @@
 {
-  "_comment": "Copy the seo-decision block into Cursor/Claude/Codex MCP config. Replace ROOT with this plugin folder path.",
+  "_comment": "Copy the seo-helper-router block into Cursor/Claude/Codex MCP config. Replace ROOT with this plugin folder path.",
   "mcpServers": {
-    "seo-decision": {
+    "seo-helper-router": {
       "command": "python",
-      "args": ["ROOT/mcp/decision_server.py"],
+      "args": ["ROOT/server/seo_router_server.py"],
       "env": {
         "SEO_HELPER_ROOT": "ROOT"
       }

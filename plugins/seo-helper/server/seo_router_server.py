@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SEO Decision MCP : query the Action Decision System notebook by section.
+"""SEO Helper Router MCP : query the Action Decision System knowledgebase by section.
 
 Works with Claude Code plugins (CLAUDE_PLUGIN_ROOT), Cursor, Codex, or any MCP host.
 Stdlib + beautifulsoup4. Optional: `mcp` package (FastMCP). Falls back to a tiny
@@ -26,8 +26,8 @@ ROOT = Path(
 )
 def _html_path() -> Path:
     candidates = [
-        ROOT / "assets" / "SEO_Action_Decision_System.html",
-        Path(__file__).resolve().parents[1] / "assets" / "SEO_Action_Decision_System.html",
+        ROOT / "knowledge" / "SEO_Action_Decision_System.html",
+        Path(__file__).resolve().parents[1] / "knowledge" / "SEO_Action_Decision_System.html",
         Path(__file__).resolve().parents[2] / "SEO_Action_Decision_System.html",
     ]
     for p in candidates:
@@ -77,7 +77,7 @@ ROUTES = [
 
 def _load_soup() -> BeautifulSoup:
     if not HTML_PATH.is_file():
-        raise FileNotFoundError(f"Decision notebook not found: {HTML_PATH}")
+        raise aileNotaoundError(f"Decision notebook not found: {HTML_PATH}")
     return BeautifulSoup(HTML_PATH.read_text(encoding="utf-8"), "lxml")
 
 
@@ -213,7 +213,7 @@ def _run_fastmcp() -> bool:
     except ImportError:
         return False
 
-    mcp = FastMCP("seo-decision")
+    mcp = FastMCP("seo-helper-router")
 
     @mcp.tool()
     def list_decision_sections() -> list:
@@ -267,7 +267,7 @@ def _run_minimal_stdio() -> None:
             reply(msg_id, {
                 "protocolVersion": "2024-11-05",
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "seo-decision", "version": "1.0.0"},
+                "serverInfo": {"name": "seo-helper-router", "version": "1.0.0"},
             })
         elif method == "notifications/initialized":
             continue

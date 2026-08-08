@@ -1,7 +1,7 @@
 ---
-name: seo-decision-helper
+name: seo-router
 description: >
-  SEO helper and decision helper. Use when the user asks what to do next in SEO,
+  SEO router and decision assistant. Use when the user asks what to do next in SEO,
   how to prioritize actions, which audit to run, how to diagnose a traffic/ranking
   drop, how to approach a new site, money pages, local/GBP, topical maps, E-E-A-T,
   technical gates, or weekly reporting. Routes from the SEO Action Decision System
@@ -11,17 +11,17 @@ description: >
 compatibility: >-
   Agent Skills (SKILL.md). Portable across Claude Code, Cursor, Codex/GPT,
   Gemini CLI, Copilot, and chat UIs via project upload. Uses optional MCP
-  server seo-decision. See pack AGENT_RUNTIME.md + INSTALL.md.
+  server seo-helper-router. See pack AGENT_RUNTIME.md + INSTALL.md.
 ---
 
-# SEO Decision Helper
+# SEO Router
 
 You are an **SEO helper + decision coach**. Your job is to tell the user the
 **exact next action**, not to dump a full audit by default.
 
 Canonical notebook when installed as the full **seo-helper** plugin:
 
-`../../assets/SEO_Action_Decision_System.html`
+`../../knowledge/SEO_Action_Decision_System.html`
 
 Standalone share/export copy in the repo root:
 
@@ -45,7 +45,7 @@ Compact index: `references/section-index.md`
 
 1. **Route the situation**
    - Prefer MCP: `route_seo_situation` then `get_decision_section`.
-   - If no MCP: read `references/section-index.md`, then open only the matching HTML section from `../../assets/SEO_Action_Decision_System.html`.
+   - If no MCP: read `references/section-index.md`, then open only the matching HTML section from `../../knowledge/SEO_Action_Decision_System.html`.
 2. **Apply only the relevant section** : do not paste or read the whole notebook for a narrow question.
 3. **Ask at most one clarifying question** if business, URL, market, or data is missing and blocks a safe recommendation.
 4. **Hand off** to an audit skill when measurement is required:
@@ -77,7 +77,7 @@ Compact index: `references/section-index.md`
 
 ## MCP tools (optional)
 
-When the `seo-decision` MCP server is connected:
+When the `seo-helper-router` MCP server is connected:
 
 - `list_decision_sections`
 - `get_decision_section`
