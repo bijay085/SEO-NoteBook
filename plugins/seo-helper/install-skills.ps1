@@ -43,7 +43,7 @@ foreach ($t in $Targets) {
     }
 }
 if (Test-Path $CommandsSrc) {
-    $commandFile = Join-Path $CommandsSrc "seo-helper.md"
+    $commandFile = Join-Path $CommandsSrc "seo-decision.md"
     if (Test-Path $commandFile) {
         $commandTargets = @(
             (Join-Path $env:USERPROFILE ".claude\commands")
@@ -54,9 +54,11 @@ if (Test-Path $CommandsSrc) {
 
         foreach ($cmdRoot in $commandTargets) {
             New-Item -ItemType Directory -Force -Path $cmdRoot | Out-Null
-            $destCommand = Join-Path $cmdRoot "seo-helper.md"
+            $oldCommand = Join-Path $cmdRoot "seo-helper.md"
+            if (Test-Path $oldCommand) { Remove-Item -Force $oldCommand }
+            $destCommand = Join-Path $cmdRoot "seo-decision.md"
             Copy-Item -Force $commandFile $destCommand
-            Write-Host "Installed /seo-helper command -> $destCommand"
+            Write-Host "Installed /seo-decision command -> $destCommand"
         }
     }
 }

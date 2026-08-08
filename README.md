@@ -23,7 +23,7 @@ Choose by goal, not by confusing tool names:
 ```text
 1. Recommended: Install once on this computer
    Choose this if you want SEO Helper available in future projects.
-   What happens: copies SEO skills and registers SEO Helper for app/plugin pickers and installs one `/seo-helper` command file for tools that support local command folders.
+   What happens: copies SEO skills and registers SEO Helper for app/plugin pickers and installs one `/seo-decision` command file for tools that support local command folders.
 
 2. Use only in one project or Custom GPT
    Choose this for ChatGPT GPT Builder, Claude Project, another account, or one-time sharing.
@@ -52,13 +52,13 @@ For most people, choose:
 1. Install globally on this computer
 ```
 
-That installs required Python packages and syncs the SEO skills into common local AI skill folders and registers the plugin picker entry and `/seo-helper` command for this Windows user:
+That installs required Python packages and syncs the SEO skills into common local AI skill folders and registers the plugin picker entry and `/seo-decision` command for this Windows user:
 
 ```text
 %USERPROFILE%\.codex\skills
-%USERPROFILE%\.codex\commands\seo-helper.md
+%USERPROFILE%\.codex\commands\seo-decision.md
 %USERPROFILE%\.claude\skills
-%USERPROFILE%\.claude\commands\seo-helper.md
+%USERPROFILE%\.claude\commands\seo-decision.md
 %USERPROFILE%\.cursor\skills
 %USERPROFILE%\.agents\plugins
 ```
@@ -97,7 +97,7 @@ SEO Helper can be used in different places, but the setup method depends on what
 | New GPT with Codex integrated | Global install for Codex + project file when needed | Use option 1 for Codex skills; use option 2 if the GPT side needs the HTML uploaded. |
 | New GPT normal chat | One-project file upload | Use option 2. ChatGPT chats cannot install local skill folders globally. |
 | GPT cowork / collaborative project | One-project file upload | Use option 2 and upload the HTML to that shared project/workspace. |
-| New GPT Codex | Global install | Use option 1. It syncs the Codex skill and `/seo-helper` command. |
+| New GPT Codex | Global install | Use option 1. It syncs the Codex skill and `/seo-decision` command. |
 | GPT web | Custom GPT or project upload | Use option 2. For Custom GPT, upload the HTML as Knowledge. |
 | GPT web cowork | Project upload | Use option 2 and upload the HTML to the shared project/workspace. |
 | Claude web chat | One-project file upload | Use option 2. Claude web chat cannot use local Windows skill folders directly. |
