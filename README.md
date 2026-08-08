@@ -2,13 +2,13 @@
 
 ## What It Is
 
-SEO Helper is a practical SEO decision system built by Bijay. It is a structured knowledgebase, a set of audit skills, and an optional MCP router — all in one repo.
+SEO Helper is a practical SEO decision system built by Bijay. It is a structured knowledgebase, a set of audit skills, and an optional MCP router, all in one repo.
 
 It is not an SEO tool that crawls, buys data, or connects to APIs by default. It works from what you already have: GSC exports, GA4 exports, crawl files, screenshots, pasted notes, and live pages.
 
 ## What It Is For
 
-Use SEO Helper when you have an SEO problem and need a clear next action — not a generic checklist.
+Use SEO Helper when you have an SEO problem and need a clear next action, not a generic checklist.
 
 It covers:
 
@@ -31,7 +31,7 @@ It is not for: live rank tracking, bulk keyword research, automated site crawlin
 
 ## How to Set Up
 
-### Windows — one command, no clone needed
+### Windows (one command, no clone needed)
 
 ```powershell
 irm https://raw.githubusercontent.com/bijay085/SEO-NoteBook/main/install.ps1 | iex
@@ -133,7 +133,7 @@ Upload `knowledge/SEO_Action_Decision_System.html` and paste your problem.
 irm https://raw.githubusercontent.com/bijay085/SEO-NoteBook/main/install.ps1 | iex
 ```
 
-Same command — it pulls latest and re-syncs.
+Same command. It pulls latest and re-syncs.
 
 Or via `START_HERE.bat` → option 3.
 
@@ -145,6 +145,7 @@ Or via `START_HERE.bat` → option 3.
 >
 > SEO Helper provides structured decision logic based on practitioner knowledge, documented search engine behaviour, and evidence-based rules. It does not replace professional SEO judgement or a formal site audit.
 >
-> Always verify recommendations against your own GSC data, GA4 data, live pages, and search engine documentation before making changes. Rankings, indexing behaviour, and algorithm signals change over time — rules in this system reflect knowledge up to the point it was last updated.
+> Always verify recommendations against your own GSC data, GA4 data, live pages, and search engine documentation before making changes. Rankings, indexing behaviour, and algorithm signals change over time. Rules in this system reflect knowledge up to the point it was last updated.
 >
 > Use this as a starting point and thinking aid, not as the final word. Manual verification is always required before acting on any SEO recommendation.
+

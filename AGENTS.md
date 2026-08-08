@@ -1,4 +1,4 @@
-# SEO Helper — Agent Instructions
+# SEO Helper: Agent Instructions
 
 ## Project Context
 
@@ -35,7 +35,7 @@ Do not run every audit skill for one issue.
 6. Priority
 7. Next skill (only if needed)
 
-For simple definitions, answer simply. If evidence is missing, say what is missing — do not invent numbers.
+For simple definitions, answer simply. If evidence is missing, say what is missing. Do not invent numbers.
 
 ## Canonical Files
 
@@ -68,3 +68,4 @@ When the user pastes noisy sources:
 
 - Avoid em dashes and en dashes in user-facing analysis. Use commas, periods, or colons instead.
 - Reports credit `Prepared by Bijay`. No logo required.
+
