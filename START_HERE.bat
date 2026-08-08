@@ -3,7 +3,7 @@ setlocal EnableExtensions
 
 cd /d "%~dp0"
 set "ROOT=%CD%"
-set "PLUGIN=%ROOT%\plugins\seo-helper"
+set "PLUGIN=%ROOT%"
 set "KB=%PLUGIN%\knowledge\SEO_Action_Decision_System.html"
 set "GPT_INSTRUCTIONS=%TEMP%\seo-helper-gpt-instructions.txt"
 set "GLOBAL_NOTE=%TEMP%\seo-helper-global-note.txt"
@@ -186,7 +186,7 @@ echo   %%USERPROFILE%%\.claude\skills
 echo   %%USERPROFILE%%\.cursor\skills
 echo   %%USERPROFILE%%\.agents\plugins  ^(plugin picker registration^)
 echo.
-powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1" -Targets codex,claude,cursor -SkipPythonPackages -RegisterPlugin
+powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install.ps1" -Targets codex,claude,cursor -SkipPythonPackages -RegisterPlugin
 if errorlevel 1 (
   echo.
   echo Global install had a problem. The repo plugin is still valid.
@@ -324,7 +324,7 @@ if errorlevel 1 (
 )
 echo.
 echo Syncing global skills again...
-powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1" -Targets codex,claude,cursor -SkipPythonPackages -RegisterPlugin
+powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install.ps1" -Targets codex,claude,cursor -SkipPythonPackages -RegisterPlugin
 if errorlevel 1 (
   echo.
   echo Repo updated and validated, but global skill sync had a problem.

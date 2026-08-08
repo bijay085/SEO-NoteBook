@@ -10,7 +10,7 @@ This directory is a local mirror of the ChatGPT project "My Notes".
 
 This project is an SEO notebook. When the user pastes SEO information, Reddit discussions, article notes, Google/Search Console observations, or other source material and asks to edit/add/update:
 
-- The only SEO decision HTML is `plugins/seo-helper/knowledge/SEO_Action_Decision_System.html`. Use this one file for both plugin knowledge and direct sharing. Do not create root/export copies or extra notebook copies inside skills.
+- The only SEO decision HTML is `knowledge/SEO_Action_Decision_System.html`. Use this one file for both plugin knowledge and direct sharing. Do not create root/export copies or extra notebook copies inside skills.
 - First check the canonical plugin notebook and place the update in the most relevant existing section instead of creating a confusing duplicate section.
 - Treat pasted sources as practitioner input unless they are official documentation. Convert them into concise operational rules, checklists, tables, or decision logic.
 - Keep additions compact and low-token: summarize the useful idea, remove navigation/noise, avoid long quotes, and do not paste raw source text unless the user explicitly asks.
@@ -23,7 +23,7 @@ This project is an SEO notebook. When the user pastes SEO information, Reddit di
 
 ## SEO Helper plugin goal
 
-The `plugins/seo-helper` plugin should optimize for speed, accuracy, and low token use:
+SEO Helper should optimize for speed, accuracy, and low token use:
 
 - Use `seo-router` as the single entry point for SEO decisions.
 - Route the user request first, then load only the matching notebook section or one needed `seo-*` audit skill.
