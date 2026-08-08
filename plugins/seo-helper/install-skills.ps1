@@ -132,11 +132,22 @@ if ($RegisterPlugin) {
         $pythonExe = (Get-Command python -ErrorAction SilentlyContinue)
         $pythonPath = if ($pythonExe) { $pythonExe.Source } else { "python" }
 
-        & $pythonPath $registerScript $serverScript $Root $claudeConfigFile --python $pythonPath
+        & $pythonPath $registerScript claude $serverScript $Root $claudeConfigFile --python $pythonPath
         if ($LASTEXITCODE -eq 0) {
             Write-Host "Restart Claude Desktop to activate MCP tools in all tabs."
         } else {
             Write-Warning "MCP registration failed. Add seo-helper-router manually to $claudeConfigFile"
+        }
+
+        # Register in OpenAI Codex (ChatGPT desktop) if installed.
+        $codexConfig = Join-Path $env:USERPROFILE ".codex\config.toml"
+        if (Test-Path (Split-Path $codexConfig)) {
+            & $pythonPath $registerScript codex $serverScript $Root $codexConfig --python $pythonPath
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "Restart Codex (ChatGPT desktop) to activate MCP tools."
+            } else {
+                Write-Warning "Codex MCP registration failed. Add seo-helper-router manually to $codexConfig"
+            }
         }
     }
 }
