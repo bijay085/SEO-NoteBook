@@ -12,8 +12,8 @@
     "gsc",
     "rankings"
   ],
-  "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
+  "skills": "../skills/",
+  "mcpServers": "../.mcp.json",
   "interface": {
     "displayName": "SEO Helper",
     "shortDescription": "SEO decision system by Bijay.",
