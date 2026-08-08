@@ -166,7 +166,8 @@ if ($RegisterPlugin) {
         category = "Productivity"
     }
     $market.plugins = @(@($market.plugins | Where-Object { $_.name -ne "seo-helper" }) + $entry)
-    $market | ConvertTo-Json -Depth 12 | Set-Content -Path $marketFile -Encoding UTF8
+    $json = $market | ConvertTo-Json -Depth 12
+    [System.IO.File]::WriteAllText($marketFile, $json, [System.Text.UTF8Encoding]::new($false))
     Write-Host "  plugin registry -> $marketFile"
 
     # MCP registration

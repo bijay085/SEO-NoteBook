@@ -14,6 +14,7 @@
     "longDescription": "Routes SEO problems to the right audit skill. Covers traffic drops, GSC diagnosis, topical maps, cannibalization, rendering, E-E-A-T, off-page, CRO, log files, and more.",
     "developerName": "bijay085",
     "category": "Productivity",
+    "websiteURL": "https://github.com/bijay085/SEO-NoteBook",
     "capabilities": ["Skills", "MCP"],
     "defaultPrompt": [
       "What should I do first for this SEO problem?",
