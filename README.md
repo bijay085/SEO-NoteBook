@@ -1,127 +1,128 @@
 # SEO NoteBook: SEO Helper Plugin + Decision System
 
-**One plugin.** Install only `plugins/seo-helper`. That single folder is the full product: SEO router, knowledgebase, audit modules, and optional MCP server.
+SEO Helper is one clean SEO decision plugin by Bijay.
 
-Portable **seo-helper** plugin by **Bijay**: SEO router, knowledgebase, audit modules, and optional MCP server.
+It helps AI tools answer SEO questions with practical decision logic instead of generic advice.
 
-## Basic GPT Setup
+## Start Here
 
-For a normal custom GPT, upload only `plugins/seo-helper/knowledge/SEO_Action_Decision_System.html` as Knowledge. In GPT Builder, use these instructions:
+Full setup guide:
 
 ```text
-You are SEO Helper, a practical SEO decision assistant. Use the uploaded SEO_Action_Decision_System.html knowledge file as the main reference. Answer the exact SEO question, not generic SEO advice. Use if/then decision logic. Structure answers as What, Why, How, Evidence, Priority. If evidence is missing, say what data is needed instead of guessing. Keep answers concise.
+SETUP.md
 ```
 
-Do not upload the whole repo for a basic GPT.
-## Start Here on Windows
+GitHub users should start there. It has exact steps for:
 
-After cloning, open the `SEO-NoteBook` folder and double-click:
+- ChatGPT Custom GPT
+- ChatGPT Projects
+- Claude Code
+- Claude Projects
+- Codex
+- Cursor
+- other AI tools with file uploads
+- optional MCP setup
+- future updates with `git pull`
 
-```text
+## Download
+
+```powershell
+git clone https://github.com/bijay085/SEO-NoteBook.git
+cd SEO-NoteBook
 START_HERE.bat
 ```
 
-It tests SEO Helper and shows the exact plugin path to paste into Claude Code.
+On Windows, double-click `START_HERE.bat` after cloning. It validates the plugin and shows the exact plugin path.
+
 ## What This Plugin Does
 
-SEO Helper is a single installable SEO decision assistant. It helps an AI agent decide what SEO action to take, which evidence to check, and which deeper audit workflow to use without making the user repeat the same context in every new chat.
+SEO Helper is a single installable SEO decision assistant. It helps an AI agent decide what SEO action to take, what evidence to check, and which deeper audit workflow to use.
 
 It helps with:
 
-- **SEO decisions:** decide what to do next for traffic drops, ranking problems, new websites, local SEO, money pages, topical maps, E-E-A-T, technical SEO, reporting, and content planning.
-- **Pasted sources:** clean Reddit threads, article notes, Google/Search Console observations, and other pasted information into compact, useful SEO rules instead of dumping raw text.
-- **File analysis:** guide the agent through GSC exports, crawl files, logs, HTML, reports, and audit evidence when a deeper diagnosis is needed.
-- **Audit routing:** choose the right included SEO audit skill, such as GSC diagnosis, render audit, CRO audit, topical map, backlink audit, log-file analysis, or cannibalization audit.
-- **Token optimization:** load only the entry helper, the needed notebook section, or the specific audit skill instead of loading every SEO rule at once.
-- **Consistent answers:** push the agent to answer with practical structure: What / Why / How / Evidence / Priority.
+- SEO decisions for traffic drops, ranking problems, new sites, local SEO, money pages, topical maps, E-E-A-T, technical SEO, AI visibility, and reporting
+- pasted source cleanup, turning Reddit threads, article notes, and observations into compact reusable rules
+- file analysis guidance for GSC exports, crawl files, logs, HTML, reports, and audit evidence
+- audit routing to the right included SEO skill
+- token optimization by loading only the relevant rule, notebook section, or audit skill
+- consistent answers using What, Why, How, Evidence, and Priority
 
-## How It Works
+## One Plugin Folder
 
-Install **one plugin folder**: `plugins/seo-helper`. Inside it, the agent starts with `seo-router`, uses the knowledgebase for rules, and only opens a deeper `seo-*` audit skill when the task needs measurement or file-based proof. The optional MCP server can route a situation to the right notebook section and suggested audit skill.
+Install only this folder when your AI tool supports plugins:
 
-| Path | What it is |
-|---|---|
-| [`plugins/seo-helper/knowledge/SEO_Action_Decision_System.html`](./plugins/seo-helper/knowledge/SEO_Action_Decision_System.html) | Canonical editable knowledgebase used by the plugin |
-| [`plugins/seo-helper/`](./plugins/seo-helper/) | **Plugin root** : install this folder in Claude / Codex; includes skills + optional MCP |
-| [`AGENTS.md`](./AGENTS.md) | Notes for agents working in this repo |
+```text
+plugins/seo-helper
+```
 
-## Updating the Knowledgebase
-
-Edit only one HTML file:
+The canonical knowledgebase is:
 
 ```text
 plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
 ```
 
-Use that same file for plugin knowledge and direct sharing. Do not add root/export copies.
-## Production Update Flow
+Do not use copied duplicate HTML files. This is the only decision knowledgebase.
 
-For maintainers, the plugin has one update path:
+## Basic ChatGPT Custom GPT Setup
+
+For a normal custom GPT, upload only this file as Knowledge:
+
+```text
+plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
+```
+
+Use the full instructions in `SETUP.md`.
+
+## How It Works
+
+The AI starts with:
+
+```text
+plugins/seo-helper/skills/seo-router/SKILL.md
+```
+
+Then it reads only the relevant section from the knowledgebase. It loads deeper `seo-*` audit skills only when the question needs measurement, files, or a full audit.
+
+## Updating the Knowledgebase
+
+Maintainers edit only:
+
+```text
+plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
+```
+
+Then run:
 
 ```powershell
 cd plugins\seo-helper
 python scripts\maintain.py rebuild-index
 python scripts\maintain.py validate
-git add knowledge\SEO_Action_Decision_System.html skills\seo-router\references\section-index.md scripts\maintain.py README.md INSTALL.md AGENT_RUNTIME.md server\seo_router_server.py
-git commit -m "Update SEO helper"
-git push
 ```
 
-Add new SEO lessons only to `plugins/seo-helper/knowledge/SEO_Action_Decision_System.html`. The section index is generated from that file. Existing users normally update with `git pull`.
-## Share / install links
+Existing users update with:
 
-**Repo:** https://github.com/bijay085/SEO-NoteBook  
-
-**Plugin folder:** https://github.com/bijay085/SEO-NoteBook/tree/main/plugins/seo-helper  
-
-### Claude Code
-
-Clone, then install the plugin folder:
-
-```bash
-git clone https://github.com/bijay085/SEO-NoteBook.git
-# In Claude Code:
-# /plugin install <path-to>/SEO-NoteBook/plugins/seo-helper
+```powershell
+git pull
 ```
 
-### Cursor / Codex (skills)
+If they uploaded files to ChatGPT or Claude Projects, they should upload the new HTML again.
 
-```bash
-git clone https://github.com/bijay085/SEO-NoteBook.git
-cd SEO-NoteBook/plugins/seo-helper
-# Windows:
-.\install-skills.ps1
-# macOS/Linux:
-./install-skills.sh
-pip install -r requirements.txt
-pip install -r server/requirements.txt
+## Links
+
+Repo:
+
+```text
+https://github.com/bijay085/SEO-NoteBook
 ```
 
-Local MCP config: copy [`plugins/seo-helper/mcp-hosts.example.json`](./plugins/seo-helper/mcp-hosts.example.json) into your host MCP settings and set `ROOT` to the `plugins/seo-helper` path.
+Plugin folder:
 
-### ChatGPT / Grok / Claude Projects
+```text
+https://github.com/bijay085/SEO-NoteBook/tree/main/plugins/seo-helper
+```
 
-Upload:
+Detailed setup:
 
-- `plugins/seo-helper/skills/seo-router/`
-- `plugins/seo-helper/knowledge/SEO_Action_Decision_System.html`
-- optionally other `plugins/seo-helper/skills/seo-*` audits you need
-
-Prompt:
-
-> Follow `seo-router/SKILL.md`. Use the knowledgebase HTML for rules. Answer with What / Why / How / Evidence / Priority.
-
-## Entry skill
-
-Ask any agent:
-
-> Load **seo-router**. Traffic dropped on my Shopify store : what should I do first?
-
-Setup guide: [SETUP.md](./SETUP.md)
-
-Full install notes: [`plugins/seo-helper/INSTALL.md`](./plugins/seo-helper/INSTALL.md) · runtime: [`plugins/seo-helper/AGENT_RUNTIME.md`](./plugins/seo-helper/AGENT_RUNTIME.md)
-
-## Note on MCP “link”
-
-The bundled MCP (`plugins/seo-helper/server/seo_router_server.py`) is **local** (runs on the user’s machine after clone). A public one-click MCP URL needs a separate hosted deploy : see `plugins/seo-helper/README.md`.
-
+```text
+SETUP.md
+```

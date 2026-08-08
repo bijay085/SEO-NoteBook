@@ -1,145 +1,353 @@
-# SEO Helper Plugin Setup
+# SEO Helper Setup
 
-This repo contains Bijay's SEO Helper plugin: SEO router, knowledgebase, audit modules, and an optional local MCP router server.
+This guide is for a new user who found the GitHub repo and wants to use SEO Helper without guessing what to install.
 
-## 1. Clone or Update the Repo
+Repo:
 
-First get the repo onto your machine:
+```text
+https://github.com/bijay085/SEO-NoteBook
+```
+
+The only plugin folder is:
+
+```text
+SEO-NoteBook/plugins/seo-helper
+```
+
+The only knowledgebase HTML is:
+
+```text
+SEO-NoteBook/plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
+```
+
+## 1. Download the Repo
+
+### Windows
+
+Open Command Prompt or PowerShell, then run:
+
+```powershell
+cd /d E:\
+git clone https://github.com/bijay085/SEO-NoteBook.git
+cd SEO-NoteBook
+START_HERE.bat
+```
+
+If you cloned somewhere else, open that folder and double-click:
+
+```text
+START_HERE.bat
+```
+
+That file checks the plugin and shows the exact local plugin path.
+
+### macOS or Linux
 
 ```bash
 git clone https://github.com/bijay085/SEO-NoteBook.git
+cd SEO-NoteBook/plugins/seo-helper
+python scripts/maintain.py validate
 ```
 
-If you already have it:
+If validation says `SEO Helper validation passed`, the files are ready.
 
-```bash
-cd SEO-NoteBook
-git pull
-```
+## 2. ChatGPT Custom GPT Setup
 
-The main plugin folder is:
+Use this when you want a normal GPT inside ChatGPT.
+
+1. Open ChatGPT.
+2. Go to `Explore GPTs`.
+3. Click `Create`.
+4. Open the `Configure` tab.
+5. Name it:
 
 ```text
-plugins/seo-helper
+SEO Helper
 ```
 
-
-## 2. Install in Claude Code
-
-Open Claude Code and run:
+6. In `Instructions`, paste:
 
 ```text
-/plugin install <path-to>/SEO-NoteBook/plugins/seo-helper
+You are SEO Helper, a practical SEO decision assistant.
+
+Use the uploaded SEO_Action_Decision_System.html file as the main knowledgebase.
+
+Answer the exact SEO question. Do not give generic SEO advice unless the user asks for basics.
+
+Use if/then decision logic. Prefer the most relevant rule from the knowledgebase instead of reading or summarizing everything.
+
+Default answer format:
+Mode:
+What:
+Why:
+How:
+Evidence:
+Priority:
+
+If the user pastes Reddit threads, articles, notes, or files, extract only reusable decision rules. Ignore spam, insults, repeated opinions, and unsupported shortcuts.
+
+If evidence is missing, say what data is needed instead of guessing. Keep answers concise and actionable.
 ```
 
-Example on Windows:
+7. In `Knowledge`, upload this file:
 
 ```text
-/plugin install D:\SEO NoteBook\plugins\seo-helper
+SEO-NoteBook/plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
 ```
 
-After updating the repo with `git pull`, restart or open a new Claude Code session so the latest plugin files are loaded.
+8. Save the GPT.
 
-## 3. Install in Codex / GPT Plugin Flow
-
-The Codex plugin manifest is here:
+Test prompt:
 
 ```text
-plugins/seo-helper/.codex-plugin/plugin.json
+A service page is indexed but has no impressions. What should I check first?
 ```
 
-The repo-local marketplace file is here:
+Use this setup if you only need the decision helper. Do not upload the whole repo for a basic GPT.
+
+## 3. ChatGPT Project Setup
+
+Use this when you want SEO Helper inside a ChatGPT Project instead of a custom GPT.
+
+1. Create or open a Project.
+2. Upload these files:
 
 ```text
-.agents/plugins/marketplace.json
+SEO-NoteBook/plugins/seo-helper/skills/seo-router/SKILL.md
+SEO-NoteBook/plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
 ```
 
-In Codex, use the plugin view/share flow for `seo-helper`, or install from the marketplace entry that points to:
+3. Add this Project instruction:
 
 ```text
-./plugins/seo-helper
+Follow seo-router/SKILL.md. Use SEO_Action_Decision_System.html as the SEO knowledgebase. Answer only the relevant part of the user's question with What, Why, How, Evidence, and Priority. Load or request deeper audit files only when the task needs measurement.
 ```
 
-When the plugin changes, update from Git and reinstall/refresh the plugin if your Codex app does not pick up local changes automatically.
+4. Optional: upload extra `seo-*` skill folders only when you need that deep audit.
 
-## 4. Install Skills Only
-
-If an AI tool supports Agent Skills but not plugins, copy every folder under:
+Test prompt:
 
 ```text
-plugins/seo-helper/skills
+Use SEO Helper. Organic clicks dropped but impressions stayed stable. What does that mean?
 ```
 
-into that tool's skills folder. For seo-router, also provide plugins/seo-helper/knowledge/SEO_Action_Decision_System.html, because the knowledgebase is intentionally not duplicated inside the skill folder.
+## 4. Claude Code Plugin Setup
 
-Common personal skill folders:
+Use this when you want the full plugin in Claude Code.
 
-| Tool | Skills Folder |
-|---|---|
-| Claude Code | `~/.claude/skills/` |
-| Codex | `~/.codex/skills/` |
-| Cursor | `~/.cursor/skills/` |
-
-On Windows, from the plugin folder you can run:
+1. Clone the repo:
 
 ```powershell
-cd "D:\SEO NoteBook\plugins\seo-helper"
-.\install-skills.ps1
+git clone https://github.com/bijay085/SEO-NoteBook.git
 ```
 
-## 5. Optional MCP Setup
-
-The local MCP server is:
+2. Copy the full path to this folder:
 
 ```text
-plugins/seo-helper/server/seo_router_server.py
+SEO-NoteBook/plugins/seo-helper
 ```
 
-Install Python requirements:
-
-```bash
-cd plugins/seo-helper
-pip install -r requirements.txt
-pip install -r server/requirements.txt
-```
-
-Then add the MCP config from:
+Example Windows path:
 
 ```text
-plugins/seo-helper/mcp-hosts.example.json
+E:\SEO-NoteBook\plugins\seo-helper
 ```
 
-Set the root/path value to your local `plugins/seo-helper` folder.
-
-Smoke test:
-
-```bash
-python server/seo_router_server.py --self-test
-```
-
-## 6. What to Ask After Install
-
-Try:
+3. In Claude Code, run:
 
 ```text
-Load seo-router. Traffic dropped on my Shopify store. What should I do first?
+/plugin install E:\SEO-NoteBook\plugins\seo-helper
 ```
 
-Or:
+4. Start a new Claude Code chat.
+
+Test prompt:
 
 ```text
-Use SEO Helper to clean this pasted SEO source and add only the useful decision rules.
+Load seo-router. Traffic dropped on my Shopify store. What should I check first?
 ```
 
-## 7. Updating
+Future updates:
 
-To get future improvements:
-
-```bash
-cd SEO-NoteBook
+```powershell
+cd E:\SEO-NoteBook
 git pull
 ```
 
-Then start a new chat/session or refresh the plugin. For local plugin hosts, a new session is the safest way to make sure updated skills and MCP tools are loaded.
+Start a new Claude Code chat after pulling updates. Reinstall only if Claude copied the plugin instead of using the local repo folder.
 
+## 5. Claude Project Setup
 
+Use this when you are using claude.ai Projects, not Claude Code.
+
+1. Create or open a Claude Project.
+2. Upload these two files first:
+
+```text
+SEO-NoteBook/plugins/seo-helper/skills/seo-router/SKILL.md
+SEO-NoteBook/plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
+```
+
+3. Add this Project instruction:
+
+```text
+Use SEO Helper. Follow seo-router/SKILL.md. Use SEO_Action_Decision_System.html for SEO rules. Answer with Mode, What, Why, How, Evidence, and Priority. Do not dump the whole knowledgebase. Use only the relevant rule for the user's question.
+```
+
+4. Optional: upload specific audit skill folders only when you need them.
+
+Test prompt:
+
+```text
+A new website is indexed but not ranking after months. What should I diagnose first?
+```
+
+## 6. Codex or Cursor Skills Setup
+
+Use this when your AI coding tool supports local skills.
+
+### Windows
+
+```powershell
+git clone https://github.com/bijay085/SEO-NoteBook.git
+cd SEO-NoteBook\plugins\seo-helper
+.\install-skills.ps1
+pip install -r requirements.txt
+pip install -r server\requirements.txt
+python scripts\maintain.py validate
+```
+
+### macOS or Linux
+
+```bash
+git clone https://github.com/bijay085/SEO-NoteBook.git
+cd SEO-NoteBook/plugins/seo-helper
+chmod +x install-skills.sh
+./install-skills.sh
+pip install -r requirements.txt
+pip install -r server/requirements.txt
+python scripts/maintain.py validate
+```
+
+Test prompt inside the AI tool:
+
+```text
+Load seo-router. I have high impressions but low CTR. What should I do first?
+```
+
+## 7. Optional MCP Setup
+
+Use MCP only if your AI tool supports MCP and you want section lookup or routing as tools.
+
+1. Open this file:
+
+```text
+SEO-NoteBook/plugins/seo-helper/mcp-hosts.example.json
+```
+
+2. Copy the `seo-helper-router` block into your AI tool's MCP settings.
+3. Replace every `ROOT` with your full plugin folder path.
+
+Example Windows value:
+
+```text
+E:\SEO-NoteBook\plugins\seo-helper
+```
+
+4. Test locally:
+
+```powershell
+cd E:\SEO-NoteBook\plugins\seo-helper
+python server\seo_router_server.py --self-test
+```
+
+If it works, the MCP exposes:
+
+```text
+list_decision_sections
+get_decision_section
+route_seo_situation
+list_seo_audit_skills
+```
+
+## 8. Other AI Tools
+
+If your AI tool has file uploads but no plugin system:
+
+Upload these two files:
+
+```text
+SEO-NoteBook/plugins/seo-helper/skills/seo-router/SKILL.md
+SEO-NoteBook/plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
+```
+
+Paste this instruction:
+
+```text
+You are SEO Helper. Follow seo-router/SKILL.md. Use SEO_Action_Decision_System.html as the knowledgebase. Answer the exact SEO question with What, Why, How, Evidence, and Priority. Use only the relevant rule. Ask for missing evidence instead of guessing.
+```
+
+If the tool supports folders, upload extra `SEO-NoteBook/plugins/seo-helper/skills/seo-*` folders only for the specific audits you want.
+
+## 9. How to Use After Setup
+
+Ask direct questions like:
+
+```text
+Use SEO Helper. My page is indexed but has no impressions. What should I check first?
+```
+
+```text
+Use SEO Helper. My rankings dropped yesterday after 4 months of growth. What is the triage order?
+```
+
+```text
+Use SEO Helper. Clean this pasted Reddit SEO thread and add only reusable decision rules.
+```
+
+```text
+Use SEO Helper. Which audit skill should I use for a traffic decline with GSC data?
+```
+
+## 10. Updating Later
+
+Users update with Git:
+
+```powershell
+cd E:\SEO-NoteBook
+git pull
+cd plugins\seo-helper
+python scripts\maintain.py validate
+```
+
+If using ChatGPT or Claude Project uploads, upload the new `SEO_Action_Decision_System.html` again after pulling updates.
+
+If using Claude Code from the local plugin path, usually `git pull` plus a new chat is enough.
+
+## 11. Maintainer Update Flow
+
+When adding new SEO knowledge:
+
+1. Edit only:
+
+```text
+plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
+```
+
+2. Run:
+
+```powershell
+cd plugins\seo-helper
+python scripts\maintain.py rebuild-index
+python scripts\maintain.py validate
+```
+
+3. Commit:
+
+```powershell
+git add knowledge\SEO_Action_Decision_System.html skills\seo-router\references\section-index.md
+git commit -m "Update SEO helper knowledgebase"
+git push
+```
+
+Do not create another knowledgebase copy.

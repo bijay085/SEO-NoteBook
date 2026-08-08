@@ -6,84 +6,213 @@ This folder is the plugin root:
 plugins/seo-helper
 ```
 
-## Fast Test After Clone
-
-From repo root:
-
-```powershell
-cd plugins\seo-helper
-python scripts\maintain.py validate
-```
-
-If validation passes, the plugin files are present and the MCP router can read the knowledgebase.
-
-## Claude Code Plugin Install
-
-In Claude Code:
+If you are viewing this inside the repo, the main full setup guide is:
 
 ```text
-/plugin install C:\path\to\SEO-NoteBook\plugins\seo-helper
+../../SETUP.md
 ```
 
-If you installed from a local repo path, future updates are simple:
+## Fast Validation
+
+From this folder:
 
 ```powershell
-git pull
-cd plugins\seo-helper
 python scripts\maintain.py validate
 ```
 
-Reinstall only if Claude copied the plugin instead of referencing the repo path.
+Expected result:
 
-## Codex / Cursor Skills Install
-
-From `plugins/seo-helper`:
-
-```powershell
-.\install-skills.ps1
-pip install -r requirements.txt
-pip install -r server\requirements.txt
-python scripts\maintain.py validate
+```text
+SEO Helper validation passed
 ```
 
-## Chat UI Setup
+## ChatGPT Custom GPT
 
-Upload these two files first:
+Use this when creating a GPT in ChatGPT.
+
+1. Open ChatGPT.
+2. Go to `Explore GPTs`.
+3. Click `Create`.
+4. Open `Configure`.
+5. Upload this file in Knowledge:
+
+```text
+knowledge/SEO_Action_Decision_System.html
+```
+
+6. Paste this in Instructions:
+
+```text
+You are SEO Helper, a practical SEO decision assistant.
+
+Use the uploaded SEO_Action_Decision_System.html file as the main knowledgebase.
+
+Answer the exact SEO question. Do not give generic SEO advice unless the user asks for basics.
+
+Use if/then decision logic. Prefer the most relevant rule from the knowledgebase instead of reading or summarizing everything.
+
+Default answer format:
+Mode:
+What:
+Why:
+How:
+Evidence:
+Priority:
+
+If evidence is missing, say what data is needed instead of guessing. Keep answers concise and actionable.
+```
+
+7. Save and test:
+
+```text
+A page is indexed but has no impressions. What should I check first?
+```
+
+## ChatGPT Project
+
+Upload:
 
 ```text
 skills/seo-router/SKILL.md
 knowledge/SEO_Action_Decision_System.html
 ```
 
-Then add this instruction:
+Project instruction:
 
 ```text
-Follow seo-router/SKILL.md. Use SEO_Action_Decision_System.html for rules. Answer with What, Why, How, Evidence, and Priority. Keep answers compact and load deeper audit material only when needed.
+Follow seo-router/SKILL.md. Use SEO_Action_Decision_System.html as the SEO knowledgebase. Answer only the relevant part of the user's question with What, Why, How, Evidence, and Priority. Load deeper audit material only when needed.
 ```
 
-Upload extra `seo-*` skill folders only when you want that specific deep audit available.
+## Claude Code
 
-## MCP Setup
+Install the whole plugin folder:
 
-Use `mcp-hosts.example.json` as the template. Replace `ROOT` with the absolute path to this folder.
+```text
+/plugin install C:\path\to\SEO-NoteBook\plugins\seo-helper
+```
 
-The local router command is:
+Example:
+
+```text
+/plugin install E:\SEO-NoteBook\plugins\seo-helper
+```
+
+Test:
+
+```text
+Load seo-router. Traffic dropped on my Shopify store. What should I check first?
+```
+
+Update later:
 
 ```powershell
-python server\seo_router_server.py
+cd E:\SEO-NoteBook
+git pull
 ```
 
-Smoke test:
+Then start a new Claude Code chat.
+
+## Claude Project
+
+Upload:
+
+```text
+skills/seo-router/SKILL.md
+knowledge/SEO_Action_Decision_System.html
+```
+
+Project instruction:
+
+```text
+Use SEO Helper. Follow seo-router/SKILL.md. Use SEO_Action_Decision_System.html for SEO rules. Answer with Mode, What, Why, How, Evidence, and Priority. Do not dump the whole knowledgebase. Use only the relevant rule.
+```
+
+## Codex or Cursor
+
+Windows:
+
+```powershell
+cd SEO-NoteBook\plugins\seo-helper
+.\install-skills.ps1
+pip install -r requirements.txt
+pip install -r server\requirements.txt
+python scripts\maintain.py validate
+```
+
+macOS or Linux:
+
+```bash
+cd SEO-NoteBook/plugins/seo-helper
+chmod +x install-skills.sh
+./install-skills.sh
+pip install -r requirements.txt
+pip install -r server/requirements.txt
+python scripts/maintain.py validate
+```
+
+Test:
+
+```text
+Load seo-router. I have high impressions but low CTR. What should I do first?
+```
+
+## Other AI Tools
+
+If the tool supports uploads but not plugins, upload:
+
+```text
+skills/seo-router/SKILL.md
+knowledge/SEO_Action_Decision_System.html
+```
+
+Instruction:
+
+```text
+You are SEO Helper. Follow seo-router/SKILL.md. Use SEO_Action_Decision_System.html as the knowledgebase. Answer the exact SEO question with What, Why, How, Evidence, and Priority. Use only the relevant rule. Ask for missing evidence instead of guessing.
+```
+
+Upload extra `seo-*` skill folders only when you need those audits.
+
+## Optional MCP
+
+Use MCP only if your AI tool supports MCP.
+
+1. Open:
+
+```text
+mcp-hosts.example.json
+```
+
+2. Copy the `seo-helper-router` block.
+3. Replace `ROOT` with the absolute path to this folder.
+4. Test:
 
 ```powershell
 python server\seo_router_server.py --self-test
 ```
 
-## Updating the Knowledgebase
+MCP tools:
 
-1. Edit `knowledge/SEO_Action_Decision_System.html`.
-2. Run `python scripts\maintain.py rebuild-index`.
-3. Run `python scripts\maintain.py validate`.
-4. Commit and push.
+```text
+list_decision_sections
+get_decision_section
+route_seo_situation
+list_seo_audit_skills
+```
+
+## Updating Knowledge
+
+Edit only:
+
+```text
+knowledge/SEO_Action_Decision_System.html
+```
+
+Then run:
+
+```powershell
+python scripts\maintain.py rebuild-index
+python scripts\maintain.py validate
+```
 
 Do not create another `SEO_Action_Decision_System.html` anywhere else.
