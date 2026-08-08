@@ -47,6 +47,17 @@ For simple definitions, answer simply. If evidence is missing, say what is missi
 | `server/seo_router_server.py` | MCP section lookup and situation router |
 | `scripts/maintain.py` | Validate, rebuild index, add rules |
 
+## Codex Plugin Icon Rules
+
+Do not change, remove, rename, or "simplify" the Codex plugin icon files or paths unless the user explicitly asks for an icon change.
+
+- Keep `.codex-plugin/plugin.json` using `interface.composerIcon: "./assets/icon.png"` and `interface.logo: "./assets/logo.png"`.
+- Keep both root fallback files: `assets/icon.png` and `assets/logo.png`.
+- Keep both manifest-local files: `.codex-plugin/assets/icon.png` and `.codex-plugin/assets/logo.png`.
+- Keep `.agents/plugins/marketplace.json` pointing the marketplace card logo to `./assets/logo.png`.
+- Do not recreate a duplicated `plugins/seo-helper/` package tree. The repo root is the plugin root.
+- Do not add stale personal marketplace entries or local installed plugin copies under `C:\Users\bijay\.agents\plugins\plugins\seo-helper`.
+
 ## Source Handling
 
 When the user pastes noisy sources:
@@ -68,4 +79,5 @@ When the user pastes noisy sources:
 
 - Avoid em dashes and en dashes in user-facing analysis. Use commas, periods, or colons instead.
 - Reports credit `Prepared by Bijay`. No logo required.
+
 
