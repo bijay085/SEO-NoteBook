@@ -1,8 +1,0 @@
-removed_id,canonical_id,removed_requirement,canonical_requirement
-ACC-0027,ACC-0001,Expose one coherent main region,Exactly one visible main landmark
-ACC-0036,ACC-0003,Make section boundaries recoverable,Sections are named
-ACC-0031,ACC-0006,Give each navigation region a distinct name,Repeated landmarks have distinct names
-ACC-0030,ACC-0005,Use a named navigation region,Nav is reserved for major navigation
-ACC-0035,ACC-0007,Use headings to express hierarchy,Headings encode hierarchy
-ACC-0050,ACC-0008,Associate media with its caption,Figure captions are structurally associated
-ACC-0042,ACC-0014,Use ARIA only to supply valid semantics,ARIA does not conflict with native semantics
