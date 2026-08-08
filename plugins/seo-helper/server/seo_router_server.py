@@ -39,7 +39,7 @@ HTML_PATH = _html_path()
 
 # Situation keywords → notebook section id + suggested audit skill(s)
 ROUTES = [
-    (["traffic down", "ranking down", "clicks down", "decline", "drop", "lost traffic", "lost traffic after migration", "ranking fluctuation", "rankings fluctuating", "homepage ranking", "homepage leaning", "cannibalization"],
+    (["traffic down", "ranking down", "clicks down", "decline", "drop", "lost traffic", "lost traffic after migration", "ranking fluctuation", "rankings fluctuating", "homepage ranking", "homepage leaning", "brand query vanished", "brand keyword vanished", "specific hour", "massive deranking", "google-only deranking", "cannibalization"],
      "decline-diagnosis", ["seo-gsc-diagnosis", "seo-ecom-decline-investigation"]),
     (["new site", "new domain", "new project", "what is this business", "entity"],
      "domain-understanding", ["seo-initial-analysis"]),
@@ -53,7 +53,7 @@ ROUTES = [
      "content-eeat", ["seo-eeat-authorship-audit"]),
     (["cannibal", "duplicate url", "same keyword two pages"],
      "decline-diagnosis", ["seo-cannibalization-audit"]),
-    (["render", "javascript", "js seo", "raw html", "robots.txt", "robots blocked", "screaming frog", "crawl blocked"],
+    (["render", "javascript", "js seo", "raw html", "robots.txt", "robots blocked", "screaming frog", "crawl blocked", "accept-encoding", "cdn", "waf", "dnssec", "load balancer", "googlebot"],
      "technical-seo", ["seo-render-audit"]),
     (["log file", "crawl budget", "bot crawl"],
      "technical-seo", ["seo-log-file-analysis"]),
@@ -71,13 +71,13 @@ ROUTES = [
      "blog-adsense", []),
     (["location page", "city page", "doorway", "same content", "duplicate location"],
      "service-location-pages", ["seo-after-foundational-setup-audit"]),
-    (["product page", "category page", "breadcrumb", "collection page"],
+    (["product page", "category page", "breadcrumb", "collection page", "cross sell", "cross-selling", "silo", "internal linking", "page depth", "click depth"],
      "service-location-pages", []),
     (["canonical", "google-selected canonical", "selected canonical"],
      "technical-seo", ["seo-render-audit"]),
     (["indexed but not showing", "indexed but not served", "not showing in serps", "indexed no impressions"],
      "technical-seo", ["seo-gsc-diagnosis"]),
-    (["b2b", "nurture", "funnel", "seo tool", "best value", "seo clients", "client acquisition"],
+    (["b2b", "nurture", "funnel", "seo tool", "seo tools", "tool gap", "best value", "seo clients", "client acquisition"],
      "weekly-reporting", []),
     (["wordpress to static", "static html", "migration", "cms migration", "post migration", "wordpress migration", "wix migration"],
      "technical-seo", ["seo-render-audit"]),

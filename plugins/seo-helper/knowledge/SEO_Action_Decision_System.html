@@ -1463,6 +1463,18 @@
       </table>
       <p><strong>Decision rule:</strong> beginners should master GSC, GA4, one crawler, and live SERP review before paying for many dashboards.</p>
 
+
+      <h3>SEO Tool Gap and Judgment Rule</h3>
+      <p>Use this when someone asks why SEO tools still feel incomplete. Tools collect signals; they rarely reconstruct the decision path. Do not treat a dashboard as a strategy.</p>
+      <table>
+        <tr><th>Tool Gap</th><th>What It Means</th><th>Better Decision</th></tr>
+        <tr><td>GSC limits history or rows.</td><td>Missing rows can hide long-tail queries and older trends.</td><td>Export regularly, store history, and compare by query/page/device/country/search appearance.</td></tr>
+        <tr><td>Third-party traffic differs from GSC or GA4.</td><td>Estimates, panels, and modeled keywords are not first-party truth.</td><td>Use third-party tools for discovery and competitors, not final performance reporting.</td></tr>
+        <tr><td>AI visibility tools show mentions only.</td><td>Mention count does not explain why the model chose a brand.</td><td>Log prompts, cited sources, repeated runs, source language, competitor framing, and passage-level claims.</td></tr>
+        <tr><td>Backlink indexes disagree.</td><td>Each tool has a different crawl/index.</td><td>Pick one consistent source for trend monitoring and verify important links manually.</td></tr>
+        <tr><td>Recommendations are generic.</td><td>The tool has data but weak judgment.</td><td>Convert findings into hypotheses, affected URLs, business impact, and a test plan.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> a useful SEO system stitches GSC, GA4, crawl data, SERP checks, backlinks, page changes, and business outcomes into one workflow. Another dashboard is not enough unless it changes the next action.</p>
       <h3>SEO Client Acquisition Reality Rule</h3>
       <p>Use this when someone struggles to get SEO clients despite having local SEO knowledge. Treat this as positioning and proof, not only SEO skill.</p>
       <table>
@@ -5382,6 +5394,18 @@
         <li>Myth: agentic SEO is just writing good content at scale. Reality: the hard part is information structure, page grouping, contextual internal links, QA gates, measurement, and continuous improvement.</li>
       </ul>
 
+
+      <h3>Cross-Sell and Internal Link Depth Rule</h3>
+      <p>Use this when someone asks whether cross-selling breaks silos, whether too many internal links hurt, or whether URL depth matters. Separate URL folder depth from click depth and user relevance.</p>
+      <table>
+        <tr><th>Question</th><th>Decision</th><th>Guardrail</th></tr>
+        <tr><td>Product cross-links across categories.</td><td>Allowed when products are genuinely related, commonly bought together, or help the user choose.</td><td>Do not link every product to every other product. Require intent, context, or merchandising logic.</td></tr>
+        <tr><td>Related-products widget.</td><td>Useful if it is selective and stable.</td><td>Avoid sitewide random widgets that create noisy links and dilute meaning.</td></tr>
+        <tr><td>Many internal links in one article.</td><td>No fixed safe number.</td><td>Every link should answer why a reader would click it now. If everything links to everything, topical meaning gets weaker.</td></tr>
+        <tr><td>URL folder depth.</td><td>Folders alone are not the same as crawl/click depth.</td><td>A deep-looking URL linked from the homepage can be shallow in click depth.</td></tr>
+        <tr><td>Click depth from important pages.</td><td>Important for discovery, priority, and internal equity.</td><td>Move important pages closer through navigation, hubs, breadcrumbs, and contextual links.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> strict silos are less important than clear architecture. Cross-link when it helps the user and reinforces meaning; reduce noisy links that exist only because templates made them easy.</p>
       <h3>AI-Built Website Launch and Ranking Rule</h3>
       <p>Use this when a site is built mostly with Claude, ChatGPT, Codex, Cursor, or another AI coding workflow and the owner wants indexing, rankings, organic traffic, or AI citations. AI can speed up build and content production, but SEO success still depends on page selection, keyword clustering, technical setup, useful data, validation, and patient testing.</p>
       <table>
@@ -5496,6 +5520,17 @@
         </tr>
       </table>
 
+
+      <h3>Brand Query SERP Shift Rule</h3>
+      <p>Use this when an exact brand query suddenly loses the homepage while the page remains indexed, canonicalized, and crawlable. This may be a query-intent or SERP-layout shift, not an indexing failure.</p>
+      <table>
+        <tr><th>Signal</th><th>Meaning</th><th>Action</th></tr>
+        <tr><td>Homepage indexed and brand-plus-modifier queries still rank.</td><td>The site is probably not deindexed.</td><td>Do not rewrite titles, spam indexing requests, or roll back unrelated changes from one incomplete day.</td></tr>
+        <tr><td>Shopping block, competitors, categories, or SERP features replace the homepage.</td><td>Google may be testing a different intent for the bare brand query.</td><td>Record result types, country, device, search appearance, Merchant Center, GBP, ads, and product feed changes.</td></tr>
+        <tr><td>Drop appears in hourly GSC.</td><td>Fresh hourly data can still change.</td><td>Wait for two complete days unless other pages, variants, countries, or devices also drop.</td></tr>
+        <tr><td>Brand loss spreads across variants or non-brand pages.</td><td>Wider quality, technical, reputation, or authority issue is possible.</td><td>Escalate to decline diagnosis, logs, backlinks, server events, reputation, and SERP ownership checks.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> if only the bare brand query changed and technical checks are clean, investigate SERP intent and brand ecosystem before changing the site.</p>
       <h3>Brand Decline Checks</h3>
       <ul>
         <li>Check Google Trends for the exact brand name, not generic primary or secondary keywords.</li>
@@ -6719,6 +6754,19 @@
         <li>Myth: if AI can explain the fix, a developer is unnecessary. Reality: AI can guide low-risk work, but a developer or consultant is still valuable for security, performance, data, server, and high-impact production changes.</li>
       </ul>
 
+
+      <h3>Non-Obvious Technical Failure Rule</h3>
+      <p>Use this when rankings, crawling, or indexing look broken but normal SEO checks do not explain it. Many SEO emergencies are actually infrastructure, reporting, security, CMS, CDN, DNS, cache, or JavaScript failures.</p>
+      <table>
+        <tr><th>Symptom</th><th>Hidden Cause To Check</th><th>Proof Needed</th></tr>
+        <tr><td>Crawl budget or crawl volume worsens with no GSC clue.</td><td>Proxy, CDN, compression, Accept-Encoding, server response size, caching, or load balancer behavior.</td><td>Compare raw HTTP responses by user-agent, proxy path, headers, size, compression, and logs.</td></tr>
+        <tr><td>Content or headings look wrong only to Googlebot.</td><td>Render bug, embed failure, CMS injection, template error, or crawler-specific output.</td><td>Capture rendered HTML as Googlebot/mobile and compare headings, body text, links, and status.</td></tr>
+        <tr><td>Pages vanish after security or geo changes.</td><td>WAF, firewall, country block, rate limit, bot rule, or 5xx served to some regions/crawlers.</td><td>Server/CDN logs by Google ASN, verified Googlebot IPs, status code split, and location tests.</td></tr>
+        <tr><td>Reports show no data or unknown coverage.</td><td>The reporting pipeline or API may be failing.</td><td>Validate the tool/API returns data before treating an empty panel as an SEO finding.</td></tr>
+        <tr><td>Sudden spam pages or foreign-language URLs.</td><td>Hack, injected templates, hidden pages, plugin compromise, sitemap abuse, or structured-data spam.</td><td>Crawl indexed URLs, inspect files/plugins, server logs, sitemap, GSC examples, and security scans.</td></tr>
+        <tr><td>Massive Google-only deranking after domain or hosting incident.</td><td>Availability, DNS/DNSSEC, fake DMCA, clone/spam copy, intermittent errors, or ranking-system reassessment.</td><td>Check DNS history, DNSSEC, Lumen/DMCA, verified logs, clone visibility, crawl stats, and index vs served status.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> before changing content, prove the measurement system works and compare what normal users, Googlebot, different locations, and the CDN/server actually receive.</p>
       <h3>SEO Agency Dev Time Validation Rule</h3>
       <p>Use this when a client asks whether an SEO agency needing developer time is normal. Technical SEO work can be a green flag, but only if it is prioritized, ticketed, and measurable.</p>
       <table>
