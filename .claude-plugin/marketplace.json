@@ -7,7 +7,7 @@
       "id": "seo-helper",
       "name": "SEO Helper",
       "description": "SEO decision system with 17 audit skills. Use for traffic drops, indexed-but-no-impressions, topical maps, cannibalization, rendering, local SEO, and more.",
-      "path": "plugins/seo-helper",
+      "path": ".",
       "version": "1.0.0",
       "author": "bijay085",
       "category": "Productivity"

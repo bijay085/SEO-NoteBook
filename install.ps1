@@ -8,7 +8,7 @@
 
 $repoUrl  = "https://github.com/bijay085/SEO-NoteBook"
 $installDir = Join-Path $env:LOCALAPPDATA "seo-helper"
-$pluginDir  = Join-Path $installDir "plugins\seo-helper"
+$pluginDir  = $installDir
 
 Write-Host ""
 Write-Host "SEO Helper Installer"
