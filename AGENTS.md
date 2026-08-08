@@ -1,35 +1,70 @@
-# ChatGPT project context
+# SEO Helper — Agent Instructions
 
-This directory is a local mirror of the ChatGPT project "My Notes".
+## Project Context
 
-- Treat every file under `sources/` as read-only reference material.
-- Do not edit, rename, move, or delete synced project files.
-- These files may be replaced the next time a task is created from this ChatGPT project.
+This is an SEO decision system. When the user pastes SEO information, Reddit discussions, article notes, GSC observations, or other source material and asks to edit/add/update:
 
-## Project instructions
+- The only SEO decision file is `knowledge/SEO_Action_Decision_System.html`. Do not create copies anywhere else.
+- Place updates in the most relevant existing section. Do not create duplicate sections.
+- Treat pasted sources as practitioner input unless they are official documentation. Convert to concise operational rules, checklists, tables, or decision logic.
+- Keep additions compact: summarize the useful idea, remove noise, avoid long quotes.
+- If a pasted source repeats an existing rule, merge or strengthen it instead of adding another version.
+- When sources conflict: prefer official search engine docs, then first-party data (GSC/GA4/crawl), then practitioner examples.
+- Do not browse the web unless the user asks for current verification.
+- After editing, verify the inserted heading exists and do a light HTML structure check.
 
-This project is an SEO notebook. When the user pastes SEO information, Reddit discussions, article notes, Google/Search Console observations, or other source material and asks to edit/add/update:
+## Runtime Rules
 
-- The only SEO decision HTML is `knowledge/SEO_Action_Decision_System.html`. Use this one file for both plugin knowledge and direct sharing. Do not create root/export copies or extra notebook copies inside skills.
-- First check the canonical plugin notebook and place the update in the most relevant existing section instead of creating a confusing duplicate section.
-- Treat pasted sources as practitioner input unless they are official documentation. Convert them into concise operational rules, checklists, tables, or decision logic.
-- Keep additions compact and low-token: summarize the useful idea, remove navigation/noise, avoid long quotes, and do not paste raw source text unless the user explicitly asks.
-- Preserve the notebook style: short explanation, practical rule, table when comparison helps, and bullets for action steps or myths.
-- If the pasted source repeats an existing rule, merge or strengthen the existing section instead of adding another version.
-- When sources conflict, prefer official search engine documentation, then measured site data such as GSC/GA4/crawl evidence, then practitioner examples.
-- Add source context briefly, for example "Added from a user-supplied Reddit discussion as practitioner input," without over-explaining.
-- Do not browse the web unless the user asks for current verification or the claim needs up-to-date confirmation.
-- After editing, verify the inserted heading exists and do a light HTML structure check such as matching table/list counts.
+Use the smallest useful context:
 
-## SEO Helper plugin goal
+1. Start with `skills/seo-router/SKILL.md`.
+2. Route the question to one notebook section.
+3. Read only that section from `knowledge/SEO_Action_Decision_System.html`.
+4. Load one deeper `seo-*` audit skill only when the task needs measurement, exports, crawling, logs, or a full deliverable.
 
-SEO Helper should optimize for speed, accuracy, and low token use:
+Do not read the whole knowledgebase for a narrow question.
+Do not run every audit skill for one issue.
 
-- Use `seo-router` as the single entry point for SEO decisions.
-- Route the user request first, then load only the matching notebook section or one needed `seo-*` audit skill.
-- Answer the exact part the user asked for with What / Why / How / Evidence / Priority.
-- Add related surrounding context only when it changes the decision or prevents a wrong recommendation.
-- Do not read the whole notebook, all skills, or all source files for a narrow question.
-- Do not include random SEO facts, generic filler, or broad audits unless the user asked for them.
-- If files/data are supplied, analyze the relevant file columns/pages/evidence first and mark missing evidence as not tested instead of guessing.
-- Keep pasted-source additions compact and operational: one useful rule beats a long copied thread.
+## Answer Format
+
+1. Mode
+2. What
+3. Why
+4. How
+5. Evidence
+6. Priority
+7. Next skill (only if needed)
+
+For simple definitions, answer simply. If evidence is missing, say what is missing — do not invent numbers.
+
+## Canonical Files
+
+| File | Purpose |
+|---|---|
+| `knowledge/SEO_Action_Decision_System.html` | Only editable SEO knowledgebase |
+| `skills/seo-router/SKILL.md` | Main entry skill |
+| `skills/seo-router/references/section-index.md` | Compact section index |
+| `server/seo_router_server.py` | MCP section lookup and situation router |
+| `scripts/maintain.py` | Validate, rebuild index, add rules |
+
+## Source Handling
+
+When the user pastes noisy sources:
+
+1. Identify the SEO problem type.
+2. Extract durable rules only.
+3. Ignore spam, insults, one-off claims, and unsupported shortcuts.
+4. Prefer if/then rules over generic tips.
+5. Do not store raw Reddit dumps in the knowledgebase.
+
+## Update Workflow
+
+1. Edit `knowledge/SEO_Action_Decision_System.html`.
+2. Run `python scripts/maintain.py rebuild-index`.
+3. Run `python scripts/maintain.py validate`.
+4. Commit and push.
+
+## Writing Rules
+
+- Avoid em dashes and en dashes in user-facing analysis. Use commas, periods, or colons instead.
+- Reports credit `Prepared by Bijay`. No logo required.
