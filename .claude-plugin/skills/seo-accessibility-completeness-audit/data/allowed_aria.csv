@@ -1,0 +1,69 @@
+element,context,implicit_role,allowed_roles,prohibited_roles,allowed_aria,prohibited_aria,notes,source_id
+a,with href,link,"button,checkbox,menuitem,menuitemradio,menuitemcheckbox,option,radio,switch,tab,treeitem",,aria per chosen role,,interactive; naming via text,SRC-HTML-ARIA
+a,without href,generic,any,,global aria-*,,non-interactive when no href,SRC-HTML-ARIA
+article,,article,"application,document,feed,main,none,presentation,region",,global,,,SRC-HTML-ARIA
+aside,,complementary,"feed,none,note,presentation,region,search",,global,,landmark,SRC-HTML-ARIA
+button,,button,"checkbox,combobox,link,menuitem,menuitemcheckbox,menuitemradio,option,radio,switch,tab",,"aria-pressed,aria-expanded per role",,name from content,SRC-HTML-ARIA
+div,,generic,any,,global,,neutral container,SRC-HTML-ARIA
+span,,generic,any,,global,,neutral inline,SRC-HTML-ARIA
+footer,page context,contentinfo,"group,none,presentation",,global,,landmark only at top level,SRC-HTML-ARIA
+header,page context,banner,"group,none,presentation",,global,,landmark only at top level,SRC-HTML-ARIA
+h1-h6,,heading,"none,presentation,tab",,aria-level,,aria-level must match rank,SRC-HTML-ARIA
+main,,main,none,other landmark roles,global,,one per page,SRC-HTML-ARIA
+nav,,navigation,"menu,menubar,none,presentation,tablist",,global,,landmark,SRC-HTML-ARIA
+section,with accessible name,region,"alert,alertdialog,application,banner,complementary,contentinfo,dialog,document,feed,group,log,main,marquee,navigation,none,note,presentation,search,status,tabpanel",,global,,region only when named,SRC-HTML-ARIA
+p,,paragraph,none? no,most roles prohibited,global,,use html-aria table,SRC-HTML-ARIA
+ul,,list,"directory,group,listbox,menu,menubar,none,presentation,radiogroup,tablist,toolbar,tree",,global,,,SRC-HTML-ARIA
+ol,,list,"directory,group,listbox,menu,menubar,none,presentation,radiogroup,tablist,toolbar,tree",,global,,,SRC-HTML-ARIA
+li,in ul/ol,listitem,"menuitem,menuitemcheckbox,menuitemradio,option,none,presentation,radio,separator,tab,treeitem",,global,,role depends on parent,SRC-HTML-ARIA
+dl,,(none) / associationlist,"group,list,none,presentation",,global,,,SRC-HTML-ARIA
+dt,,term / listitem,listitem,,global,,,SRC-HTML-ARIA
+dd,,definition,,,global,,,SRC-HTML-ARIA
+table,,table,any,,global,,grid/treegrid via role,SRC-HTML-ARIA
+thead/tbody/tfoot,,rowgroup,any,,global,,,SRC-HTML-ARIA
+tr,,row,any,,global,,,SRC-HTML-ARIA
+th,,columnheader/rowheader,any,,aria-sort,,scope drives role,SRC-HTML-ARIA
+td,,cell (in table),any,,global,,gridcell in grid,SRC-HTML-ARIA
+caption,,caption,no role,all roles prohibited,global,,,SRC-HTML-ARIA
+form,with name,form,"none,presentation,search",,global,,landmark when named,SRC-HTML-ARIA
+label,,(no role),no role,all roles prohibited,global,,associates via for=,SRC-HTML-ARIA
+fieldset,,group,"none,presentation,radiogroup",,global,,,SRC-HTML-ARIA
+legend,,(no role),no role,all roles prohibited,,,,SRC-HTML-ARIA
+input,type=text,textbox,"combobox,searchbox,spinbutton",,aria-*,,,SRC-HTML-ARIA
+input,type=checkbox,checkbox,"button,menuitemcheckbox,option,switch",,aria-checked,,,SRC-HTML-ARIA
+input,type=radio,radio,menuitemradio,,aria-checked,,,SRC-HTML-ARIA
+input,type=search,searchbox / textbox,,,aria-*,,,SRC-HTML-ARIA
+input,type=hidden,(no role),no role,all roles prohibited,none,all aria-* prohibited,,SRC-HTML-ARIA
+select,single-line,combobox,menu,,aria-*,,listbox when multiple/size>1,SRC-HTML-ARIA
+textarea,,textbox,no other role,,aria-*,,,SRC-HTML-ARIA
+option,,option,no other role,,aria-selected,,,SRC-HTML-ARIA
+img,non-empty alt,image,"any (img,none limited)",,global,,named by alt,SRC-HTML-ARIA
+img,"empty alt (alt="""")",presentation,"none,presentation only",any other role,,most aria prohibited,decorative,SRC-HTML-ARIA
+figure,,figure,any,,global,,,SRC-HTML-ARIA
+figcaption,,(no role),"group,none,presentation",,global,,,SRC-HTML-ARIA
+dialog,,dialog,"alertdialog,none",,aria-modal,,,SRC-HTML-ARIA
+details,,group,,,aria-*,,,SRC-HTML-ARIA
+summary,,(no role),,,,,first child of details,SRC-HTML-ARIA
+iframe,,(none),"application,document,img,none,presentation",,aria-*,,name via title=,SRC-HTML-ARIA
+svg,,graphics-document / image,"img,graphics-document,graphics-symbol,none,presentation",,aria-*,,name via title/aria-label,SRC-HTML-ARIA
+hr,,separator,"none,presentation",,aria-orientation,,,SRC-HTML-ARIA
+input,type=email/tel/url,textbox,"combobox,searchbox",,aria-*,,,SRC-HTML-ARIA
+input,type=password,(no name from content),no role,,aria-*,,never expose value,SRC-HTML-ARIA
+input,type=number,spinbutton,,,aria-valuenow/min/max,,,SRC-HTML-ARIA
+input,type=range,slider,,,aria-valuenow/min/max,,,SRC-HTML-ARIA
+input,type=submit/reset/button,button,,,aria-*,,,SRC-HTML-ARIA
+input,type=file,button,,,aria-*,,,SRC-HTML-ARIA
+input,type=date/time/etc,(date/time control),,,aria-*,,,SRC-HTML-ARIA
+optgroup,,group,,,aria-*,,,SRC-HTML-ARIA
+datalist,,listbox,no other role,,aria-*,,,SRC-HTML-ARIA
+output,,status,any,,aria-live,,live region,SRC-HTML-ARIA
+progress,,progressbar,,,aria-valuenow/min/max,,,SRC-HTML-ARIA
+meter,,meter,,,aria-valuenow/min/max,,,SRC-HTML-ARIA
+menu,,list,"directory,group,listbox,menu,menubar,none,presentation,radiogroup,tablist,toolbar,tree",,aria-*,,,SRC-HTML-ARIA
+area,with href,link,,,aria-*,,,SRC-HTML-ARIA
+picture,,(no role),no role,all roles prohibited,,,,SRC-HTML-ARIA
+time,,time,any,,aria-*,,,SRC-HTML-ARIA
+abbr,,(no role),any,,aria-*,,,SRC-HTML-ARIA
+blockquote,,blockquote,any,,aria-*,,,SRC-HTML-ARIA
+pre,,generic,any,,aria-*,,,SRC-HTML-ARIA
+code,,code,any,,aria-*,,,SRC-HTML-ARIA

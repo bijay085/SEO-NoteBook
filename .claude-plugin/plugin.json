@@ -12,7 +12,7 @@
     "gsc",
     "rankings"
   ],
-  "skills": "../skills/",
+  "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "SEO Helper",
