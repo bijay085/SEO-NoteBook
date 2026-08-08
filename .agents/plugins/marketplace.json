@@ -1,0 +1,20 @@
+{
+  "name": "seo-helper",
+  "interface": {
+    "displayName": "SEO Helper"
+  },
+  "plugins": [
+    {
+      "name": "seo-helper",
+      "source": {
+        "source": "local",
+        "path": "."
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

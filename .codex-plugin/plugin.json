@@ -1,0 +1,23 @@
+{
+  "name": "seo-helper",
+  "version": "1.0.0",
+  "description": "Practical SEO decision system with 17 audit skills. Routes traffic drops, GSC issues, topical maps, cannibalization, rendering, and more.",
+  "author": {
+    "name": "bijay085"
+  },
+  "keywords": ["seo", "audit", "decision", "gsc", "rankings"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "SEO Helper",
+    "shortDescription": "SEO decision system by Bijay.",
+    "longDescription": "Routes SEO problems to the right audit skill. Covers traffic drops, GSC diagnosis, topical maps, cannibalization, rendering, E-E-A-T, off-page, CRO, log files, and more.",
+    "developerName": "bijay085",
+    "category": "Productivity",
+    "capabilities": ["Skills", "MCP"],
+    "defaultPrompt": [
+      "What should I do first for this SEO problem?",
+      "Route this site issue to the right SEO module."
+    ]
+  }
+}
