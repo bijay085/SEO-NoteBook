@@ -8,7 +8,7 @@
       "name": "seo-helper",
       "source": {
         "source": "local",
-        "path": "."
+        "path": ".agents/plugins"
       },
       "policy": {
         "installation": "AVAILABLE",
