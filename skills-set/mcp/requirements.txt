@@ -1,4 +1,0 @@
-beautifulsoup4>=4.12
-lxml>=5.0
-# Optional — richer MCP SDK. Server still runs without it (minimal stdio mode).
-mcp>=1.2.0

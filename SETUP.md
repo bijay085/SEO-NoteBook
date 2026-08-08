@@ -23,7 +23,6 @@ The main plugin folder is:
 plugins/seo-helper
 ```
 
-Install this folder, not the old `skills-set` snapshot.
 
 ## 2. Install in Claude Code
 
@@ -142,4 +141,5 @@ git pull
 ```
 
 Then start a new chat/session or refresh the plugin. For local plugin hosts, a new session is the safest way to make sure updated skills and MCP tools are loaded.
+
 
