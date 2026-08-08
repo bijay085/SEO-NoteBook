@@ -18,7 +18,7 @@
       "interface": {
         "displayName": "SEO Helper",
         "shortDescription": "SEO decision system by Bijay.",
-        "logo": "https://raw.githubusercontent.com/bijay085/SEO-NoteBook/main/.codex-plugin/assets/logo.png"
+        "logo": "./.codex-plugin/assets/logo.png"
       }
     }
   ]
