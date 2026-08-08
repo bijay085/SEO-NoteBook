@@ -7,8 +7,9 @@
     {
       "name": "seo-helper",
       "source": {
-        "source": "local",
-        "path": "./plugins/seo-helper"
+        "source": "git",
+        "url": "https://github.com/bijay085/SEO-NoteBook",
+        "path": "plugins/seo-helper"
       },
       "policy": {
         "installation": "AVAILABLE",
