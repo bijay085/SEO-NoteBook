@@ -1,0 +1,45 @@
+{
+  "client": "<Client Name>",
+  "domain": "example.com",
+  "period": "<Month Year>",
+  "output_dir": "./Off-Page-Audit/",
+  "inputs": {
+    "ahrefs_export": "",
+    "semrush_toxic_export": "",
+    "existing_disavow": "",
+    "outbound_export": "",
+    "dataforseo_referring_domains_json": "",
+    "competitors": [],
+    "gsc_account": "business",
+    "gsc_property": "sc-domain:example.com"
+  },
+  "taxonomy": {
+    "toxic_thresholds": {
+      "dataforseo_spam_score": 60,
+      "ahrefs_toxicity": 30,
+      "semrush_toxic_score": 60,
+      "min_sources_to_disavow": 2
+    },
+    "branded_anchor_terms": ["example", "example.com"],
+    "internal_domains": ["example.com"]
+  },
+  "apis": {
+    "dataforseo": true,
+    "gsc": false,
+    "clarity": false
+  },
+  "env_file": "project `.env` / host environment variables",
+  "brand": {
+    "name": "Bijay",
+    "yellow": "#F5C518",
+    "black": "#0A0A0A",
+    "dark": "#1A1A1A",
+    "green": "#2ECC71",
+    "red": "#E74C3C",
+    "orange": "#E67E22",
+    "blue": "#3498DB",
+    "font_xlsx": "Arial",
+    "font_html": "Inter",
+    "logo_url": ""
+  }
+}

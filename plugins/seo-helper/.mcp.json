@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "seo-helper-router": {
+      "command": "python",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/server/seo_router_server.py"],
+      "env": {
+        "SEO_HELPER_ROOT": "${CLAUDE_PLUGIN_ROOT}"
+      }
+    }
+  }
+}

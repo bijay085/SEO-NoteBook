@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Render Audit Report : SEO</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+  --ink: #0B0E1A; --ink2: #151929; --ink3: #1E2440;
+  --accent: #4F6EF7; --accent2: #7C3AED;
+  --pass: #22C55E; --warn: #F59E0B; --crit: #EF4444;
+  --muted: #64748B; --border: rgba(255,255,255,0.07);
+  --text: #E2E8F0; --dim: #94A3B8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh}
+.mono{font-family:'DM Mono',monospace}
+.syne{font-family:'Syne',sans-serif}
+
+/* grain */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5}
+
+/* sidebar */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:var(--ink2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:10;overflow-y:auto}
+.logo{padding:22px 20px 14px;border-bottom:1px solid var(--border)}
+.brand{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:var(--accent);letter-spacing:.02em}
+.brand-sub{font-size:10px;color:var(--dim);margin-top:2px;font-family:'DM Mono',monospace;letter-spacing:.05em}
+.nav-section{padding:14px 12px 6px}
+.nav-label{font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;padding:0 8px;margin-bottom:5px;font-family:'DM Mono',monospace}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;cursor:pointer;color:var(--dim);font-size:12px;transition:all .15s;margin-bottom:1px;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,.05);color:var(--text)}
+.nav-item.active{background:rgba(79,110,247,.15);color:var(--accent)}
+.nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.url-pill{margin:3px 12px;padding:6px 10px;border-radius:6px;background:var(--ink3);border:1px solid var(--border);font-size:10px;font-family:'DM Mono',monospace;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;transition:all .15s;display:block}
+.url-pill:hover{border-color:var(--accent);color:var(--text)}
+
+/* main */
+.main{margin-left:220px;padding:32px 36px;position:relative;z-index:1;max-width:1400px}
+.page-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.page-title{font-family:'Syne',sans-serif;font-weight:700;font-size:22px;color:#fff;letter-spacing:-.01em}
+.page-meta{font-size:11px;color:var(--dim);margin-top:4px;font-family:'DM Mono',monospace}
+.page-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:10px;font-family:'DM Mono',monospace;border:1px solid var(--border);color:var(--dim);background:var(--ink3)}
+.chip.framework{border-color:rgba(79,110,247,.4);color:#93C5FD;background:rgba(79,110,247,.08)}
+.chip.pagetype{border-color:rgba(124,58,237,.4);color:#C4B5FD;background:rgba(124,58,237,.08)}
+.chip.jsheavy{border-color:rgba(245,158,11,.4);color:#FCD34D;background:rgba(245,158,11,.08)}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:10px;font-family:'DM Mono',monospace;font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.badge-pass{background:rgba(34,197,94,.15);color:#86EFAC;border:1px solid rgba(34,197,94,.3)}
+.badge-warn{background:rgba(245,158,11,.15);color:#FCD34D;border:1px solid rgba(245,158,11,.3)}
+.badge-crit{background:rgba(239,68,68,.15);color:#FCA5A5;border:1px solid rgba(239,68,68,.3)}
+.badge-info{background:rgba(79,110,247,.15);color:#93C5FD;border:1px solid rgba(79,110,247,.3)}
+
+/* gap significance pills */
+.gap-sig{display:inline-block;padding:2px 6px;border-radius:3px;font-size:9px;font-family:'DM Mono',monospace;font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.gap-none{color:var(--muted);background:transparent}
+.gap-low{color:#93C5FD;background:rgba(79,110,247,.12);border:1px solid rgba(79,110,247,.2)}
+.gap-medium{color:#FCD34D;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.2)}
+.gap-high{color:#FCA5A5;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.2)}
+
+/* sections */
+.section{margin-bottom:28px}
+.section-hdr{font-family:'Syne',sans-serif;font-weight:600;font-size:12px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.section-hdr::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* score cards */
+.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.score-card{background:var(--ink2);border:1px solid var(--border);border-radius:12px;padding:18px 22px;position:relative;overflow:hidden}
+.score-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.score-card.google::before{background:linear-gradient(90deg,#4285F4,#34A853)}
+.score-card.aibot::before{background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.score-card.gap::before{background:linear-gradient(90deg,#F59E0B,#EF4444)}
+.score-lbl{font-size:10px;color:var(--dim);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.score-val{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.score-val.hi{color:var(--pass)}.score-val.md{color:var(--warn)}.score-val.lo{color:var(--crit)}
+.score-sub{font-size:11px;color:var(--dim);margin-top:5px}
+.score-breakdown{margin-top:10px;padding-top:8px;border-top:1px solid var(--border)}
+.score-breakdown-item{font-size:10px;color:var(--dim);font-family:'DM Mono',monospace;line-height:1.7}
+.score-breakdown-item.deduct{color:#FCA5A5}
+.score-breakdown-item.ok{color:#86EFAC}
+.bar-track{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:12px;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px}
+
+/* per-url score grid */
+.url-score-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-bottom:16px}
+.url-score-card{background:var(--ink2);border:1px solid var(--border);border-radius:10px;padding:14px 18px}
+.url-score-url{font-family:'DM Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.url-score-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.url-score-row span:first-child{font-size:11px;color:var(--dim)}
+.url-score-row span:last-child{font-family:'DM Mono',monospace;font-size:12px;font-weight:600}
+
+/* gap bars */
+.gap-row{background:var(--ink2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:8px}
+.gap-lbl{display:flex;justify-content:space-between;margin-bottom:7px;font-size:11px}
+.gap-track{height:8px;background:rgba(255,255,255,.07);border-radius:4px;position:relative;overflow:hidden}
+.gap-legend{display:flex;gap:14px;margin-top:7px;font-size:10px;color:var(--dim);font-family:'DM Mono',monospace}
+.gap-legend span{display:flex;align-items:center;gap:4px}
+.dot{width:8px;height:8px;border-radius:2px;display:inline-block}
+
+/* issue cards */
+.issue-card{background:var(--ink2);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden}
+.issue-hdr{display:grid;grid-template-columns:90px 1fr auto;align-items:start;gap:12px;padding:12px 16px;cursor:pointer;transition:background .15s}
+.issue-hdr:hover{background:rgba(255,255,255,.02)}
+.issue-body{padding:14px 16px;border-top:1px solid var(--border);display:none}
+.issue-body.open{display:block}
+.severity-reason{font-size:11px;color:var(--dim);font-style:italic;margin-top:4px;line-height:1.4}
+
+/* observed row */
+.observed-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.observed-cell{background:var(--ink3);border:1px solid var(--border);border-radius:6px;padding:8px 10px}
+.observed-lbl{font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.observed-val{font-size:11px;font-family:'DM Mono',monospace;line-height:1.5}
+
+/* section labels inside issue body */
+.field-lbl{font-size:10px;color:var(--dim);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;margin-top:10px}
+
+/* diff table */
+.diff-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px}
+.diff-tbl th{background:var(--ink3);color:var(--dim);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.diff-tbl td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.diff-tbl tr:last-child td{border-bottom:none}
+.diff-tbl tr:hover td{background:rgba(255,255,255,.015)}
+.raw-val{color:#93C5FD;font-family:'DM Mono',monospace;font-size:11px}
+.rend-val{color:#C084FC;font-family:'DM Mono',monospace;font-size:11px}
+.match-y{color:var(--pass);font-family:'DM Mono',monospace;font-size:11px}
+.match-n{color:var(--crit);font-family:'DM Mono',monospace;font-size:11px}
+.empty-val{color:var(--muted);font-style:italic;font-size:11px}
+
+/* code blocks */
+.code-wrap{background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:10px;overflow-x:auto}
+.code-wrap pre{font-family:'DM Mono',monospace;font-size:11px;color:#E2E8F0;white-space:pre-wrap;word-break:break-all;line-height:1.6}
+.copy-btn{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);background:var(--ink3);border:1px solid var(--border);border-radius:4px;padding:3px 8px;cursor:pointer;float:right;margin-bottom:6px;transition:all .15s}
+.copy-btn:hover{color:var(--text);border-color:var(--accent)}
+
+/* ai-suggested warning banner */
+.ai-warn-banner{display:flex;align-items:flex-start;gap:8px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:6px;padding:9px 12px;margin-bottom:10px;font-size:11px;color:#FCD34D;font-family:'DM Mono',monospace;line-height:1.5}
+.ai-warn-banner strong{font-weight:600}
+
+/* missing alt table */
+.alt-tbl{width:100%;border-collapse:collapse;font-size:11px;margin-top:10px}
+.alt-tbl th{background:var(--ink3);color:var(--dim);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.alt-tbl td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;font-family:'DM Mono',monospace}
+.alt-tbl tr:last-child td{border-bottom:none}
+.alt-placeholder{color:var(--warn);font-style:italic}
+.alt-src{color:#93C5FD;word-break:break-all;max-width:340px}
+
+/* prose block */
+.prose-block{background:rgba(79,110,247,.06);border-left:2px solid var(--accent);padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:10px;font-size:12px;color:var(--text);line-height:1.6}
+
+/* verify block */
+.verify-block{display:flex;align-items:flex-start;gap:8px;background:rgba(34,197,94,.06);border-left:2px solid var(--pass);padding:8px 12px;border-radius:0 6px 6px 0;font-size:11px;color:#86EFAC;font-family:'DM Mono',monospace;margin-top:8px}
+
+/* evidence block */
+.evidence-block{font-size:11px;color:var(--dim);font-style:italic;margin-top:8px;padding:8px 12px;background:var(--ink3);border-radius:6px;line-height:1.5}
+
+/* signal table */
+.sig-tbl{width:100%;border-collapse:collapse;font-size:12px;background:var(--ink2);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.sig-tbl th{background:var(--ink3);color:var(--dim);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.sig-tbl td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.sig-tbl tr:last-child td{border-bottom:none}
+.sig-tbl tr:hover td{background:rgba(255,255,255,.02)}
+
+/* expandable signal detail rows */
+.sig-detail-row{display:none;background:rgba(0,0,0,.2)}
+.sig-detail-row.open{display:table-row}
+.sig-detail-inner{padding:10px 14px;font-size:11px;line-height:1.6}
+.sig-expand-btn{cursor:pointer;font-size:10px;font-family:'DM Mono',monospace;color:var(--accent);background:none;border:none;padding:0;margin-left:6px;opacity:.7}
+.sig-expand-btn:hover{opacity:1}
+
+/* action plan view-full link */
+.view-full-link{font-size:10px;font-family:'DM Mono',monospace;color:var(--accent);cursor:pointer;white-space:nowrap;display:inline-block;margin-top:3px;opacity:.8}
+.view-full-link:hover{opacity:1;text-decoration:underline}
+
+/* bot matrix */
+.bot-tbl{width:100%;border-collapse:collapse;background:var(--ink2);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.bot-tbl th{background:var(--ink3);font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;padding:9px 14px;text-align:center;border-bottom:1px solid var(--border)}
+.bot-tbl th:first-child{text-align:left}
+.bot-tbl td{padding:9px 14px;text-align:center;border-bottom:1px solid var(--border);font-size:11px}
+.bot-tbl tr:last-child td{border-bottom:none}
+.bot-tbl td:first-child{text-align:left;font-family:'DM Mono',monospace;color:var(--dim);font-size:11px}
+.allow{color:#86EFAC;background:rgba(34,197,94,.08)}
+.block{color:#FCA5A5;background:rgba(239,68,68,.08)}
+.unknown{color:var(--dim)}
+
+/* tabs */
+.tab-bar{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:0}
+.tab{padding:8px 16px;cursor:pointer;font-size:12px;color:var(--dim);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;font-family:'DM Mono',monospace;letter-spacing:.04em}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* footer */
+.report-footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;color:var(--muted);font-size:10px;font-family:'DM Mono',monospace}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fadeUp .35s ease both}
+.fu:nth-child(2){animation-delay:.05s}.fu:nth-child(3){animation-delay:.1s}.fu:nth-child(4){animation-delay:.15s}
+</style>
+</head>
+<body>
+
+{# ── SIGNAL LABEL MAP ──────────────────────────────────────────────────────── #}
+{% set SIGNAL_LABELS = {
+  'title': 'Title Tag',
+  'meta_description': 'Meta Description',
+  'meta_robots': 'Meta Robots',
+  'x_robots_header': 'X-Robots-Tag Header',
+  'canonical': 'Canonical Tag',
+  'h1': 'H1 Headings',
+  'h2': 'H2 Headings hidden by JavaScript',
+  'h3': 'H3 Headings hidden by JavaScript',
+  'body_text': 'Body Text JS-gated',
+  'internal_links': 'Internal Links',
+  'json_ld': 'JSON-LD Schema',
+  'og_title': 'OG Title',
+  'images': 'Images',
+  'images_missing_alt': 'Images : Missing Alt Text',
+} %}
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="brand">SEO</div>
+    <div class="brand-sub">RENDER AUDIT v1.0</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Screens</div>
+    <a href="#summary" class="nav-item active" onclick="showTab('summary',this)">
+      <div class="nav-dot" style="background:#4F6EF7"></div> Summary
+    </a>
+    <a href="#criticals" class="nav-item" onclick="showTab('criticals',this)">
+      <div class="nav-dot" style="background:#EF4444"></div> Critical Issues
+    </a>
+    <a href="#warnings" class="nav-item" onclick="showTab('warnings',this)">
+      <div class="nav-dot" style="background:#F59E0B"></div> Warnings
+    </a>
+    <a href="#action-plan" class="nav-item" onclick="showTab('action-plan',this)">
+      <div class="nav-dot" style="background:#22C55E"></div> Action Plan
+    </a>
+    <a href="#signals" class="nav-item" onclick="showTab('signals',this)">
+      <div class="nav-dot" style="background:#A78BFA"></div> All Signals
+    </a>
+    <a href="#bots" class="nav-item" onclick="showTab('bots',this)">
+      <div class="nav-dot" style="background:#64748B"></div> Bot Access
+    </a>
+  </div>
+  <div class="nav-section" style="margin-top:auto;padding-bottom:16px">
+    <div class="nav-label">Audited URLs</div>
+    {% for res in results %}
+    <span class="url-pill" title="{{ res.url }}">{{ res.url | replace('https://','') | replace('http://','') | truncate(34) }}</span>
+    {% endfor %}
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HEADER -->
+  <div class="page-hdr fu">
+    <div>
+      <div class="page-title">Rendered vs Raw Audit</div>
+      <div class="page-meta">{{ url_count }} URL{% if url_count != 1 %}s{% endif %} &nbsp;·&nbsp; {{ generated_at }} &nbsp;·&nbsp; gemini-2.5-flash + gpt-4.1-mini</div>
+      {# Surface framework + page type chips from reading result if available #}
+      {% if meta.js_framework_detected and meta.js_framework_detected not in ('none','unknown') %}
+      <div class="page-chips">
+        <span class="chip framework">⬡ {{ meta.js_framework_detected }}</span>
+        {% if meta.page_type_inferred %}<span class="chip pagetype">{{ meta.page_type_inferred }}</span>{% endif %}
+        {% if meta.js_heavy_page %}<span class="chip jsheavy">⚡ JS-heavy page</span>{% endif %}
+      </div>
+      {% elif meta.page_type_inferred %}
+      <div class="page-chips">
+        <span class="chip pagetype">{{ meta.page_type_inferred }}</span>
+        {% if meta.js_heavy_page %}<span class="chip jsheavy">⚡ JS-heavy page</span>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+      <span class="badge badge-crit">{{ total_crit }} critical</span>
+      <span class="badge badge-warn">{{ total_warn }} warnings</span>
+      <span class="badge badge-pass">{{ total_pass }} passes</span>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: SUMMARY ══════════════════════════════════════════════════════ -->
+  <div id="tab-summary" class="tab-panel active">
+
+    <div class="score-grid fu">
+      {% set g_cls = 'hi' if avg_google >= 75 else ('md' if avg_google >= 50 else 'lo') %}
+      {% set a_cls = 'hi' if avg_ai >= 75 else ('md' if avg_ai >= 50 else 'lo') %}
+      {% set r_cls = 'hi' if avg_gap >= 75 else ('md' if avg_gap >= 50 else 'lo') %}
+
+      <div class="score-card google">
+        <div class="score-lbl">Google Crawl Score</div>
+        <div class="score-val {{ g_cls }}">{{ avg_google }}<span style="font-size:18px;color:var(--dim)">/100</span></div>
+        <div class="score-sub">Avg across {{ url_count }} URL{% if url_count != 1 %}s{% endif %}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:{{ avg_google }}%;background:linear-gradient(90deg,#4285F4,#34A853)"></div></div>
+        <div class="score-breakdown">
+          {% if total_crit > 0 %}<div class="score-breakdown-item deduct"> to {{ total_crit * 15 }} pts · {{ total_crit }} critical issue{% if total_crit != 1 %}s{% endif %}</div>{% endif %}
+          {% if total_warn > 0 %}<div class="score-breakdown-item deduct"> to {{ total_warn * 5 }} pts · {{ total_warn }} warning{% if total_warn != 1 %}s{% endif %}</div>{% endif %}
+          {% if total_crit == 0 and total_warn == 0 %}<div class="score-breakdown-item ok">✓ No critical or warning issues</div>{% endif %}
+        </div>
+      </div>
+
+      <div class="score-card aibot">
+        <div class="score-lbl">AI Bot Score</div>
+        <div class="score-val {{ a_cls }}">{{ avg_ai }}<span style="font-size:18px;color:var(--dim)">/100</span></div>
+        <div class="score-sub">Bot access + schema + llms.txt</div>
+        <div class="bar-track"><div class="bar-fill" style="width:{{ avg_ai }}%;background:linear-gradient(90deg,#4F6EF7,#7C3AED)"></div></div>
+        <div class="score-breakdown">
+          {% for res in results %}
+            {% set blocked = res.bot_access.values() | select('equalto','block') | list | length %}
+            {% if blocked > 0 %}<div class="score-breakdown-item deduct"> to {{ blocked * 20 }} pts · {{ blocked }} bot{% if blocked != 1 %}s{% endif %} blocked</div>{% endif %}
+            {% if res.llms_txt_status != 'present' %}<div class="score-breakdown-item deduct"> to 10 pts · llms.txt missing</div>{% endif %}
+            {% set schema_pass = res.signals | selectattr('signal_id','eq','json_ld') | selectattr('severity','eq','pass') | list | length %}
+            {% if schema_pass == 0 %}<div class="score-breakdown-item deduct"> to 10 pts · no JSON-LD schema</div>{% endif %}
+          {% endfor %}
+          {% if avg_ai == 100 %}<div class="score-breakdown-item ok">✓ All bots allowed · llms.txt present</div>{% endif %}
+        </div>
+      </div>
+
+      <div class="score-card gap">
+        <div class="score-lbl">Render Gap Score</div>
+        <div class="score-val {{ r_cls }}">{{ avg_gap }}<span style="font-size:18px;color:var(--dim)">/100</span></div>
+        <div class="score-sub">Content consistency raw vs render</div>
+        <div class="bar-track"><div class="bar-fill" style="width:{{ avg_gap }}%;background:linear-gradient(90deg,#F59E0B,#EF4444)"></div></div>
+        <div class="score-breakdown">
+          {% for res in results %}
+            {% set mismatches = res.signals | rejectattr('match') | list | length %}
+            {% if mismatches > 0 %}<div class="score-breakdown-item deduct"> to {{ mismatches * 5 }} pts · {{ mismatches }} signal mismatch{% if mismatches != 1 %}es{% endif %}</div>{% endif %}
+            {% set bt = res.signals | selectattr('signal_id','eq','body_text') | first | default(none) %}
+            {% if bt and bt.rendered_value is mapping %}
+              {% set gp = bt.rendered_value.get('gap_pct', 0) | int %}
+              {% if gp > 0 %}<div class="score-breakdown-item deduct"> to {{ (gp * 0.5) | int }} pts · {{ gp }}% body text gap</div>{% endif %}
+            {% endif %}
+          {% endfor %}
+          {% if avg_gap == 100 %}<div class="score-breakdown-item ok">✓ Raw and rendered content match</div>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Per-URL scores -->
+    <div class="section fu">
+      <div class="section-hdr">Per-URL Scores</div>
+      <div class="url-score-grid">
+        {% for res in results %}
+        <div class="url-score-card">
+          <div class="url-score-url">{{ res.url }}</div>
+          {% set g = res.scores.get('google_score', 0) %}
+          {% set a = res.scores.get('ai_bot_score', 0) %}
+          {% set r = res.scores.get('render_gap_score', 0) %}
+          <div class="url-score-row">
+            <span>Google Score</span>
+            <span style="color:{% if g >= 75 %}var(--pass){% elif g >= 50 %}var(--warn){% else %}var(--crit){% endif %}">{{ g }}/100</span>
+          </div>
+          <div class="url-score-row">
+            <span>AI Bot Score</span>
+            <span style="color:{% if a >= 75 %}var(--pass){% elif a >= 50 %}var(--warn){% else %}var(--crit){% endif %}">{{ a }}/100</span>
+          </div>
+          <div class="url-score-row">
+            <span>Render Gap</span>
+            <span style="color:{% if r >= 75 %}var(--pass){% elif r >= 50 %}var(--warn){% else %}var(--crit){% endif %}">{{ r }}/100</span>
+          </div>
+          {% set crit_n = res.signals | selectattr('severity','eq','critical') | list | length %}
+          {% set warn_n = res.signals | selectattr('severity','eq','warning') | list | length %}
+          <div style="margin-top:8px;display:flex;gap:5px;flex-wrap:wrap">
+            {% if crit_n %}<span class="badge badge-crit">{{ crit_n }} critical</span>{% endif %}
+            {% if warn_n %}<span class="badge badge-warn">{{ warn_n }} warn</span>{% endif %}
+            <span class="badge" style="background:rgba(100,116,139,.15);color:var(--dim);border:1px solid rgba(100,116,139,.3)">{{ res.llms_txt_status }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Render gap bars -->
+    <div class="section fu">
+      <div class="section-hdr">Render Gap : Content Volume</div>
+      {% for res in results %}
+        {% set bt = res.signals | selectattr('signal_id','eq','body_text') | first | default(none) %}
+        {% if bt %}
+          {% if bt.raw_value is mapping %}
+            {% set raw_c = bt.raw_value.get('char_count', 0) | int %}
+          {% else %}
+            {% set raw_c = bt.raw_value | default(0) | int %}
+          {% endif %}
+          {% if bt.rendered_value is mapping %}
+            {% set rend_c = bt.rendered_value.get('char_count', 0) | int %}
+            {% set gap_p = bt.rendered_value.get('gap_pct', 0) | round | int %}
+          {% else %}
+            {% set rend_c = bt.rendered_value | default(0) | int %}
+            {% set gap_p = ((rend_c - raw_c) / rend_c * 100) | round | int if rend_c > 0 else 0 %}
+          {% endif %}
+          {% set raw_pct = (raw_c / rend_c * 100) | round | int if rend_c > 0 else 100 %}
+          {% if gap_p >= 60 %}{% set risk='HIGH RISK' %}{% set rc='var(--crit)' %}{% set badge='badge-crit' %}
+          {% elif gap_p >= 30 %}{% set risk='MEDIUM RISK' %}{% set rc='var(--warn)' %}{% set badge='badge-warn' %}
+          {% else %}{% set risk='LOW RISK' %}{% set rc='var(--pass)' %}{% set badge='badge-pass' %}{% endif %}
+        <div class="gap-row">
+          <div class="gap-lbl">
+            <span class="mono" style="color:var(--text)">{{ res.url | replace('https://','') | replace('http://','') }}</span>
+            <span style="color:{{ rc }}">{{ gap_p }}% JS-gated &nbsp;<span class="badge {{ badge }}">{{ risk }}</span></span>
+          </div>
+          <div class="gap-track">
+            <div style="position:absolute;left:0;top:0;bottom:0;width:{{ raw_pct }}%;background:var(--accent);opacity:.85;border-radius:4px"></div>
+            <div style="position:absolute;left:{{ raw_pct }}%;top:0;bottom:0;right:0;background:var(--accent2);opacity:.25;border-radius:0 4px 4px 0"></div>
+          </div>
+          <div class="gap-legend">
+            <span><span class="dot" style="background:var(--accent)"></span> Raw: {{ raw_c | format_number }} chars</span>
+            <span><span class="dot" style="background:var(--accent2);opacity:.6"></span> Rendered: {{ rend_c | format_number }} chars</span>
+            <span style="color:{{ rc }}">Gap: +{{ (rend_c - raw_c) | format_number }} chars</span>
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+  </div><!-- /tab-summary -->
+
+  <!-- ═══ TAB: CRITICAL ISSUES ══════════════════════════════════════════════ -->
+  <div id="tab-criticals" class="tab-panel">
+    <div class="section">
+      <div class="section-hdr">Critical Issues : {{ total_crit }} found</div>
+      {% if all_criticals %}
+        {% for url, sol in all_criticals %}
+        <div class="issue-card" id="issue-{{ sol.signal_id }}">
+          <div class="issue-hdr" onclick="toggle(this)">
+            <span class="badge badge-crit">CRITICAL</span>
+            <div>
+              <div style="font-weight:500;color:var(--text);font-size:13px">{{ SIGNAL_LABELS.get(sol.signal_id, sol.signal_id | replace('_',' ') | title) }}</div>
+              <div style="color:var(--dim);font-size:11px;margin-top:2px">{{ url | replace('https://','') }} &nbsp;·&nbsp; {{ sol.category }}</div>
+              {% if sol.severity_reason %}<div class="severity-reason">{{ sol.severity_reason }}</div>{% endif %}
+            </div>
+            <span class="mono" style="color:var(--dim);font-size:11px">▼</span>
+          </div>
+          <div class="issue-body">
+            {% if sol.observed_in_raw or sol.observed_in_rendered %}
+            <div class="observed-row">
+              <div class="observed-cell">
+                <div class="observed-lbl">Raw HTML</div>
+                <div class="observed-val raw-val">{{ sol.observed_in_raw or ': not found' }}</div>
+              </div>
+              <div class="observed-cell">
+                <div class="observed-lbl">Rendered DOM</div>
+                <div class="observed-val rend-val">{{ sol.observed_in_rendered or ': not found' }}</div>
+              </div>
+            </div>
+            {% endif %}
+
+            {% if sol.prose %}<div class="prose-block">{{ sol.prose }}</div>{% endif %}
+
+            <div class="field-lbl">Diagnosis</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.6;margin-bottom:10px">{{ sol.diagnosis }}</div>
+
+            <div class="field-lbl">Specific Fix</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.6;margin-bottom:10px">{{ sol.fix }}</div>
+
+            {% if sol.code_block or sol.code_fix %}
+            <div class="code-wrap">
+              <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+              <pre>{{ sol.code_block or sol.code_fix }}</pre>
+            </div>
+            {% endif %}
+
+            {% if sol.evidence_basis %}
+            <div class="evidence-block">Evidence: {{ sol.evidence_basis }}</div>
+            {% endif %}
+
+            {% if sol.verify %}
+            <div class="verify-block">▶ VERIFY: {{ sol.verify }}</div>
+            {% endif %}
+
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <span class="badge badge-info">Effort: {{ sol.effort or ': ' }}</span>
+              <span class="badge badge-info">Impact: {{ sol.impact or ': ' }}</span>
+              <span class="badge badge-crit">Priority #{{ sol.priority_rank }}</span>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div style="color:var(--dim);padding:20px;text-align:center">No critical issues found.</div>
+      {% endif %}
+    </div>
+  </div><!-- /tab-criticals -->
+
+  <!-- ═══ TAB: WARNINGS ══════════════════════════════════════════════════════ -->
+  <div id="tab-warnings" class="tab-panel">
+    <div class="section">
+      <div class="section-hdr">Warnings : {{ total_warn }} found</div>
+      {% if all_warnings %}
+        {% for url, sol in all_warnings %}
+        <div class="issue-card" id="issue-{{ sol.signal_id }}">
+          <div class="issue-hdr" onclick="toggle(this)">
+            <span class="badge badge-warn">WARNING</span>
+            <div>
+              <div style="font-weight:500;color:var(--text);font-size:13px">{{ SIGNAL_LABELS.get(sol.signal_id, sol.signal_id | replace('_',' ') | title) }}</div>
+              <div style="color:var(--dim);font-size:11px;margin-top:2px">{{ url | replace('https://','') }} &nbsp;·&nbsp; {{ sol.category }}</div>
+              {% if sol.severity_reason %}<div class="severity-reason">{{ sol.severity_reason }}</div>{% endif %}
+            </div>
+            <span class="mono" style="color:var(--dim);font-size:11px">▼</span>
+          </div>
+          <div class="issue-body">
+
+            {# Observed evidence row : shown for all warnings #}
+            {% if sol.observed_in_raw or sol.observed_in_rendered %}
+            <div class="observed-row">
+              <div class="observed-cell">
+                <div class="observed-lbl">Raw HTML</div>
+                <div class="observed-val raw-val">{{ sol.observed_in_raw or ': not found' }}</div>
+              </div>
+              <div class="observed-cell">
+                <div class="observed-lbl">Rendered DOM</div>
+                <div class="observed-val rend-val">{{ sol.observed_in_rendered or ': not found' }}</div>
+              </div>
+            </div>
+            {% endif %}
+
+            {% if sol.prose %}<div class="prose-block">{{ sol.prose }}</div>{% endif %}
+
+            <div style="font-size:12px;color:var(--text);line-height:1.6;margin-bottom:10px">{{ sol.fix }}</div>
+
+            {# ── IMAGES MISSING ALT : special rendering ── #}
+            {% if sol.signal_id == 'images_missing_alt' or sol.signal_id == 'images' %}
+              {# Pull missing_alt list from the signal #}
+              {% set img_sig = none %}
+              {% for res in results %}
+                {% if not img_sig %}
+                  {% set img_sig = res.signals | selectattr('signal_id','eq','images') | first | default(none) %}
+                {% endif %}
+              {% endfor %}
+              {% if img_sig and img_sig.rendered_value is mapping %}
+                {% set missing_list = img_sig.rendered_value.get('missing_alt', []) %}
+                {% if missing_list %}
+                <div class="ai-warn-banner">
+                  ⚠ <span><strong>AI-suggested placeholder alt text only</strong> : the values below were NOT copied from the page. Each image currently has an empty alt attribute. Write descriptive alt text yourself after reviewing each image.</span>
+                </div>
+                <table class="alt-tbl">
+                  <thead><tr><th>#</th><th>Image src</th><th>Current alt</th><th>Required action</th></tr></thead>
+                  <tbody>
+                    {% for img in missing_list %}
+                    <tr>
+                      <td style="color:var(--muted)">{{ loop.index }}</td>
+                      <td class="alt-src">{{ img.src | truncate(80) }}</td>
+                      <td><span style="color:var(--crit);font-family:'DM Mono',monospace">""</span> <span style="color:var(--muted);font-size:10px">(empty)</span></td>
+                      <td class="alt-placeholder">→ write descriptive alt text</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                {% endif %}
+              {% endif %}
+              {# Still show any code block but add warning banner above it if present #}
+              {% if sol.code_block or sol.code_fix %}
+              <div class="ai-warn-banner" style="margin-top:10px">
+                ⚠ <span><strong>Code block contains AI-suggested alt text</strong> : review and replace every <code>alt="..."</code> value with your own description before deploying.</span>
+              </div>
+              <div class="code-wrap">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                <pre>{{ sol.code_block or sol.code_fix }}</pre>
+              </div>
+              {% endif %}
+            {% else %}
+              {# All other warnings : show code block normally #}
+              {% if sol.code_block or sol.code_fix %}
+              <div class="code-wrap">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                <pre>{{ sol.code_block or sol.code_fix }}</pre>
+              </div>
+              {% endif %}
+            {% endif %}
+
+            {% if sol.evidence_basis %}
+            <div class="evidence-block">Evidence: {{ sol.evidence_basis }}</div>
+            {% endif %}
+
+            {% if sol.verify %}
+            <div class="verify-block">▶ VERIFY: {{ sol.verify }}</div>
+            {% endif %}
+
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <span class="badge badge-info">Effort: {{ sol.effort or ': ' }}</span>
+              <span class="badge badge-info">Impact: {{ sol.impact or ': ' }}</span>
+              {% if sol.priority_rank < 999 %}<span class="badge badge-warn">Priority #{{ sol.priority_rank }}</span>{% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div style="color:var(--dim);padding:20px;text-align:center">No warnings found.</div>
+      {% endif %}
+    </div>
+  </div><!-- /tab-warnings -->
+
+  <!-- ═══ TAB: ACTION PLAN ═══════════════════════════════════════════════════ -->
+  <div id="tab-action-plan" class="tab-panel">
+    <div class="section">
+      <div class="section-hdr">Action Plan : Priority-Sorted Fix List</div>
+      <table class="sig-tbl">
+        <thead>
+          <tr>
+            <th>#</th><th>URL</th><th>Signal</th><th>Severity</th>
+            <th>Effort</th><th>Impact</th><th>Fix Summary</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for url, sol in all_solutions %}
+          <tr>
+            <td class="mono" style="color:var(--dim)">{{ sol.priority_rank }}</td>
+            <td class="mono" style="font-size:10px;color:var(--dim)">{{ url | replace('https://','') | truncate(30) }}</td>
+            <td style="font-weight:500">{{ SIGNAL_LABELS.get(sol.signal_id, sol.signal_id | replace('_',' ') | title) }}</td>
+            <td>
+              {% if sol.severity == 'critical' %}<span class="badge badge-crit">CRITICAL</span>
+              {% elif sol.severity == 'warning' %}<span class="badge badge-warn">WARNING</span>
+              {% else %}<span class="badge badge-pass">PASS</span>{% endif %}
+            </td>
+            <td class="mono" style="font-size:11px;color:var(--dim)">{{ sol.effort or ': ' }}</td>
+            <td class="mono" style="font-size:11px;color:var(--dim)">{{ sol.impact or ': ' }}</td>
+            <td style="font-size:11px;line-height:1.5">
+              {{ sol.fix | truncate(120) }}
+              <br>
+              {% set tab = 'criticals' if sol.severity == 'critical' else 'warnings' %}
+              <span class="view-full-link" onclick="goToIssue('{{ tab }}','issue-{{ sol.signal_id }}')">View full detail ↗</span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div><!-- /tab-action-plan -->
+
+  <!-- ═══ TAB: ALL SIGNALS ═══════════════════════════════════════════════════ -->
+  <div id="tab-signals" class="tab-panel">
+    {% for res in results %}
+    <div class="section">
+      <div class="section-hdr">{{ res.url | replace('https://','') | replace('http://','') }}</div>
+      <table class="sig-tbl">
+        <thead>
+          <tr>
+            <th>Signal</th><th>Category</th><th>Raw Value</th>
+            <th>Rendered Value</th><th>Gap</th><th>Match</th><th>Severity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sig in res.signals %}
+          {% set has_detail = (
+            (sig.signal_id == 'body_text' and sig.rendered_value is mapping and sig.rendered_value.get('js_gated_text_samples', [])) or
+            (sig.signal_id == 'images' and sig.rendered_value is mapping and (sig.rendered_value.get('missing_alt',[]) or sig.rendered_value.get('js_only_images',[]))) or
+            (sig.signal_id == 'internal_links' and sig.rendered_value is mapping and sig.rendered_value.get('js_only_hrefs',[])) or
+            (sig.signal_id == 'json_ld' and sig.raw_value is mapping and sig.raw_value.get('blocks',[]))
+          ) %}
+          <tr>
+            <td style="font-weight:500;font-size:12px">
+              {{ sig.signal_name }}
+              {% if has_detail %}<button class="sig-expand-btn" onclick="toggleSigDetail(this)">[ + ]</button>{% endif %}
+            </td>
+            <td style="color:var(--dim);font-size:11px">{{ sig.category }}</td>
+
+            {# ── RAW VALUE : branch on signal_id first, not dict keys ── #}
+            <td><span class="raw-val">
+              {%- if sig.raw_value is none -%}: 
+              {%- elif sig.signal_id == 'body_text' -%}
+                {%- if sig.raw_value is mapping -%}{{ sig.raw_value.get('char_count',0) | format_number }} chars
+                {%- else -%}{{ sig.raw_value | int | format_number }} chars{%- endif -%}
+              {%- elif sig.signal_id == 'images' -%}
+                {%- if sig.raw_value is mapping -%}{{ sig.raw_value.get('count',0) }} imgs
+                  {%- if sig.raw_value.get('lazy_load_detected',[]) %} · {{ sig.raw_value.lazy_load_detected | length }} lazy-load{%- endif -%}
+                {%- else -%}{{ sig.raw_value }}{%- endif -%}
+              {%- elif sig.signal_id == 'internal_links' -%}
+                {%- if sig.raw_value is mapping -%}{{ sig.raw_value.get('count',0) }} links
+                {%- else -%}{{ sig.raw_value }}{%- endif -%}
+              {%- elif sig.signal_id == 'json_ld' -%}
+                {%- if sig.raw_value is mapping -%}{{ (sig.raw_value.get('types') or []) | join(', ') or 'none' }}
+                {%- else -%}{{ sig.raw_value }}{%- endif -%}
+              {%- elif sig.raw_value is mapping -%}{{ sig.raw_value | string | truncate(60) }}
+              {%- elif sig.raw_value is iterable and sig.raw_value is not string -%}{{ sig.raw_value | join(', ') | truncate(60) }}
+              {%- else -%}{{ sig.raw_value | string | truncate(80) }}
+              {%- endif -%}
+            </span></td>
+
+            {# ── RENDERED VALUE ── #}
+            <td><span class="rend-val">
+              {%- if sig.rendered_value is none -%}: 
+              {%- elif sig.signal_id == 'body_text' -%}
+                {%- if sig.rendered_value is mapping -%}
+                  {{ sig.rendered_value.get('char_count',0) | format_number }} chars · gap {{ sig.rendered_value.get('gap_pct',0) }}%
+                  {%- set jg = sig.rendered_value.get('js_gated_text_samples',[]) -%}
+                  {%- if jg %} · {{ jg | length }} JS-gated blocks detected
+                  {%- elif sig.severity in ('warning','critical') %} · JS-gating detected via AI reading
+                  {%- else %} · 0 JS-gated blocks{%- endif -%}
+                {%- else -%}{{ sig.rendered_value | int | format_number }} chars{%- endif -%}
+              {%- elif sig.signal_id == 'images' -%}
+                {%- if sig.rendered_value is mapping -%}
+                  {{ sig.rendered_value.get('count',0) }} imgs
+                  {%- if sig.rendered_value.get('js_only_images',[]) %} · {{ sig.rendered_value.get('js_only_images_total', sig.rendered_value.js_only_images | length) }} JS-only{%- endif -%}
+                  {%- if sig.rendered_value.get('missing_alt',[]) %} · {{ sig.rendered_value.get('missing_alt_total', sig.rendered_value.missing_alt | length) }} missing alt{%- endif -%}
+                {%- else -%}{{ sig.rendered_value }}{%- endif -%}
+              {%- elif sig.signal_id == 'internal_links' -%}
+                {%- if sig.rendered_value is mapping -%}
+                  {{ sig.rendered_value.get('count',0) }} links
+                  {%- if sig.rendered_value.get('js_only_hrefs',[]) %} · {{ sig.rendered_value.get('js_only_hrefs_total', sig.rendered_value.js_only_hrefs | length) }} JS-only{%- endif -%}
+                {%- else -%}{{ sig.rendered_value }}{%- endif -%}
+              {%- elif sig.signal_id == 'json_ld' -%}
+                {%- if sig.rendered_value is mapping -%}{{ (sig.rendered_value.get('types') or []) | join(', ') or 'none' }}
+                {%- else -%}{{ sig.rendered_value }}{%- endif -%}
+              {%- elif sig.rendered_value is mapping -%}{{ sig.rendered_value | string | truncate(60) }}
+              {%- elif sig.rendered_value is iterable and sig.rendered_value is not string -%}{{ sig.rendered_value | join(', ') | truncate(60) }}
+              {%- else -%}{{ sig.rendered_value | string | truncate(80) }}
+              {%- endif -%}
+            </span></td>
+
+            {# ── GAP SIGNIFICANCE ── #}
+            <td>
+              {% if sig.gap_significance == 'high' %}<span class="gap-sig gap-high">high</span>
+              {% elif sig.gap_significance == 'medium' %}<span class="gap-sig gap-medium">med</span>
+              {% elif sig.gap_significance == 'low' %}<span class="gap-sig gap-low">low</span>
+              {% else %}<span class="gap-sig gap-none">: </span>{% endif %}
+            </td>
+
+            <td>{% if sig.match %}<span class="match-y">✓</span>{% else %}<span class="match-n">✗</span>{% endif %}</td>
+            <td>
+              {% if sig.severity == 'critical' %}<span class="badge badge-crit">CRITICAL</span>
+              {% elif sig.severity == 'warning' %}<span class="badge badge-warn">WARNING</span>
+              {% elif sig.severity == 'pass' %}<span class="badge badge-pass">PASS</span>
+              {% else %}<span class="badge badge-info">{{ sig.severity | upper }}</span>{% endif %}
+            </td>
+          </tr>
+
+          {# ── EXPANDABLE DETAIL ROW ── #}
+          {% if has_detail %}
+          <tr class="sig-detail-row">
+            <td colspan="7">
+              <div class="sig-detail-inner">
+                {% if sig.signal_id == 'body_text' and sig.rendered_value is mapping %}
+                  {% set samples = sig.rendered_value.get('js_gated_text_samples', []) %}
+                  {% if samples %}
+                  <div style="color:var(--dim);font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px">JS-gated text blocks (present in rendered, absent from raw)</div>
+                  {% for s in samples %}
+                  <div style="padding:5px 8px;margin-bottom:4px;background:var(--ink3);border-radius:4px;font-size:11px;color:var(--text);border-left:2px solid var(--warn)">{{ s | truncate(200) }}</div>
+                  {% endfor %}
+                  {% endif %}
+
+                {% elif sig.signal_id == 'images' and sig.rendered_value is mapping %}
+                  {% set js_imgs = sig.rendered_value.get('js_only_images', []) %}
+                  {% set miss_alt = sig.rendered_value.get('missing_alt', []) %}
+                  {% set lazy = sig.raw_value.get('lazy_load_detected', []) if sig.raw_value is mapping else [] %}
+                  {% set n_js_imgs = sig.rendered_value.get('js_only_images_total', js_imgs | length) %}
+                  {% set n_miss_alt = sig.rendered_value.get('missing_alt_total', miss_alt | length) %}
+                  {% if js_imgs %}
+                  <div style="color:var(--dim);font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px">JS-only images ({{ n_js_imgs }}{% if n_js_imgs > js_imgs | length %}, showing {{ js_imgs | length }}{% endif %})</div>
+                  {% for img in js_imgs %}
+                  <div style="font-size:10px;font-family:'DM Mono',monospace;color:#93C5FD;padding:2px 0">{{ img.src | truncate(100) }}</div>
+                  {% endfor %}
+                  {% endif %}
+                  {% if miss_alt %}
+                  <div style="color:var(--dim);font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin:8px 0 5px">Missing alt ({{ n_miss_alt }}) : empty alt="" found on these images</div>
+                  {% for img in miss_alt %}
+                  <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--crit);padding:2px 0">{{ img.src | truncate(100) }}</div>
+                  {% endfor %}
+                  {% endif %}
+                  {% if lazy %}
+                  <div style="color:var(--dim);font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin:8px 0 5px">Lazy-load detected in raw HTML ({{ lazy | length }})</div>
+                  {% for img in lazy %}
+                  <div style="font-size:10px;font-family:'DM Mono',monospace;color:#FCD34D;padding:2px 0">{{ img.src | truncate(100) }}</div>
+                  {% endfor %}
+                  {% endif %}
+
+                {% elif sig.signal_id == 'internal_links' and sig.rendered_value is mapping %}
+                  {% set js_hrefs = sig.rendered_value.get('js_only_hrefs', []) %}
+                  {% set n_js_hrefs = sig.rendered_value.get('js_only_hrefs_total', js_hrefs | length) %}
+                  {% if js_hrefs %}
+                  <div style="color:var(--dim);font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px">JS-only links ({{ n_js_hrefs }}{% if n_js_hrefs > js_hrefs | length %}, showing {{ js_hrefs | length }}{% endif %})</div>
+                  {% for href in js_hrefs %}
+                  <div style="font-size:10px;font-family:'DM Mono',monospace;color:#93C5FD;padding:2px 0">{{ href }}</div>
+                  {% endfor %}
+                  {% endif %}
+
+                {% elif sig.signal_id == 'json_ld' and sig.raw_value is mapping %}
+                  {% set blocks = sig.raw_value.get('blocks', []) %}
+                  {% if blocks %}
+                  <div style="color:var(--dim);font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px">Schema blocks</div>
+                  <div style="font-size:10px;font-family:'DM Mono',monospace;color:#C084FC;white-space:pre-wrap;background:var(--ink3);padding:8px;border-radius:4px">{{ blocks | tojson(indent=2) | truncate(800) }}</div>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% endif %}
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endfor %}
+  </div><!-- /tab-signals -->
+
+  <!-- ═══ TAB: BOT ACCESS ════════════════════════════════════════════════════ -->
+  <div id="tab-bots" class="tab-panel">
+    <div class="section">
+      <div class="section-hdr">Bot Access Matrix : robots.txt & llms.txt</div>
+      <table class="bot-tbl">
+        <thead>
+          <tr>
+            <th>Domain / Path</th>
+            <th>Googlebot</th><th>GPTBot</th><th>ClaudeBot</th>
+            <th>PerplexityBot</th><th>anthropic-ai</th><th>Applebot-Ext</th>
+            <th>llms.txt</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for res in results %}
+          <tr>
+            <td>{{ res.url | replace('https://','') | replace('http://','') }}</td>
+            {% for bot in ['Googlebot','GPTBot','ClaudeBot','PerplexityBot','anthropic-ai','Applebot-Extended'] %}
+              {% set status = res.bot_access.get(bot, 'unknown') %}
+              <td class="{{ 'allow' if status == 'allow' else ('block' if status == 'block' else 'unknown') }}">
+                {{ status | upper }}
+              </td>
+            {% endfor %}
+            <td class="{{ 'allow' if res.llms_txt_status == 'present' else 'block' }}">
+              {{ '✓ Present' if res.llms_txt_status == 'present' else '✗ Missing' }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div><!-- /tab-bots -->
+
+  <!-- FOOTER -->
+  <div class="report-footer">
+    <div>SEO Render Audit Tool &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; {{ generated_at }}</div>
+    <div>gemini-2.5-flash · gpt-4.1-mini</div>
+  </div>
+
+</main><!-- /main -->
+
+<script>
+// Tab switching
+function showTab(id, el) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  return false;
+}
+
+// Navigate to a specific issue card and expand it
+function goToIssue(tab, issueId) {
+  const navItem = document.querySelector('.nav-item[href="#' + tab + '"]');
+  showTab(tab, navItem);
+  setTimeout(() => {
+    const card = document.getElementById(issueId);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const body = card.querySelector('.issue-body');
+      const arrow = card.querySelector('.issue-hdr span:last-child');
+      if (body && !body.classList.contains('open')) {
+        body.classList.add('open');
+        if (arrow) arrow.textContent = '▲';
+      }
+    }
+  }, 80);
+}
+
+// Issue card toggle
+function toggle(hdr) {
+  const body = hdr.nextElementSibling;
+  const arrow = hdr.querySelector('span:last-child');
+  const open = body.classList.toggle('open');
+  arrow.textContent = open ? '▲' : '▼';
+}
+
+// Signal detail row toggle
+function toggleSigDetail(btn) {
+  const row = btn.closest('tr');
+  const detailRow = row.nextElementSibling;
+  if (detailRow && detailRow.classList.contains('sig-detail-row')) {
+    const open = detailRow.classList.toggle('open');
+    btn.textContent = open ? '[ to ]' : '[ + ]';
+  }
+}
+
+// Copy code block
+function copyCode(btn) {
+  const pre = btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'COPIED!';
+    setTimeout(() => btn.textContent = 'COPY', 1500);
+  });
+}
+</script>
+</body>
+</html>

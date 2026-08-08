@@ -8,19 +8,13 @@
       "name": "seo-helper",
       "source": {
         "source": "local",
-        "path": "."
+        "path": "./plugins/seo-helper"
       },
       "policy": {
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Productivity",
-      "interface": {
-        "displayName": "SEO Helper",
-        "shortDescription": "SEO decision system by Bijay.",
-        "logo": "./assets/logo.png",
-        "websiteURL": "https://github.com/bijay085/SEO-NoteBook"
-      }
+      "category": "Productivity"
     }
   ]
 }
