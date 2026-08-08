@@ -129,6 +129,11 @@ if (Test-Path $CmdNsSrc) {
         New-Item -ItemType Directory -Force -Path $nsDir | Out-Null
         Get-ChildItem -Path $cmdRoot -Filter "seo-*.md" -File -ErrorAction SilentlyContinue | Remove-Item -Force
         Remove-Item -Force (Join-Path $cmdRoot "seo-helper.md") -ErrorAction SilentlyContinue
+        # Remove stale flat command files dropped by old installs before namespacing
+        $staleNames = Get-ChildItem -Path $CmdNsSrc -Filter "*.md" | Select-Object -ExpandProperty Name
+        foreach ($n in $staleNames) {
+            Remove-Item -Force (Join-Path $cmdRoot $n) -ErrorAction SilentlyContinue
+        }
         Get-ChildItem -Path $CmdNsSrc -Filter "*.md" | ForEach-Object {
             Copy-Item -Force $_.FullName (Join-Path $nsDir $_.Name)
         }
