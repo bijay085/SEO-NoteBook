@@ -1,0 +1,81 @@
+{
+  "client": {
+    "name": "<Client legal / brand name>",
+    "short_name": "<Short name for filenames & headers>",
+    "domain": "<example.com : null if no live site yet>",
+    "platform": "<CMS / stack, e.g. Webflow, WordPress : optional>",
+    "business_model": "<how they make money, one line>",
+    "primary_market": "<geography served, or 'national / online'>",
+    "buying_intent": "<the core commercial action a buyer takes, e.g. 'buy a food-photoshoot service'>",
+    "target_persona": "<ICP: who buys : role, size, region>",
+    "stated_goal": "<the client's own goal, verbatim if given>",
+    "differentiators": ["<what makes them different 1>", "<2>"],
+    "do_not_call": ["<terms the client refuses to be branded with>"],
+    "_comment": "Only name is truly needed. Fill what you know; leave the rest null : every field degrades gracefully."
+  },
+  "entity": {
+    "_comment": "The EAV brief. Enough to build Report 3 + the topical map even with ZERO input files.",
+    "central_entity": "<e.g. Food Photography>",
+    "wikipedia_url": "<https://en.wikipedia.org/wiki/... : optional KG anchor>",
+    "wikidata_id": "<Qxxxxx : optional KG anchor>",
+    "dimensions": ["<Attribute 1, e.g. Food Type>", "<Drink Type>", "<Food Store Type>", "<Social Platform + entity>", "<Stylist>", "<Studio & Equipment>"],
+    "bridge": "<the L2 bridge, e.g. 'Food Photography by AI'>",
+    "convincing_dimensions": ["<why choose the bridge, e.g. low cost>", "<no heavy equipment>", "<no large crew>", "<minutes not days>"],
+    "funnel": "<one-line funnel thesis: target broad Dimension+entity demand, then introduce the bridge + convincing dimensions>",
+    "conclusion": "<the position to land, e.g. 'AI for Food Photography'>"
+  },
+  "period": {
+    "label": "<e.g. Initial Analysis · as of Jul 2026>",
+    "engagement_start": "<YYYY-MM-DD or null>",
+    "phase": "pre-foundation"
+  },
+  "brand": {
+    "agency": "Bijay",
+    "logo_url": "",
+    "logo_local": null,
+    "yellow": "#F5C518",
+    "black": "#0A0A0A",
+    "dark": "#1A1A1A",
+    "text": "#1C1C1C",
+    "muted": "#888888",
+    "green": "#2ECC71",
+    "red": "#E74C3C",
+    "orange": "#E67E22",
+    "font": "Lexend"
+  },
+  "inputs": {
+    "_comment": "EVERY input is optional. null = not provided → its report(s) drop or lighten, never block. Extra/bespoke files: list them under 'custom' and fold each into the closest report or an appendix.",
+    "questionnaire": null,
+    "business_overview": null,
+    "competitors": null,
+    "sitemap_xml": null,
+    "page_list": null,
+    "page_plan": null,
+    "task_logs": null,
+    "action_items": null,
+    "concerns": null,
+    "client_prework_dir": null,
+    "custom": []
+  },
+  "apis": {
+    "_comment": "Toggle the data sources this run may use. Each is a pre-configured MCP server; false or unavailable → that source degrades gracefully. No secrets here.",
+    "dataforseo": true,
+    "google_search_console": false,
+    "gsc_account": null,
+    "wikipedia_wikidata": true,
+    "clarity": false,
+    "web_verification": true
+  },
+  "baseline": {
+    "_comment": "Optional overrides for the initial Baseline Snapshot (Report 10, scripts/baseline_metrics.py). Every field degrades gracefully -- leave null to use the documented default. gsc_*_window_months only matter if apis.google_search_console is true; gbp_search only matters if the client is a local/location business worth matching to a GBP listing.",
+    "gsc_long_window_months": 16,
+    "gsc_recent_window_months": 3,
+    "gbp_search": {
+      "business_name": null,
+      "address": null,
+      "location_coordinate": null,
+      "_comment": "Inputs for business_data_business_listings_search. null business_name falls back to client.name; a low-confidence/no match is reported as such, never silently accepted as the client's listing."
+    }
+  },
+  "output_dir": "Output"
+}
