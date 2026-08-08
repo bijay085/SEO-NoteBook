@@ -8,6 +8,7 @@ param(
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $SkillsSrc = Join-Path $Root "skills"
+$CommandsSrc = Join-Path $Root "commands"
 
 # Support -Targets cursor,claude,codex as a single comma-separated arg.
 $Targets = @(
@@ -41,7 +42,24 @@ foreach ($t in $Targets) {
         Write-Host "Installed $($d.Name) -> $dest"
     }
 }
+if (Test-Path $CommandsSrc) {
+    $commandFile = Join-Path $CommandsSrc "seo-helper.md"
+    if (Test-Path $commandFile) {
+        $commandTargets = @(
+            (Join-Path $env:USERPROFILE ".claude\commands")
+            (Join-Path $env:USERPROFILE ".cursor\commands")
+            (Join-Path $env:USERPROFILE ".codex\commands")
+            (Join-Path $env:USERPROFILE ".agents\commands")
+        )
 
+        foreach ($cmdRoot in $commandTargets) {
+            New-Item -ItemType Directory -Force -Path $cmdRoot | Out-Null
+            $destCommand = Join-Path $cmdRoot "seo-helper.md"
+            Copy-Item -Force $commandFile $destCommand
+            Write-Host "Installed /seo-helper command -> $destCommand"
+        }
+    }
+}
 if (-not $SkipPythonPackages) {
     Write-Host ""
     Write-Host "Installing Python packages..."
