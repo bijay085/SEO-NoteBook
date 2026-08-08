@@ -7,7 +7,19 @@ It is designed to work two ways:
 - global install once on your computer, then use it in future projects
 - one-project use when you only want to upload/share the knowledge file
 
-## Fast Start on Windows
+## Fast Start on Windows — no git clone needed
+
+Open PowerShell and run:
+
+```powershell
+irm https://raw.githubusercontent.com/bijay085/SEO-NoteBook/main/install.ps1 | iex
+```
+
+That is all. No manual cloning. The script installs to `%LOCALAPPDATA%\seo-helper`, sets up skills and MCP tools, and prints what to do next.
+
+To update later, run the same command again.
+
+## Alternative: clone and use the interactive launcher
 
 ```powershell
 git clone https://github.com/bijay085/SEO-NoteBook.git
