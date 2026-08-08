@@ -4,6 +4,16 @@
 
 Portable **seo-helper** plugin by **Bijay**: SEO router, knowledgebase, audit modules, and optional MCP server.
 
+## Basic GPT Setup
+
+For a normal custom GPT, use:
+
+```text
+GPT_BASIC_SETUP.md
+plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
+```
+
+Open `GPT_BASIC_SETUP.md`, paste the instructions into GPT Builder, and upload the knowledgebase file. Do not upload the whole repo for a basic GPT.
 ## Start Here on Windows
 
 After cloning, open the `SEO-NoteBook` folder and double-click:
