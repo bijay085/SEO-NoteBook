@@ -54,6 +54,20 @@ plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
 ```
 
 Use that same file for plugin knowledge and direct sharing. Do not add root/export copies.
+## Production Update Flow
+
+For maintainers, the plugin has one update path:
+
+```powershell
+cd plugins\seo-helper
+python scripts\maintain.py rebuild-index
+python scripts\maintain.py validate
+git add knowledge\SEO_Action_Decision_System.html skills\seo-router\references\section-index.md scripts\maintain.py README.md INSTALL.md AGENT_RUNTIME.md server\seo_router_server.py
+git commit -m "Update SEO helper"
+git push
+```
+
+Add new SEO lessons only to `plugins/seo-helper/knowledge/SEO_Action_Decision_System.html`. The section index is generated from that file. Existing users normally update with `git pull`.
 ## Share / install links
 
 **Repo:** https://github.com/bijay085/SEO-NoteBook  

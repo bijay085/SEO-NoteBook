@@ -1,86 +1,89 @@
-# Install on any AI agent
+# SEO Helper Install Guide
 
-This folder is the **seo-helper plugin** root. In this repo the canonical path is `plugins/seo-helper` (Claude + Codex manifests, skills,
-knowledgebase, optional MCP server). Skills use the open [Agent Skills](https://agentskills.io)
-format.
-
-## 0. Claude Code : install as a plugin (recommended)
+This folder is the plugin root:
 
 ```text
-/plugin install D:\SEO NoteBook\plugins\seo-helper
+plugins/seo-helper
 ```
 
-That loads `.claude-plugin/plugin.json`, all `skills/`, and `.mcp.json` (`seo-helper-router`).
+## Fast Test After Clone
 
-Codex/GPT: use `.codex-plugin/plugin.json` with your Codex plugin/marketplace flow,
-or copy skills via `install-skills.ps1` below.
+From repo root:
 
-## 1. Python (once, for scripted skills + MCP)
-
-```bash
-pip install -r requirements.txt
-pip install -r server/requirements.txt
+```powershell
+cd plugins\seo-helper
+python scripts\maintain.py validate
 ```
 
-## 2. Coding agents (native skills folders)
+If validation passes, the plugin files are present and the MCP router can read the knowledgebase.
 
-Copy **every** folder under `skills/` into the host skills directory. Also keep this plugin folder available if you want `seo-router` to read the shared `knowledge/SEO_Action_Decision_System.html` file. Full plugin install is cleaner than skills-only install:
+## Claude Code Plugin Install
 
-| Agent | Personal (all projects) | Project-only |
-|---|---|---|
-| **Claude Code** | `~/.claude/skills/` | `.claude/skills/` |
-| **Cursor** | `~/.cursor/skills/` | `.cursor/skills/` |
-| **OpenAI Codex CLI** | `~/.codex/skills/` | `.agents/skills/` or project skills dir |
-| **GitHub Copilot** (VS Code) | agent skills dir per Copilot docs | `.github/skills/` when supported |
-| **Gemini CLI / OpenCode / Cline / Windsurf** | that product’s skills folder | project skills folder if offered |
+In Claude Code:
 
-### Windows (PowerShell) : install to Claude + Cursor + Codex
+```text
+/plugin install C:\path\to\SEO-NoteBook\plugins\seo-helper
+```
 
-From this `plugins/seo-helper` folder:
+If you installed from a local repo path, future updates are simple:
+
+```powershell
+git pull
+cd plugins\seo-helper
+python scripts\maintain.py validate
+```
+
+Reinstall only if Claude copied the plugin instead of referencing the repo path.
+
+## Codex / Cursor Skills Install
+
+From `plugins/seo-helper`:
 
 ```powershell
 .\install-skills.ps1
+pip install -r requirements.txt
+pip install -r server\requirements.txt
+python scripts\maintain.py validate
 ```
 
-Or pick targets:
+## Chat UI Setup
+
+Upload these two files first:
+
+```text
+skills/seo-router/SKILL.md
+knowledge/SEO_Action_Decision_System.html
+```
+
+Then add this instruction:
+
+```text
+Follow seo-router/SKILL.md. Use SEO_Action_Decision_System.html for rules. Answer with What, Why, How, Evidence, and Priority. Keep answers compact and load deeper audit material only when needed.
+```
+
+Upload extra `seo-*` skill folders only when you want that specific deep audit available.
+
+## MCP Setup
+
+Use `mcp-hosts.example.json` as the template. Replace `ROOT` with the absolute path to this folder.
+
+The local router command is:
 
 ```powershell
-.\install-skills.ps1 -Targets cursor,claude,codex
+python server\seo_router_server.py
 ```
 
-### macOS / Linux
+Smoke test:
 
-```bash
-chmod +x install-skills.sh
-./install-skills.sh # claude + cursor + codex
-./install-skills.sh cursor # one host
+```powershell
+python server\seo_router_server.py --self-test
 ```
 
-## 3. Chat UIs without a skills folder
+## Updating the Knowledgebase
 
-Use the same files as project knowledge:
+1. Edit `knowledge/SEO_Action_Decision_System.html`.
+2. Run `python scripts\maintain.py rebuild-index`.
+3. Run `python scripts\maintain.py validate`.
+4. Commit and push.
 
-| Product | How |
-|---|---|
-| **ChatGPT** (GPT / Projects) | Upload the skill folder (or zip) into Project files; in instructions say: “When I name an SEO audit, open that skill’s SKILL.md and follow it.” |
-| **Claude** (claude.ai Projects) | Add the skill folders to Project knowledge; same instruction line. |
-| **Grok** | Attach / upload `SKILL.md` + needed `references/` and `scripts/` into the project or custom instructions. |
-
-Tip: for chat UIs, start with `seo-router/SKILL.md` plus `knowledge/SEO_Action_Decision_System.html`. Add one audit skill only when needed so context stays small. Point the agent at `AGENT_RUNTIME.md` for tools/exports.
-
-## 4. Optional MCP connectors
-
-`mcp-servers.json` declares **DataForSEO** (env names only). Add the same block to
-your host’s MCP config if you use live SERP/keyword/backlink pulls. GSC, Clarity,
-and browser tools are host connectors : authorize them in that product, or pass
-CSV/HTML exports instead (see `AGENT_RUNTIME.md`).
-
-## 5. Smoke test
-
-In any agent:
-
-> Load `seo-router`. Traffic dropped on my Shopify store. What should I check first?
-
-If it reads the skill and answers from the methodology, install worked.
-
-
+Do not create another `SEO_Action_Decision_System.html` anywhere else.

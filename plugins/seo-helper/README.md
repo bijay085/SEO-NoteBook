@@ -1,98 +1,161 @@
 # SEO Helper Plugin
 
-**One plugin** for Claude, Cursor, Codex/GPT, and chat UIs:
+One clean plugin for Claude, Cursor, Codex/GPT, and chat UIs.
 
-1. **`seo-router`** : SEO helper / “what should I do next?” coach
-2. **Canonical knowledgebase** : `knowledge/SEO_Action_Decision_System.html`
-3. **15 audit skills** : `skills/seo-*` (GSC, CRO, render, topical map, …)
-4. **Optional MCP** : `server/seo_router_server.py` (section lookup + situation router)
+Install this folder:
 
-Author credit on reports: **Prepared by Bijay** (text **SEO** mark, no logo).
+```text
+plugins/seo-helper
+```
 
-## What It Helps With
+Author credit on reports: `Prepared by Bijay`.
 
-SEO Helper gives an AI agent a reusable SEO operating system instead of one-off generic advice.
+## What It Does
 
-Use it for:
+SEO Helper helps an AI agent give exact SEO decisions instead of generic advice.
 
-- **Choosing the next SEO action:** traffic drops, weak rankings, new site planning, local/GBP, money pages, content refreshes, technical gates, and reporting.
-- **Turning pasted sources into rules:** summarize noisy Reddit posts, article notes, docs, and observations into compact decision rules, tables, or checklists.
-- **Analyzing files:** work from GSC exports, crawls, server logs, HTML, page lists, keyword files, and audit evidence.
-- **Routing audits:** select the correct included audit workflow when the issue needs deeper proof.
-- **Reducing token waste:** start small, load only the relevant notebook section or audit skill, and avoid repeating the full SEO knowledge base in every chat.
-- **Keeping output useful:** answer with What / Why / How / Evidence / Priority, then recommend the next measurable step.
+It helps with:
+
+- choosing the next SEO action for ranking drops, indexed pages with no impressions, local SEO, money pages, AI visibility, reporting, and new sites
+- turning pasted SEO sources into compact decision rules
+- analyzing files such as GSC exports, crawls, logs, HTML, and keyword files
+- routing deeper work to the right included audit skill
+- saving tokens by loading only the router, one notebook section, or one audit skill when needed
 
 ## How It Works
 
-The installed plugin has one entry point: `seo-router`. The agent first routes the situation, then consults only the relevant part of `knowledge/SEO_Action_Decision_System.html`, and loads one specific `seo-*` audit skill only when the task needs deeper proof. If the MCP server is connected, it can list sections, fetch a notebook section, and route a short SEO situation to the most relevant audit skill. The goal is speed, accuracy, and low token use: exact answer first, related context only when it helps the decision.
+The plugin starts from one skill: `seo-router`.
 
-## Layout (this is the plugin root)
+The router finds the right section in the canonical knowledgebase, answers the exact question, and only loads a deeper audit skill when evidence is needed.
 
+Canonical knowledgebase:
+
+```text
+knowledge/SEO_Action_Decision_System.html
 ```
-plugins/seo-helper/ <- install THIS folder as the plugin
-  .claude-plugin/plugin.json ← Claude Code plugin
-  .codex-plugin/plugin.json ← Codex / GPT plugin
-  .mcp.json ← MCP for Claude plugin load
-  knowledge/SEO_Action_Decision_System.html
-  server/seo_router_server.py
+
+That is the only decision HTML. Do not create copies in the repo root or inside skill folders.
+
+## Layout
+
+```text
+plugins/seo-helper/
+  .claude-plugin/plugin.json
+  .codex-plugin/plugin.json
+  .mcp.json
+  AGENT_RUNTIME.md
+  INSTALL.md
+  README.md
+  knowledge/
+    SEO_Action_Decision_System.html
+  scripts/
+    maintain.py
+  server/
+    seo_router_server.py
   skills/
-    seo-router/ ← start here for routing / decisions
+    seo-router/
     seo-gsc-diagnosis/
+    seo-render-audit/
+    seo-topical-map/
     ...
 ```
 
-Knowledgebase rule: `knowledge/SEO_Action_Decision_System.html` is the only decision HTML. Use it for plugin knowledge and direct sharing. Do not add copied notebooks in the repo root or inside skill folders.
-
-Why not one flat file? Agents load **skills by folder**. The router skill is the single entry point; audits stay separate so the model only pulls what it needs.
-
 ## Install
 
-### Claude Code (plugin)
-
-From a Claude session (path adjusted to your machine):
+### Claude Code
 
 ```text
 /plugin install D:\SEO NoteBook\plugins\seo-helper
 ```
 
-Or add as a local marketplace/plugin directory per Claude Code docs, then enable **seo-helper**.
+For a cloned repo on another machine, use that machine's path to `plugins/seo-helper`.
 
-### Cursor / Codex (skills + MCP)
+### Cursor / Codex Skills
+
+From this folder:
 
 ```powershell
-cd "D:\SEO NoteBook\plugins\seo-helper"
 .\install-skills.ps1
 pip install -r requirements.txt
 pip install -r server\requirements.txt
+python scripts\maintain.py validate
 ```
 
-Add MCP from `mcp-hosts.example.json` (set `ROOT` to this folder) into Cursor / Codex MCP settings.
+### ChatGPT / Claude / Grok Project Knowledge
 
-### ChatGPT / Grok / Claude Projects (chat UI)
+For a basic chat UI setup, upload only:
 
-Upload at least:
+```text
+skills/seo-router/SKILL.md
+knowledge/SEO_Action_Decision_System.html
+```
 
-- `skills/seo-router/SKILL.md`
-- `knowledge/SEO_Action_Decision_System.html`
-- (optional) any `seo-*` audit you need
+Instruction:
 
-Instruction line:
+```text
+You are SEO Helper. Follow seo-router/SKILL.md. Use SEO_Action_Decision_System.html as the main knowledgebase. Answer the exact SEO question with What, Why, How, Evidence, and Priority. Load deeper audit material only when needed.
+```
 
-> You are my SEO helper. Follow `seo-router/SKILL.md`. Use the knowledgebase HTML for rules. Answer with What / Why / How / Evidence / Priority. Only run a deep audit skill when measurement is required.
+## Updating Knowledge
 
-Full detail: [INSTALL.md](INSTALL.md) · runtime rules: [AGENT_RUNTIME.md](AGENT_RUNTIME.md)
+Edit one file:
 
-## Smoke tests
+```text
+knowledge/SEO_Action_Decision_System.html
+```
+
+Then run:
+
+```powershell
+python scripts\maintain.py rebuild-index
+python scripts\maintain.py validate
+git add knowledge\SEO_Action_Decision_System.html skills\seo-router\references\section-index.md
+git commit -m "Update SEO helper knowledgebase"
+git push
+```
+
+Existing users update with:
+
+```powershell
+git pull
+python scripts\maintain.py validate
+```
+
+They do not need to reinstall if their AI app points to this repo folder. Reinstall is only needed if their app copied the plugin files during install.
+
+## Useful Commands
+
+Validate everything:
+
+```powershell
+python scripts\maintain.py validate
+```
+
+Rebuild section index:
+
+```powershell
+python scripts\maintain.py rebuild-index
+```
+
+Add a tiny simple rule before an existing heading:
+
+```powershell
+python scripts\maintain.py add-rule --title "Example Rule" --body "Use this when..." --decision "Do X before Y." --before "Underrated SEO Action Rule"
+```
+
+MCP smoke test:
 
 ```powershell
 python server\seo_router_server.py --self-test
 ```
 
-In any agent:
+## Optional MCP
 
-> Load seo-router. Traffic dropped on my Shopify store : what should I do first?
+The MCP server is local and optional. It exposes:
 
-## Optional DataForSEO
+- `list_decision_sections`
+- `get_decision_section`
+- `route_seo_situation`
+- `list_seo_audit_skills`
 
-See `mcp-servers.json` / `mcp-hosts.example.json`. Env names only : no secrets in the pack.
-
+Use `mcp-hosts.example.json` as the copy/paste template for hosts that support MCP.

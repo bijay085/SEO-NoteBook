@@ -6,17 +6,16 @@ cd /d "%~dp0"
 echo SEO Helper
 echo ==========
 echo.
-echo This folder is ready.
 echo Plugin path:
 echo %CD%\plugins\seo-helper
 echo.
-echo Testing the local SEO router...
+echo Running production validation...
 echo.
-python plugins\seo-helper\server\seo_router_server.py --self-test
+python plugins\seo-helper\scripts\maintain.py validate
 if errorlevel 1 (
   echo.
-  echo Test did not run. Make sure Python is installed, then run this file again.
-  echo Plugin files are still here:
+  echo Validation failed. Make sure Python is installed, then run this file again.
+  echo Plugin files are here:
   echo %CD%\plugins\seo-helper
   pause
   exit /b 1
@@ -25,12 +24,14 @@ if errorlevel 1 (
 echo.
 echo OK. SEO Helper is working locally.
 echo.
-echo To install in Claude Code, paste this inside Claude Code:
+echo Claude Code install command:
 echo /plugin install %CD%\plugins\seo-helper
 echo.
-echo To make a basic custom GPT, open README.md and use Basic GPT Setup.
-echo.
-echo The only GPT knowledge file is:
+echo Basic custom GPT knowledge file:
 echo %CD%\plugins\seo-helper\knowledge\SEO_Action_Decision_System.html
+echo.
+echo To update later:
+echo git pull
+echo python plugins\seo-helper\scripts\maintain.py validate
 echo.
 pause

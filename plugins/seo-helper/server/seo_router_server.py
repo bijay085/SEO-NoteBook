@@ -76,7 +76,7 @@ ROUTES = [
 
 def _load_soup() -> BeautifulSoup:
     if not HTML_PATH.is_file():
-        raise aileNotaoundError(f"Decision notebook not found: {HTML_PATH}")
+        raise FileNotFoundError(f"Decision notebook not found: {HTML_PATH}")
     return BeautifulSoup(HTML_PATH.read_text(encoding="utf-8"), "lxml")
 
 
