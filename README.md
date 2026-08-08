@@ -6,14 +6,13 @@ Portable **seo-helper** plugin by **Bijay**: SEO router, knowledgebase, audit mo
 
 ## Basic GPT Setup
 
-For a normal custom GPT, use:
+For a normal custom GPT, upload only `plugins/seo-helper/knowledge/SEO_Action_Decision_System.html` as Knowledge. In GPT Builder, use these instructions:
 
 ```text
-GPT_BASIC_SETUP.md
-plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
+You are SEO Helper, a practical SEO decision assistant. Use the uploaded SEO_Action_Decision_System.html knowledge file as the main reference. Answer the exact SEO question, not generic SEO advice. Use if/then decision logic. Structure answers as What, Why, How, Evidence, Priority. If evidence is missing, say what data is needed instead of guessing. Keep answers concise.
 ```
 
-Open `GPT_BASIC_SETUP.md`, paste the instructions into GPT Builder, and upload the knowledgebase file. Do not upload the whole repo for a basic GPT.
+Do not upload the whole repo for a basic GPT.
 ## Start Here on Windows
 
 After cloning, open the `SEO-NoteBook` folder and double-click:

@@ -28,10 +28,9 @@ echo.
 echo To install in Claude Code, paste this inside Claude Code:
 echo /plugin install %CD%\plugins\seo-helper
 echo.
-echo To make a basic custom GPT, open:
-echo %CD%\GPT_BASIC_SETUP.md
+echo To make a basic custom GPT, open README.md and use Basic GPT Setup.
 echo.
-echo The GPT knowledge file is:
+echo The only GPT knowledge file is:
 echo %CD%\plugins\seo-helper\knowledge\SEO_Action_Decision_System.html
 echo.
 pause
