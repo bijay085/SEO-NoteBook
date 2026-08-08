@@ -1,5 +1,5 @@
 ---
-name: cannibalization-audit
+name: seo-cannibalization-audit
 description: >-
   Full forensic keyword-cannibalization audit from Google Search Console data : the verdict engine,
   not a candidate list. For every same-intent page pair it runs a decision cascade (duplicate →

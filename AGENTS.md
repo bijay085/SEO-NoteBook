@@ -57,6 +57,7 @@ Do not change, remove, rename, or "simplify" the Codex plugin icon files or path
 - Keep `.agents/plugins/marketplace.json` pointing the marketplace card logo to `./assets/logo.png`.
 - Do not recreate a duplicated `plugins/seo-helper/` package tree. The repo root is the plugin root.
 - Do not add stale personal marketplace entries or local installed plugin copies under `C:\Users\bijay\.agents\plugins\plugins\seo-helper`.
+- Keep the marketplace package under `.agents/plugins/` synced with root plugin metadata and skill names. Codex plugin previews read this package.
 
 ## Source Handling
 

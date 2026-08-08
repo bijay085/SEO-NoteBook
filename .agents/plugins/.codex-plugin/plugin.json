@@ -1,11 +1,17 @@
 {
   "name": "seo-helper",
-  "version": "1.0.0",
+  "version": "1.0.0+codex.20260808163539",
   "description": "Practical SEO decision system with 17 audit skills. Routes traffic drops, GSC issues, topical maps, cannibalization, rendering, and more.",
   "author": {
     "name": "bijay085"
   },
-  "keywords": ["seo", "audit", "decision", "gsc", "rankings"],
+  "keywords": [
+    "seo",
+    "audit",
+    "decision",
+    "gsc",
+    "rankings"
+  ],
   "skills": "../skills/",
   "mcpServers": "../.mcp.json",
   "interface": {
@@ -15,7 +21,10 @@
     "developerName": "bijay085",
     "category": "Productivity",
     "websiteURL": "https://github.com/bijay085/SEO-NoteBook",
-    "capabilities": ["Skills", "MCP"],
+    "capabilities": [
+      "Skills",
+      "MCP"
+    ],
     "defaultPrompt": [
       "What should I do first for this SEO problem?",
       "Route this site issue to the right SEO module."

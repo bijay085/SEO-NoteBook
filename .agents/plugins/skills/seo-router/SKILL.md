@@ -1,5 +1,5 @@
 ---
-name: router
+name: seo-router
 description: >
   SEO router and decision assistant. Use when the user asks what to do next in SEO,
   how to prioritize actions, which audit to run, how to diagnose a traffic/ranking

@@ -1,5 +1,5 @@
 ---
-name: accessibility-completeness-audit
+name: seo-accessibility-completeness-audit
 description: >-
   Audit a live web page (or a page spec) on TWO dimensions at once and produce a
   branded SEO deliverable: (1) ACCESSIBILITY & SEMANTIC correctness : is the
