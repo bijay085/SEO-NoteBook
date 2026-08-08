@@ -6,83 +6,13 @@ set "ROOT=%CD%"
 set "PLUGIN=%ROOT%\plugins\seo-helper"
 set "KB=%PLUGIN%\knowledge\SEO_Action_Decision_System.html"
 set "GPT_INSTRUCTIONS=%TEMP%\seo-helper-gpt-instructions.txt"
+set "GLOBAL_NOTE=%TEMP%\seo-helper-global-note.txt"
 
 title SEO Helper Setup
 
-:validate
-cls
-echo SEO Helper
-echo ==========
-echo.
-echo Checking the plugin...
-echo.
-python "%PLUGIN%\scripts\maintain.py" validate
-if errorlevel 1 goto validation_failed
+goto validate
 
-echo.
-echo OK. SEO Helper is ready.
-echo.
-
-:menu
-echo What do you want to use?
-echo.
-echo   1. Claude Code plugin
-echo   2. ChatGPT Custom GPT
-echo   3. Codex / local skills
-echo   4. Update this repo
-echo   5. Validate only
-echo   0. Exit
-echo.
-set /p choice="Choose 1, 2, 3, 4, 5, or 0: "
-
-if "%choice%"=="1" goto claude
-if "%choice%"=="2" goto gpt
-if "%choice%"=="3" goto local
-if "%choice%"=="4" goto update
-if "%choice%"=="5" goto done
-if "%choice%"=="0" exit /b 0
-cls
-echo Please choose a number from the menu.
-echo.
-goto menu
-
-:claude
-cls
-echo Claude Code Setup
-echo =================
-echo.
-echo Claude Code requires one install command inside Claude.
-echo I copied it to your clipboard:
-echo.
-echo /plugin install "%PLUGIN%"
-echo.
-echo Open Claude Code, paste it, press Enter.
-echo After that, ask: Use SEO Helper for this SEO case.
-echo.
-<nul set /p="/plugin install "%PLUGIN%"" | clip
-where claude >nul 2>nul
-if not errorlevel 1 (
-  echo Opening Claude Code...
-  start "" claude
-) else (
-  echo Claude command was not found, so open Claude Code manually.
-)
-echo.
-pause
-goto menu
-
-:gpt
-cls
-echo ChatGPT Custom GPT Setup
-echo ========================
-echo.
-echo ChatGPT does not allow a local repo to install itself automatically.
-echo This option removes the manual hunting:
-echo.
-echo 1. I will open the exact folder that contains the upload file.
-echo 2. I will copy the GPT instructions to your clipboard.
-echo 3. In GPT Builder, upload SEO_Action_Decision_System.html from the opened folder.
-echo.
+:write_gpt_instructions
 > "%GPT_INSTRUCTIONS%" echo You are SEO Helper, a practical SEO decision assistant.
 >> "%GPT_INSTRUCTIONS%" echo.
 >> "%GPT_INSTRUCTIONS%" echo Use the uploaded SEO_Action_Decision_System.html file as the main knowledgebase.
@@ -100,45 +30,158 @@ echo.
 >> "%GPT_INSTRUCTIONS%" echo.
 >> "%GPT_INSTRUCTIONS%" echo If the user pastes Reddit threads, articles, notes, or files, extract only reusable decision rules. Ignore spam, insults, repeated opinions, and unsupported shortcuts.
 >> "%GPT_INSTRUCTIONS%" echo If evidence is missing, say what data is needed instead of guessing. Keep answers concise and actionable.
+exit /b 0
+
+:validate
+cls
+echo SEO Helper
+echo ==========
+echo.
+echo Checking the plugin...
+echo.
+python "%PLUGIN%\scripts\maintain.py" validate
+if errorlevel 1 goto validation_failed
+
+echo.
+echo OK. SEO Helper is ready.
+echo.
+
+:menu
+echo What do you want?
+echo.
+echo   1. Install globally on this computer - use in future projects
+echo   2. Use in one project or Custom GPT
+echo   3. Update SEO Helper everywhere
+echo   4. Advanced: Claude Code plugin install
+echo   5. Validate only
+echo   0. Exit
+echo.
+set /p choice="Choose 1, 2, 3, 4, 5, or 0: "
+
+if "%choice%"=="1" goto global
+if "%choice%"=="2" goto project
+if "%choice%"=="3" goto update_everywhere
+if "%choice%"=="4" goto claude_plugin
+if "%choice%"=="5" goto done
+if "%choice%"=="0" exit /b 0
+cls
+echo Please choose a number from the menu.
+echo.
+goto menu
+
+:global
+cls
+echo Global Install
+echo ==============
+echo.
+echo This installs SEO Helper skills for this Windows user.
+echo After this, supported local AI tools can use SEO Helper in any project.
+echo.
+echo Installing to common skill folders:
+echo   %%USERPROFILE%%\.codex\skills
+echo   %%USERPROFILE%%\.claude\skills
+echo   %%USERPROFILE%%\.cursor\skills
+echo.
+powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1" -Targets codex,claude,cursor
+if errorlevel 1 (
+  echo.
+  echo Global install had a problem. The repo plugin is still valid.
+  pause
+  goto menu
+)
+
+echo.
+echo Creating global usage note...
+> "%GLOBAL_NOTE%" echo SEO Helper is installed globally for this Windows user.
+>> "%GLOBAL_NOTE%" echo.
+>> "%GLOBAL_NOTE%" echo In new projects, ask:
+>> "%GLOBAL_NOTE%" echo Use SEO Helper for this SEO case: [paste problem]
+>> "%GLOBAL_NOTE%" echo.
+>> "%GLOBAL_NOTE%" echo To update later, open this repo and run START_HERE.bat, then choose option 3.
+notepad "%GLOBAL_NOTE%"
+
+echo.
+echo Done. For future projects, ask your AI tool:
+echo.
+echo Use SEO Helper for this SEO case: [paste problem]
+echo.
+echo Updates: run START_HERE.bat again and choose option 3.
+echo.
+pause
+goto menu
+
+:project
+cls
+echo One Project / Custom GPT
+echo ========================
+echo.
+echo Use this when you do not want global install, or you are using a different AI account.
+echo.
+echo Choose project type:
+echo.
+echo   1. ChatGPT Custom GPT
+ echo   2. Claude/ChatGPT project file upload
+ echo   0. Back
+ echo.
+set /p pchoice="Choose 1, 2, or 0: "
+if "%pchoice%"=="1" goto gpt
+if "%pchoice%"=="2" goto project_files
+if "%pchoice%"=="0" goto menu
+cls
+echo Please choose 1, 2, or 0.
+echo.
+goto project
+
+:gpt
+cls
+echo ChatGPT Custom GPT
+echo ==================
+echo.
+echo ChatGPT cannot install a local plugin folder automatically.
+echo I will do the practical setup helpers now:
+echo.
+echo - open GPT Builder
+echo - select the exact knowledge file
+echo - copy GPT instructions to clipboard
+echo.
+call :write_gpt_instructions
 type "%GPT_INSTRUCTIONS%" | clip
 explorer /select,"%KB%"
 start "" "https://chatgpt.com/gpts/editor"
 echo.
-echo GPT instructions are copied to clipboard.
-echo The HTML knowledge file is selected in File Explorer.
-echo GPT Builder is opening in your browser.
+echo GPT instructions are copied.
+echo Upload the selected SEO_Action_Decision_System.html file in GPT Builder.
 echo.
 pause
 goto menu
 
-:local
+:project_files
 cls
-echo Codex / Local Skills Setup
-echo ==========================
-echo.
-echo Installing local skills from the SEO Helper plugin...
-echo.
-powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1"
-if errorlevel 1 (
-  echo.
-  echo Local skill install had a problem. The plugin itself is still valid.
-  pause
-  goto menu
-)
-echo.
-echo Local skills installed. Testing again...
-python "%PLUGIN%\scripts\maintain.py" validate
-if errorlevel 1 goto validation_failed
-echo.
-echo Done. In Codex, ask: Use seo-router for this SEO case.
-echo.
-pause
-goto menu
-
-:update
-cls
-echo Updating SEO Helper
+echo Project File Upload
 echo ===================
+echo.
+echo I selected the one file most projects need:
+echo.
+echo %KB%
+echo.
+echo Upload it to the AI project. Then tell the project:
+echo Use this file as SEO Helper. Answer only from the relevant section.
+echo.
+call :write_gpt_instructions
+type "%GPT_INSTRUCTIONS%" | clip
+explorer /select,"%KB%"
+echo.
+echo Instructions are copied to clipboard.
+echo.
+pause
+goto menu
+
+:update_everywhere
+cls
+echo Update SEO Helper Everywhere
+echo ===========================
+echo.
+echo Pulling latest repo changes...
 echo.
 git pull
 if errorlevel 1 (
@@ -148,11 +191,43 @@ if errorlevel 1 (
   goto menu
 )
 echo.
-echo Re-checking after update...
+echo Validating latest files...
 python "%PLUGIN%\scripts\maintain.py" validate
 if errorlevel 1 goto validation_failed
 echo.
-echo Updated and validated.
+echo Syncing global skills again...
+powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1" -Targets codex,claude,cursor
+if errorlevel 1 (
+  echo.
+  echo Repo updated and validated, but global skill sync had a problem.
+  pause
+  goto menu
+)
+echo.
+echo Done. Latest SEO Helper is synced for this computer.
+echo If you used a Custom GPT or project upload, upload the selected HTML file again.
+echo.
+pause
+goto menu
+
+:claude_plugin
+cls
+echo Claude Code Plugin Install
+echo ==========================
+echo.
+echo This is for Claude Code's plugin system.
+echo I copied the install command to your clipboard:
+echo.
+echo /plugin install "%PLUGIN%"
+echo.
+<nul set /p="/plugin install "%PLUGIN%"" | clip
+where claude >nul 2>nul
+if not errorlevel 1 (
+  echo Opening Claude Code...
+  start "" claude
+) else (
+  echo Claude command was not found, so open Claude Code manually.
+)
 echo.
 pause
 goto menu

@@ -1,101 +1,110 @@
 # SEO Helper Setup
 
-Use `START_HERE.bat`. That is the setup flow.
-
-## Windows
+Run one file:
 
 ```powershell
-git clone https://github.com/bijay085/SEO-NoteBook.git
-cd SEO-NoteBook
 START_HERE.bat
 ```
 
-The launcher will check the plugin and show a menu:
+That is the setup app.
+
+## Choose By Goal
 
 ```text
-1. Claude Code plugin
-2. ChatGPT Custom GPT
-3. Codex / local skills
-4. Update this repo
+1. Install globally on this computer - use in future projects
+2. Use in one project or Custom GPT
+3. Update SEO Helper everywhere
+4. Advanced: Claude Code plugin install
 5. Validate only
 0. Exit
 ```
 
-Pick the tool you use. Do not manually browse random folders first.
+## 1. Install Globally
 
-## What Each Option Does
+Use this if you want SEO Helper available again and again without setting it up for every project.
 
-### 1. Claude Code Plugin
+It installs/syncs SEO Helper skills into common local skill folders for this Windows user:
 
-This is the closest real plugin install.
+```text
+%USERPROFILE%\.codex\skills
+%USERPROFILE%\.claude\skills
+%USERPROFILE%\.cursor\skills
+```
 
-The launcher copies the correct `/plugin install ...` command to your clipboard and opens Claude Code when the `claude` command exists.
-
-Claude Code still requires the command to be entered inside Claude. That is a Claude limitation, not an SEO Helper file problem.
-
-After install, ask:
+After that, in a new project just ask:
 
 ```text
 Use SEO Helper for this SEO case: [paste problem]
 ```
 
-### 2. ChatGPT Custom GPT
+## 2. Use In One Project Or Custom GPT
 
-ChatGPT Custom GPT cannot install a local plugin folder automatically.
+Use this when you do not want global install or you are using another AI account.
 
-The launcher does the practical parts for you:
+The launcher will:
 
-- opens GPT Builder
-- opens File Explorer with the correct knowledge file selected
-- copies the GPT instructions to your clipboard
+- select the exact knowledgebase file
+- copy instructions to clipboard
+- open GPT Builder when you choose Custom GPT
 
-In GPT Builder:
-
-1. Create a GPT.
-2. Paste the copied instructions.
-3. Upload the selected file: `SEO_Action_Decision_System.html`.
-4. Save.
-
-That is the shortest possible Custom GPT setup without building a hosted ChatGPT App.
-
-### 3. Codex / Local Skills
-
-The launcher installs the SEO skills locally and validates the plugin.
-
-After it finishes, ask Codex:
+The selected file is:
 
 ```text
-Use seo-router for this SEO case: [paste problem]
+plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
 ```
 
-### 4. Update This Repo
+For Custom GPT, upload that file in Knowledge and paste the copied instructions.
 
-The launcher runs update and validates again.
+For Claude/ChatGPT projects, upload that file and paste the copied instructions.
 
-Use this after Bijay pushes new knowledgebase changes.
+## 3. Update SEO Helper Everywhere
 
-### 5. Validate Only
+Use this after new rules are pushed.
 
-Checks that the plugin files are present and the canonical knowledgebase is readable.
+It runs:
+
+- `git pull`
+- plugin validation
+- global skill sync again
+
+This keeps local global skills fresh.
+
+Important: if you uploaded the HTML to a Custom GPT or a project, upload the updated HTML again because those products keep their own copy.
+
+## 4. Advanced Claude Code Plugin Install
+
+Use this only if you specifically want Claude Code's plugin install system.
+
+The launcher copies the correct command:
+
+```text
+/plugin install [your local plugins/seo-helper path]
+```
+
+Claude Code still requires entering that command inside Claude.
+
+## 5. Validate Only
+
+Checks that the repo and canonical knowledgebase are working.
 
 ## No Required Connectors
 
-SEO Helper works without connectors.
-
-It uses the built-in knowledgebase plus whatever the user provides:
+SEO Helper works from provided data first:
 
 - pasted notes
-- Reddit/source text
 - screenshots
 - GSC exports
 - GA4 exports
 - crawl exports
-- server logs
-- URLs and manual context
+- logs
+- manual context
+- the built-in knowledgebase
 
-Optional connectors such as Semrush, Cloudflare, Google Drive, Notion, or Airtable are not required. Add them only when live external data access is needed.
+No connector is required for normal use.
 
-## Single Source of Truth
+Optional live-data connectors are only useful when a user wants live external data access.
+
+## Single Source Of Truth
 
 The only knowledgebase is:
 
@@ -103,15 +112,4 @@ The only knowledgebase is:
 plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
 ```
 
-Do not create duplicate HTML copies. Do not upload the whole repo when one knowledge file is enough.
-
-## Maintainer Update Flow
-
-After adding or editing rules:
-
-```powershell
-python plugins\seo-helper\scripts\maintain.py rebuild-index
-python plugins\seo-helper\scripts\maintain.py validate
-```
-
-Then commit and push.
+Keep the system clean. Do not create duplicate knowledgebase files.

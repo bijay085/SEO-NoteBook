@@ -1,8 +1,11 @@
 # SEO NoteBook: SEO Helper
 
-SEO Helper is one clean SEO decision plugin by Bijay.
+SEO Helper is one clean SEO decision system by Bijay.
 
-It helps AI tools answer SEO questions with practical decision logic instead of generic advice.
+It is designed to work two ways:
+
+- global install once on your computer, then use it in future projects
+- one-project use when you only want to upload/share the knowledge file
 
 ## Fast Start on Windows
 
@@ -12,13 +15,56 @@ cd SEO-NoteBook
 START_HERE.bat
 ```
 
-`START_HERE.bat` is the main setup launcher. It validates the plugin, then lets you choose:
+Choose by goal, not by confusing tool names:
 
-- Claude Code plugin setup
-- ChatGPT Custom GPT setup
-- Codex / local skills setup
-- update with `git pull`
-- validate only
+```text
+1. Install globally on this computer - use in future projects
+2. Use in one project or Custom GPT
+3. Update SEO Helper everywhere
+4. Advanced: Claude Code plugin install
+5. Validate only
+0. Exit
+```
+
+## Best Setup
+
+For most people, choose:
+
+```text
+1. Install globally on this computer
+```
+
+That syncs the SEO skills into common local AI skill folders for this Windows user:
+
+```text
+%USERPROFILE%\.codex\skills
+%USERPROFILE%\.claude\skills
+%USERPROFILE%\.cursor\skills
+```
+
+After that, in future projects ask:
+
+```text
+Use SEO Helper for this SEO case: [paste problem]
+```
+
+## Updating Later
+
+Run:
+
+```powershell
+START_HERE.bat
+```
+
+Choose:
+
+```text
+3. Update SEO Helper everywhere
+```
+
+It pulls the latest repo, validates, and syncs the global skills again.
+
+If you uploaded the HTML into a Custom GPT or an AI project, upload the updated HTML again because those systems keep their own copy.
 
 ## No Required Connectors
 
@@ -51,13 +97,7 @@ SEO Helper helps with:
 - routing to deeper audit skills only when needed
 - token optimization by using only the relevant rule or section
 
-## Main Files
-
-Installable plugin folder:
-
-```text
-plugins/seo-helper
-```
+## Single Source of Truth
 
 Canonical knowledgebase:
 
@@ -65,11 +105,28 @@ Canonical knowledgebase:
 plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
 ```
 
-Do not use duplicate knowledgebase copies. This HTML file is the single source of truth.
+Do not create duplicate knowledgebase copies. This HTML file is the shareable one-file version and the source used by the skills.
 
-## For Maintainers
+## One-Project Use
 
-Edit only the canonical knowledgebase for new SEO rules:
+Choose this in `START_HERE.bat`:
+
+```text
+2. Use in one project or Custom GPT
+```
+
+The launcher selects the right HTML file and copies the instructions to clipboard.
+
+Use this when:
+
+- you are using a different AI account
+- you do not want global install
+- you are sharing with someone who only needs the knowledgebase
+- you are making a Custom GPT
+
+## Maintainer Flow
+
+Edit new rules in:
 
 ```text
 plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
@@ -82,15 +139,4 @@ python plugins\seo-helper\scripts\maintain.py rebuild-index
 python plugins\seo-helper\scripts\maintain.py validate
 ```
 
-Users update with:
-
-```powershell
-git pull
-START_HERE.bat
-```
-
-## Important Reality
-
-Claude Code can install the local plugin folder.
-
-ChatGPT Custom GPT cannot auto-install a local GitHub repo from a `.bat` file. The launcher opens GPT Builder, selects the exact HTML file, and copies the instructions to the clipboard so setup is as close to plug-and-play as ChatGPT currently allows.
+Commit and push.
