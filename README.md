@@ -4,6 +4,15 @@
 
 Portable **seo-helper** plugin by **Bijay**: SEO router, knowledgebase, audit modules, and optional MCP server.
 
+## Start Here on Windows
+
+After cloning, open the `SEO-NoteBook` folder and double-click:
+
+```text
+START_HERE.bat
+```
+
+It tests SEO Helper and shows the exact plugin path to paste into Claude Code.
 ## What This Plugin Does
 
 SEO Helper is a single installable SEO decision assistant. It helps an AI agent decide what SEO action to take, which evidence to check, and which deeper audit workflow to use without making the user repeat the same context in every new chat.
