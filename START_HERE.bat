@@ -127,7 +127,7 @@ echo What do you want?
 echo.
 echo   1. Recommended: Install once on this computer
 echo      Choose this if you want SEO Helper available in future projects.
-echo      What happens: installs Python packages and copies SEO skills to user-level Codex, Claude, and Cursor folders.
+echo      What happens: installs Python packages, copies SEO skills, and registers SEO Helper for app/plugin pickers.
 echo.
 echo   2. Use only in one project or Custom GPT
 echo      Choose this for ChatGPT GPT Builder, Claude Project, another account, or one-time sharing.
@@ -135,7 +135,7 @@ echo      What happens: opens/selects the single HTML knowledge file and copies 
 echo.
 echo   3. Update SEO Helper everywhere
 echo      Choose this after Bijay pushes new rules or fixes.
-echo      What happens: runs git pull, validates, installs packages, then re-syncs global skills.
+echo      What happens: runs git pull, validates, installs packages, re-syncs skills, and refreshes picker registration.
 echo.
 echo   4. Advanced: Claude Code plugin install
 echo      Choose this only if you specifically use Claude Code plugin commands.
@@ -184,8 +184,9 @@ echo Installing to common skill folders:
 echo   %%USERPROFILE%%\.codex\skills
 echo   %%USERPROFILE%%\.claude\skills
 echo   %%USERPROFILE%%\.cursor\skills
+echo   %%USERPROFILE%%\.agents\plugins  ^(plugin picker registration^)
 echo.
-powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1" -Targets codex,claude,cursor -SkipPythonPackages
+powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1" -Targets codex,claude,cursor -SkipPythonPackages -RegisterPlugin
 if errorlevel 1 (
   echo.
   echo Global install had a problem. The repo plugin is still valid.
@@ -323,7 +324,7 @@ if errorlevel 1 (
 )
 echo.
 echo Syncing global skills again...
-powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1" -Targets codex,claude,cursor -SkipPythonPackages
+powershell -ExecutionPolicy Bypass -File "%PLUGIN%\install-skills.ps1" -Targets codex,claude,cursor -SkipPythonPackages -RegisterPlugin
 if errorlevel 1 (
   echo.
   echo Repo updated and validated, but global skill sync had a problem.

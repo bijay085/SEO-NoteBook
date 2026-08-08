@@ -13,7 +13,7 @@ That is the setup app. If Python is missing, the launcher asks before installing
 ```text
 1. Recommended: Install once on this computer
    Choose this if you want SEO Helper available in future projects.
-   What happens: copies SEO skills to your user-level Codex, Claude, and Cursor skill folders.
+   What happens: copies SEO skills and registers SEO Helper for app/plugin pickers.
 
 2. Use only in one project or Custom GPT
    Choose this for ChatGPT GPT Builder, Claude Project, another account, or one-time sharing.
@@ -38,12 +38,13 @@ That is the setup app. If Python is missing, the launcher asks before installing
 
 Use this if you want SEO Helper available again and again without setting it up for every project.
 
-It installs required Python packages and syncs SEO Helper skills into common local skill folders for this Windows user:
+It installs required Python packages and syncs SEO Helper skills into common local skill folders and registers the plugin picker entry for this Windows user:
 
 ```text
 %USERPROFILE%\.codex\skills
 %USERPROFILE%\.claude\skills
 %USERPROFILE%\.cursor\skills
+%USERPROFILE%\.agents\plugins
 ```
 
 After that, in a new project just ask:
@@ -80,7 +81,9 @@ It runs:
 
 - `git pull`
 - plugin validation
+- Python package install/update
 - global skill sync again
+- plugin picker registration refresh
 
 This keeps local global skills fresh.
 
@@ -98,7 +101,11 @@ The launcher copies the correct command:
 
 Claude Code still requires entering that command inside Claude.
 
-## 5. Validate Only
+## 5. Where Can I Use This?
+
+Shows which setup method to use for GPT, Claude, Cursor, Antigravity, and other AI apps.
+
+## 6. Validate Only
 
 Checks that the repo and canonical knowledgebase are working.
 
@@ -121,7 +128,7 @@ SEO Helper can be used in different places, but the setup method depends on what
 | Claude desktop cowork | Project/file upload | Use option 2 unless that workspace supports local skills. |
 | Claude Code desktop/local | Claude Code plugin or global skills | Use option 4 for `/plugin install`, or option 1 for skill folders. |
 | Claude web Claude Code | Claude Code plugin path if supported; otherwise project upload | Use option 4 when Claude Code accepts plugin commands. |
-| Cursor | Global install | Use option 1. It syncs to `%USERPROFILE%\.cursor\skills`. |
+| Cursor | Global install | Use option 1. It syncs to `%USERPROFILE%\.cursor\skills` and registers the plugin in `%USERPROFILE%\.agents\plugins`. |
 | Antigravity or other AI coding tools | Local skill folder or one-file knowledge upload | If it supports local skills, point it to `plugins/seo-helper/skills` or copied global skills. If not, use the HTML file. |
 | Any AI with file upload | One-file knowledge upload | Upload `plugins/seo-helper/knowledge/SEO_Action_Decision_System.html`. |
 
