@@ -155,7 +155,7 @@ if ($RegisterPlugin) {
 
     if (Test-Path $marketFile) {
         $market = Get-Content -Raw $marketFile | ConvertFrom-Json
-        if (-not $market.plugins) { $market | Add-Member -MemberType NoteProperty -Name plugins -Value @() }
+        if (-not ($market.PSObject.Properties['plugins'])) { $market | Add-Member -MemberType NoteProperty -Name plugins -Value @() }
     } else {
         New-Item -ItemType Directory -Force -Path $marketRoot | Out-Null
         $market = [pscustomobject]@{
