@@ -44,7 +44,7 @@ Clones to `%LOCALAPPDATA%\seo-helper`, installs skills, commands, and MCP tools 
 ```bash
 git clone https://github.com/bijay085/SEO-NoteBook.git
 cd SEO-NoteBook
-bash install-skills.sh
+bash install.sh
 ```
 
 ### Claude Code marketplace
