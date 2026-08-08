@@ -127,7 +127,7 @@ echo What do you want?
 echo.
 echo   1. Recommended: Install once on this computer
 echo      Choose this if you want SEO Helper available in future projects.
-echo      What happens: installs Python packages, copies SEO skills, and registers SEO Helper for app/plugin pickers.
+echo      What happens: installs Python packages, copies SEO skills, registers SEO Helper for app/plugin pickers, and installs all /seo-* command files.
 echo.
 echo   2. Use only in one project or Custom GPT
 echo      Choose this for ChatGPT GPT Builder, Claude Project, another account, or one-time sharing.

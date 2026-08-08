@@ -10,7 +10,7 @@ Usage inside a builder:
                        kind="bars", unit="")
     # ...insert `block` (an HTML <figure> string) where the chart belongs.
 
-kind="bars"  -> vertical bars (comparisons, scores)
+kind="bars" -> vertical bars (comparisons, scores)
 kind="hbars" -> horizontal bars (distributions / histograms, long labels)
 """
 import html as _h

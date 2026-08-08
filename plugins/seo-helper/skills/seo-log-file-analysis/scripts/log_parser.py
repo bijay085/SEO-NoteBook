@@ -1,25 +1,25 @@
-"""Log parsing — format detection, per-format line parsers, and log-role routing.
+"""Log parsing : format detection, per-format line parsers, and log-role routing.
 
 Ported (logic + thresholds unchanged) from a prior Colab analyzer
 `seo_log_file_analyzer.py`, with three enhancements:
-  1. STREAMING — `iter_records()` yields one record at a time instead of
+  1. STREAMING : `iter_records()` yields one record at a time instead of
      building a pandas DataFrame, so multi-GB rotated logs parse in bounded
      memory. Nothing here holds more than one line.
-  2. COMPRESSION — `.gz` / `.bz2` / `.xz` open transparently, and a path may be
+  2. COMPRESSION : `.gz` / `.bz2` / `.xz` open transparently, and a path may be
      a file, a directory, or a glob. Real server logs arrive rotated+compressed.
-  3. HONEST COUNTS — every parse returns (parsed, total, failed) so the report
+  3. HONEST COUNTS : every parse returns (parsed, total, failed) so the report
      can state the parse rate instead of silently dropping lines.
 
 Record schema (one dict per request):
   ip, timestamp (datetime|None), method, url, status (int), bytes (int),
-  user_agent, referrer   (+ log_role / source_file added by the orchestrator)
+  user_agent, referrer (+ log_role / source_file added by the orchestrator)
 
 Public API:
-  expand_paths(paths)          -> [str]   files, dirs and globs -> log files
-  detect_format(path)          -> (fmt, sample_lines)
-  infer_log_role(path)         -> 'access'|'error'|'cloudways_*'
-  iter_records(path, ...)      -> yields record dict or None (failed line)
-  parse_file(path, ...)        -> (records|None, total_lines, failed_lines)
+  expand_paths(paths) -> [str] files, dirs and globs -> log files
+  detect_format(path) -> (fmt, sample_lines)
+  infer_log_role(path) -> 'access'|'error'|'cloudways_*'
+  iter_records(path, ...) -> yields record dict or None (failed line)
+  parse_file(path, ...) -> (records|None, total_lines, failed_lines)
   route_log_roles(role_counts) -> (primary_roles, reason)
 """
 import bz2
@@ -36,7 +36,7 @@ METHODS = ("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH")
 
 # Rotated logs almost never end in a tidy extension: `access.log-2026-07-19-1784419220`,
 # `access.log.1`, `access_log`, `error_log`. Matching on suffix alone silently drops
-# them — and a silent drop is worse than a crash, because the report still looks
+# them : and a silent drop is worse than a crash, because the report still looks
 # complete. Anything with `.log` anywhere in the name, or a classic Apache
 # access_log / error_log name, counts as a log file.
 _LOG_NAME_RE = re.compile(r"\.log([.\-_]|$)|(^|[._-])(access|error)(_log)?([._-]|$)", re.I)
@@ -85,10 +85,10 @@ def discover_logs(paths):
                     elif not fn.startswith("."):
                         skipped.append(full)
         elif any(ch in p for ch in "*?["):
-            # An explicit glob is the user's own filter — honour it verbatim.
+            # An explicit glob is the user's own filter : honour it verbatim.
             out.extend(sorted(x for x in _glob.glob(p) if os.path.isfile(x)))
         elif os.path.isfile(p):
-            out.append(p)          # named explicitly: never second-guess it
+            out.append(p) # named explicitly: never second-guess it
     seen, uniq = set(), []
     for p in out:
         rp = os.path.realpath(p)
@@ -148,7 +148,7 @@ def detect_format(filepath):
 
 
 def infer_log_role(filepath):
-    """Which kind of log this is — decides whether it feeds the main SEO totals."""
+    """Which kind of log this is : decides whether it feeds the main SEO totals."""
     name = os.path.basename(str(filepath)).lower()
     for ext in (".gz", ".bz2", ".xz"):
         if name.endswith(ext):
@@ -234,9 +234,9 @@ def parse_bracket_line(line):
                 referrer = parts[3] if len(parts) >= 4 else ""
                 user_agent = parts[5] if len(parts) >= 6 else ""
         elif first_chunk and not first_chunk[0].isdigit():
-            # Unquoted request line, method first — the vhost-prefixed Apache/
+            # Unquoted request line, method first : the vhost-prefixed Apache/
             # Cloudways shape:
-            #   host ip [ts] GET "/url" HTTP/2.0 200 "ref" "UA" ip "/entry" - cpu bytes t t
+            # host ip [ts] GET "/url" HTTP/2.0 200 "ref" "UA" ip "/entry" - cpu bytes t t
             method = first_chunk.split()[0]
             url = parts[1] if len(parts) >= 2 else "-"
             for tok in (parts[2].strip() if len(parts) >= 3 else "").split():
@@ -372,7 +372,7 @@ def _iter_csv(filepath, log):
         ua_col = find_col(["user_agent", "user-agent", "agent"])
         ip_col = find_col(["ip", "address", "remote"])
         if not url_col:
-            log("   Could not find a URL column in this CSV — skipped.")
+            log(" Could not find a URL column in this CSV : skipped.")
             return
         for row in reader:
             url = str(row.get(url_col, "-") or "-")
@@ -395,12 +395,12 @@ def _iter_csv(filepath, log):
 
 def _iter_cloudways_fpm(filepath, log):
     """Cloudways PHP-FPM 3-line format: timestamp / IP / request.
-    NOTE: carries no User-Agent — classification falls back to verified bot IPs."""
+    NOTE: carries no User-Agent : classification falls back to verified bot IPs."""
     cur_year = datetime.now().year
     with open_text(filepath) as fh:
         raw = [ln.strip() for ln in fh if ln.strip()]
-    log("   NOTE: Cloudways FPM log has no User-Agent field.")
-    log("   Official search-bot IP ranges will be used where available.")
+    log(" NOTE: Cloudways FPM log has no User-Agent field.")
+    log(" Official search-bot IP ranges will be used where available.")
     i = 0
     while i < len(raw) - 2:
         l1, l2, l3 = raw[i], raw[i + 1], raw[i + 2]
@@ -409,7 +409,7 @@ def _iter_cloudways_fpm(filepath, log):
             continue
         try:
             ts = None
-            for fmt in ("%Y %b %d %H:%M:%S", "%Y %b  %d %H:%M:%S"):
+            for fmt in ("%Y %b %d %H:%M:%S", "%Y %b %d %H:%M:%S"):
                 try:
                     ts = datetime.strptime(f"{cur_year} {l1}", fmt)
                     break
@@ -492,9 +492,9 @@ def parse_file(filepath, log=print, collect=True):
     """Parse one file -> (records|None, total_lines, failed_lines).
     collect=False counts without retaining (used by the pass-1 sweep)."""
     fmt, samples = detect_format(filepath)
-    log(f"   Format detected: {fmt.upper()}")
+    log(f" Format detected: {fmt.upper()}")
     for i, s in enumerate(samples[:3]):
-        log(f"   [{i+1}] {s[:150]}{'...' if len(s) > 150 else ''}")
+        log(f" [{i+1}] {s[:150]}{'...' if len(s) > 150 else ''}")
     records, total, failed = ([] if collect else None), 0, 0
     for rec in iter_records(filepath, log=log, fmt=fmt):
         total += 1
@@ -505,7 +505,7 @@ def parse_file(filepath, log=print, collect=True):
             records.append(rec)
     parsed = total - failed
     if parsed == 0 and total > 0:
-        log("   Trying last-resort regex...")
+        log(" Trying last-resort regex...")
         recovered = 0
         for rec in iter_last_resort(filepath):
             recovered += 1
@@ -513,6 +513,6 @@ def parse_file(filepath, log=print, collect=True):
                 records.append(rec)
         failed = max(total - recovered, 0)
         parsed = recovered
-        log(f"   Last-resort: {recovered:,} entries")
-    log(f"   Total: {total:,} lines | Parsed: {parsed:,} | Failed: {failed:,}")
+        log(f" Last-resort: {recovered:,} entries")
+    log(f" Total: {total:,} lines | Parsed: {parsed:,} | Failed: {failed:,}")
     return records, total, failed

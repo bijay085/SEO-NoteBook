@@ -7,8 +7,8 @@ combine.py so every section shares one look.
 
     import brand_lib as B
     cfg = B.load_config("config.json")
-    html = B.shell("Leads & Channel ROI", inner_html, cfg)   # standalone report
-    B.tbl(["A","B"], [["1","2"]])                             # table helper
+    html = B.shell("Leads & Channel ROI", inner_html, cfg) # standalone report
+    B.tbl(["A","B"], [["1","2"]]) # table helper
 """
 import json, os
 
@@ -72,7 +72,7 @@ def shell(title, inner, cfg):
         inner = f"<div class='report-wrapper'>{inner}</div>"
     return (f"<!doctype html><html><head><meta charset='utf-8'>"
             f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
-            f"<title>{cfg.get('brand',{}).get('agency','Bijay')} — {title}</title>"
+            f"<title>{cfg.get('brand',{}).get('agency','Bijay')} : {title}</title>"
             f"<style>{css(cfg)}</style></head><body>{header(title,cfg)}{inner}{footer(cfg)}</body></html>")
 
 def tbl(headers, rows):

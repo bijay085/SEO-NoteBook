@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
-"""sandbox_metrics.py — the quantitative core of the Sandbox-Effect analysis.
+"""sandbox_metrics.py : the quantitative core of the Sandbox-Effect analysis.
 
 Turns Google Search Console exports into the "is this site graduating?" signal set:
 the brand vs non-brand split, the impressions-up / clicks-flat suppression signature,
 non-brand position bands, zero-click interception candidates, and a 0-100 Graduation
 Score. Emits sandbox_data.json for the report + workbook, and prints a readable table.
 
-PURE STDLIB — no pandas/scipy needed (so it runs without a venv). For the heavier
+PURE STDLIB : no pandas/scipy needed (so it runs without a venv). For the heavier
 before/after stats that a CORE-UPDATE DEMOTION needs (changepoint, Simpson's-paradox
-position decomposition), this script only *flags* the mode — defer the decomposition to
+position decomposition), this script only *flags* the mode : defer the decomposition to
 the sibling skill `seo-ecom-decline-investigation` rather than re-implementing it here.
 
 INPUTS (all CSV; column names are matched case-insensitively and tolerate GSC UI export
 headers like "Top queries"/"Clicks"/"Impressions"/"CTR"/"Position" and the lowercase
 MCP forms). Feed whatever GSC gives you:
 
-    --daily    date,clicks,impressions[,ctr,position]      (date dimension — the trend)
-    --queries  query,clicks,impressions,ctr,position       (query dimension — brand split)
-    --pages    page,clicks,impressions,ctr,position         (optional — top pages)
-    --config   config.json (default ./config.json; for brand_regex, period, domain)
-    --out      sandbox_data.json (default <output_dir>/data/sandbox_data.json)
+    --daily date,clicks,impressions[,ctr,position] (date dimension : the trend)
+    --queries query,clicks,impressions,ctr,position (query dimension : brand split)
+    --pages page,clicks,impressions,ctr,position (optional : top pages)
+    --config config.json (default ./config.json; for brand_regex, period, domain)
+    --out sandbox_data.json (default <output_dir>/data/sandbox_data.json)
 
 Usage:
     python3 sandbox_metrics.py --daily daily.csv --queries queries.csv --config config.json
@@ -121,7 +121,7 @@ def brand_split(queries, brand_rx):
         if bucket is nb:
             if c > 0: nb_click_qs.append((term, int(c), int(i), round(pos,1)))
             # zero-click interception candidate: ranks well, big impressions, ~0 CTR
-            ctr_pct = ctr if ctr <= 1 else ctr  # ctr may be fraction or percent; normalise below
+            ctr_pct = ctr if ctr <= 1 else ctr # ctr may be fraction or percent; normalise below
             if pos and pos <= 10 and i >= 500:
                 cpct = (c/i*100) if i else 0
                 if cpct < 1.0: zero_click.append((term, int(i), round(cpct,3), round(pos,1)))
@@ -164,15 +164,15 @@ def position_bands(queries, brand_rx):
 # ---------- graduation score ----------
 def graduation_score(brand_share, nb_pos, bands, med_ctr_4_10):
     def clamp(x): return max(0.0, min(1.0, x))
-    a = clamp((100 - (brand_share if brand_share is not None else 100)) / 50.0)  # non-brand click share vs 50%
-    b = clamp((30 - (nb_pos if nb_pos else 30)) / (30 - 8))                       # non-brand avg position 8..30
-    c = clamp((bands.get('1-3',0)+bands.get('4-10',0)) / 40.0)                    # page-1 non-brand impr share vs 40%
-    d = clamp((med_ctr_4_10 if med_ctr_4_10 else 0) / 3.0)                        # CTR-at-rank health vs 3%
+    a = clamp((100 - (brand_share if brand_share is not None else 100)) / 50.0) # non-brand click share vs 50%
+    b = clamp((30 - (nb_pos if nb_pos else 30)) / (30 - 8)) # non-brand avg position 8..30
+    c = clamp((bands.get('1-3',0)+bands.get('4-10',0)) / 40.0) # page-1 non-brand impr share vs 40%
+    d = clamp((med_ctr_4_10 if med_ctr_4_10 else 0) / 3.0) # CTR-at-rank health vs 3%
     score = round(100*(0.30*a + 0.30*b + 0.25*c + 0.15*d), 1)
-    if score >= 70:  stage = "Graduated / graduating — non-brand demand is being captured"
-    elif score >= 45: stage = "Emerging — partial graduation; specific pillars still holding it back"
-    elif score >= 25: stage = "Suppressed — indexed but not trusted; classic sandbox/brand-only pattern"
-    else:            stage = "Deep suppression — near brand-only; entity/E-E-A-T/link trust unresolved"
+    if score >= 70: stage = "Graduated / graduating : non-brand demand is being captured"
+    elif score >= 45: stage = "Emerging : partial graduation; specific pillars still holding it back"
+    elif score >= 25: stage = "Suppressed : indexed but not trusted; classic sandbox/brand-only pattern"
+    else: stage = "Deep suppression : near brand-only; entity/E-E-A-T/link trust unresolved"
     return score, stage, {'nonbrand_share':round(a,2),'nonbrand_position':round(b,2),
                           'page1_share':round(c,2),'ctr_at_rank':round(d,2)}
 
@@ -189,18 +189,18 @@ def mode_flags(months, brand_share, nb_pos, bands, med_ctr, has_baseline):
         if impr_chg > 20 and click_chg < 10 and (nb_pos or 99) > 12:
             flags.append(("SANDBOX / TRUST-HOLD",
               f"impressions {impr_chg:+.0f}% but clicks {click_chg:+.0f}% across the window; non-brand avg pos {nb_pos}. "
-              "Visibility is accumulating without converting to rank/clicks — the never-graduated pattern."))
+              "Visibility is accumulating without converting to rank/clicks : the never-graduated pattern."))
         if impr_chg < -25 and has_baseline:
             flags.append(("POSSIBLE CORE-UPDATE DEMOTION",
-              f"impressions {impr_chg:+.0f}% with a baseline present — this may be a demotion, not a sandbox. "
+              f"impressions {impr_chg:+.0f}% with a baseline present : this may be a demotion, not a sandbox. "
               "Run the sibling skill `seo-ecom-decline-investigation` for the changepoint + position decomposition."))
     if bands.get('1-3',0)+bands.get('4-10',0) >= 25 and (med_ctr is not None and med_ctr < 1.0):
         flags.append(("ZERO-CLICK INTERCEPTION",
           f"{bands.get('1-3',0)+bands.get('4-10',0):.0f}% of non-brand impressions rank page-1 but median CTR@4-10 is {med_ctr}% "
-          "— AI Overviews / PAA are answering on the SERP. Fix = SERP-feature capture + intent pivot, NOT 'rank higher'."))
+          ": AI Overviews / PAA are answering on the SERP. Fix = SERP-feature capture + intent pivot, NOT 'rank higher'."))
     if brand_share is not None and brand_share >= 75:
         flags.append(("BRAND-ONLY JAIL",
-          f"{brand_share}% of clicks are brand — the site earns clicks only when people already know the name. "
+          f"{brand_share}% of clicks are brand : the site earns clicks only when people already know the name. "
           "Non-brand discovery is the gap."))
     return flags
 
@@ -221,10 +221,10 @@ def main():
     months = []
     if a.daily and os.path.exists(a.daily):
         daily,_ = read_csv(a.daily); months = monthly_from_daily(daily); data['monthly'] = months
-        print(f"{'Month':8}{'Days':>5}{'Clicks':>8}{'Impr':>9}{'CTR%':>7}{'Pos':>6}  Partial")
+        print(f"{'Month':8}{'Days':>5}{'Clicks':>8}{'Impr':>9}{'CTR%':>7}{'Pos':>6} Partial")
         for m in months:
             print(f"{m['month']:8}{m['days']:>5}{m['clicks']:>8}{m['impr']:>9}{m['ctr']:>7}"
-                  f"{(m['position'] if m['position'] else '-'):>6}  {'YES (excluded from trend)' if m['partial'] else ''}")
+                  f"{(m['position'] if m['position'] else '-'):>6} {'YES (excluded from trend)' if m['partial'] else ''}")
 
     brand_share=nb_pos=med_ctr=None; bands={}
     if a.queries and os.path.exists(a.queries):
@@ -238,8 +238,8 @@ def main():
                      'query_dim_note':'Query-dimension totals UNDERCOUNT (GSC anonymises rare queries). '
                                       'Use --daily date totals for the headline trend.'})
         print(f"\nBrand vs non-brand (query dim): brand clicks={b['clicks']} nonbrand clicks={nb['clicks']} "
-              f"brand_share={brand_share}%  nonbrand_pos={nb_pos}")
-        print(f"Non-brand impression bands: {bands}  median CTR@4-10={med_ctr}%")
+              f"brand_share={brand_share}% nonbrand_pos={nb_pos}")
+        print(f"Non-brand impression bands: {bands} median CTR@4-10={med_ctr}%")
         if zero_click: print(f"Zero-click candidates (rank<=10, impr>=500, CTR<1%): {len(zero_click)}")
 
     if a.pages and os.path.exists(a.pages):
@@ -256,9 +256,9 @@ def main():
         flags = mode_flags(months, brand_share, nb_pos, bands, med_ctr, has_baseline)
         data.update({'graduation_score':score,'graduation_stage':stage,'score_components':comps,
                      'mode_flags':[{'mode':m,'evidence':e} for m,e in flags]})
-        print(f"\n=== GRADUATION SCORE: {score}/100 — {stage} ===")
-        print(f"    components (0-1): {comps}")
-        for m,e in flags: print(f"  [{m}] {e}")
+        print(f"\n=== GRADUATION SCORE: {score}/100 : {stage} ===")
+        print(f" components (0-1): {comps}")
+        for m,e in flags: print(f" [{m}] {e}")
 
     os.makedirs(os.path.dirname(out) or '.', exist_ok=True)
     json.dump(data, open(out,'w',encoding='utf-8'), indent=2)

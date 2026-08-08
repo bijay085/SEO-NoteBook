@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
-"""Claude-native SEO Render Audit — deterministic prep + build.
+"""Claude-native SEO Render Audit : deterministic prep + build.
 
 The AI reasoning passes (reading / analysis / solutions) are performed by Claude
 in-context between the two subcommands (see SKILL.md), NOT by any external LLM API.
 
-  prep   fetch raw HTML + robots/llms + extract raw-vs-rendered signals. The
+  prep fetch raw HTML + robots/llms + extract raw-vs-rendered signals. The
          rendered DOM comes from --rendered-file (produced via the browser / Playwright tool)
          or, if installed, an optional local Playwright fallback. Writes
          raw_<slug>.html, rendered_<slug>.html and prep_<slug>.json.
 
-  build  read prep_<slug>.json plus Claude's analysis_<slug>.json /
+  build read prep_<slug>.json plus Claude's analysis_<slug>.json /
          solutions_<slug>.json / reading_<slug>.json, run the deterministic
          scorer, and write the branded XLSX + HTML + JSON reports.
 
 Usage:
-  python render_audit.py prep  --url URL [--rendered-file R.html] --ws WS [--slug S]
+  python render_audit.py prep --url URL [--rendered-file R.html] --ws WS [--slug S]
   python render_audit.py build --ws WS [--out DIR]
 """
 from __future__ import annotations
@@ -30,19 +30,19 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-import config                                                        # noqa: E402
-from models import (                                                 # noqa: E402
+import config # noqa: E402
+from models import ( # noqa: E402
     URLAuditResult, FetchResult, SignalResult, SolutionRecord,
 )
-from fetcher.raw_fetch import fetch_raw                              # noqa: E402
-from fetcher.aux_fetch import (                                      # noqa: E402
+from fetcher.raw_fetch import fetch_raw # noqa: E402
+from fetcher.aux_fetch import ( # noqa: E402
     fetch_robots, fetch_llms_txt, parse_bot_access,
 )
-from engine.extractor import extract_signals                        # noqa: E402
-from engine.scorer import (                                         # noqa: E402
+from engine.extractor import extract_signals # noqa: E402
+from engine.scorer import ( # noqa: E402
     apply_scores, reconcile_severity_from_solutions, compute_scores,
 )
-from outputs import build_xlsx, build_json                          # noqa: E402
+from outputs import build_xlsx, build_json # noqa: E402
 
 
 def slug_of(url: str) -> str:
@@ -52,8 +52,8 @@ def slug_of(url: str) -> str:
     return s or "homepage"
 
 
-# ── HTML report (ported from the app's build_html_report — registers the
-#    format_number filter and passes `meta`, which the template requires) ──────
+# ── HTML report (ported from the app's build_html_report : registers the
+# format_number filter and passes `meta`, which the template requires) ──────
 def build_html_report(results, output_path: str) -> None:
     from jinja2 import Environment, FileSystemLoader
     from outputs.html_builder import _avg
@@ -127,7 +127,7 @@ def cmd_prep(a) -> int:
                 render_time_ms = rend["render_time_ms"]
                 console_errors = rend["console_errors"]
                 rmode = "playwright"
-        except Exception as e:  # pragma: no cover
+        except Exception as e: # pragma: no cover
             rendered_html = raw_html
             render_error = f"no renderer: {e}"
             rmode = "RAW-ONLY"
@@ -173,16 +173,16 @@ def cmd_prep(a) -> int:
     gapped = [s for s in signals
               if s.gap_significance in ("medium", "high") or not s.match]
     blocked = ",".join(b for b, v in bot_access.items() if v == "block") or "none"
-    print(f"PREP OK  {url}")
-    print(f"  slug={slug}  status={raw.status_code}  "
-          f"raw_chars={raw_chars}  rend_chars={rend_chars}  body_gap={gap_pct}%")
-    print(f"  render={rmode}" + (f"  render_error={render_error}" if render_error else ""))
-    print(f"  robots={'yes' if robots_txt else 'no'}  "
-          f"llms.txt={llms_status}  bots_blocked={blocked}")
-    print(f"  signals={len(signals)}  with_gap_or_mismatch={len(gapped)}")
-    print(f"  raw_html   -> {raw_path}")
-    print(f"  rendered   -> {rend_path}")
-    print(f"  prep       -> {prep_path}")
+    print(f"PREP OK {url}")
+    print(f" slug={slug} status={raw.status_code} "
+          f"raw_chars={raw_chars} rend_chars={rend_chars} body_gap={gap_pct}%")
+    print(f" render={rmode}" + (f" render_error={render_error}" if render_error else ""))
+    print(f" robots={'yes' if robots_txt else 'no'} "
+          f"llms.txt={llms_status} bots_blocked={blocked}")
+    print(f" signals={len(signals)} with_gap_or_mismatch={len(gapped)}")
+    print(f" raw_html -> {raw_path}")
+    print(f" rendered -> {rend_path}")
+    print(f" prep -> {prep_path}")
     print(f"NEXT (Claude): read prep_{slug}.json + the two HTML files, then write "
           f"analysis_{slug}.json, solutions_{slug}.json, reading_{slug}.json "
           f"(schemas in SKILL.md). Then: build --ws {ws}")
@@ -196,7 +196,7 @@ def _load(ws: Path, name: str, default):
         try:
             return json.loads(p.read_text(encoding="utf-8"))
         except Exception as e:
-            print(f"  warn: {name} unreadable ({e}) — using default", file=sys.stderr)
+            print(f" warn: {name} unreadable ({e}) : using default", file=sys.stderr)
     return default
 
 
@@ -224,7 +224,7 @@ def cmd_build(a) -> int:
 
     preps = sorted(ws.glob("prep_*.json"))
     if not preps:
-        sys.exit(f"error: no prep_*.json in {ws} — run `prep` first")
+        sys.exit(f"error: no prep_*.json in {ws} : run `prep` first")
 
     results = []
     for pp in preps:
@@ -236,7 +236,7 @@ def cmd_build(a) -> int:
         if analysis:
             signals = apply_scores(signals, analysis)
         else:
-            print(f"  warn: analysis_{slug}.json missing — signals stay 'pass'",
+            print(f" warn: analysis_{slug}.json missing : signals stay 'pass'",
                   file=sys.stderr)
 
         sols_raw = _load(ws, f"solutions_{slug}.json", [])
@@ -283,19 +283,19 @@ def cmd_build(a) -> int:
                       ("JSON", lambda: build_json(results, js))]:
         try:
             fn()
-            print(f"  {label}: ok")
+            print(f" {label}: ok")
         except Exception as e:
-            print(f"  {label} FAILED: {e}", file=sys.stderr)
+            print(f" {label} FAILED: {e}", file=sys.stderr)
 
     print(f"report dir: {out_dir}")
     for r in results:
         sc = r.scores or {}
         nc = sum(1 for s in r.signals if s.severity == "critical")
         nw = sum(1 for s in r.signals if s.severity == "warning")
-        print(f"  {r.url} — {r.audit_status} — "
+        print(f" {r.url} : {r.audit_status} : "
               f"google={sc.get('google_score','n/a')} "
               f"ai={sc.get('ai_bot_score','n/a')} "
-              f"gap={sc.get('render_gap_score','n/a')}  crit={nc} warn={nw}")
+              f"gap={sc.get('render_gap_score','n/a')} crit={nc} warn={nw}")
     return 0
 
 

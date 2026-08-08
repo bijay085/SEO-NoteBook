@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# check_urls.sh — the verification gate.
+# check_urls.sh : the verification gate.
 # Prints HTTP status, redirect target, and rel=canonical for each URL so you can tell a
 # real duplicate (two live 200s, each self-canonical) from an already-consolidated one
 # (clean slug 301 -> single 200 twin). NEVER claim cannibalization without running this.
 #
 # Usage:
-#   check_urls.sh https://site/a https://site/b ...
-#   printf '%s\n' url1 url2 | check_urls.sh
+# check_urls.sh https://site/a https://site/b ...
+# printf '%s\n' url1 url2 | check_urls.sh
 #
 # macOS bash 3.2 safe (no mapfile). Requires curl.
 

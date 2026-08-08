@@ -8,10 +8,10 @@ Usage:
 (engine-run/raw/*.json). Shapes vary by endpoint, so the extractor walks each JSON
 recursively and pulls every {keyword, search_volume, difficulty, cpc, intent} it
 finds. Keywords dedupe by lowercased text (max search volume wins). Each keyword's
-cluster is the seed file (stem) where it carried the most volume — a natural,
+cluster is the seed file (stem) where it carried the most volume : a natural,
 deterministic clustering that needs no extra SERP calls. Outputs into out_dir:
-  master_by_sv.tsv   keyword  search_volume  kd  cpc  intent  cluster   (SV desc)
-  clusters.tsv       cluster  n_keywords  aggregate_sv  top_keyword  top_sv
+  master_by_sv.tsv keyword search_volume kd cpc intent cluster (SV desc)
+  clusters.tsv cluster n_keywords aggregate_sv top_keyword top_sv
 """
 import sys, os, json, glob
 

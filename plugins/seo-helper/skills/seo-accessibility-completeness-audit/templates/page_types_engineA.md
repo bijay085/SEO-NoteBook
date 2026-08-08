@@ -15,7 +15,7 @@ Each major wireframe block must show the actual tags on or immediately beside th
 - Visible section or component name
 - Relevant supplied heading or concise content excerpt
 - Semantic wrapper such as `header`, `main`, `section`, `article`, `aside`, `nav`, or `footer`
-- Internal content elements such as `h1`–`h3`, `p`, `ul`, `ol`, `figure`, `figcaption`, `blockquote`, `form`, `label`, `input`, `details`, `summary`, `a`, or `button`
+- Internal content elements such as `h1` to `h3`, `p`, `ul`, `ol`, `figure`, `figcaption`, `blockquote`, `form`, `label`, `input`, `details`, `summary`, `a`, or `button`
 - Tentative layout such as full-width, two-column, card grid, ordered steps, carousel, or accordion
 - Responsive source order when the visual layout uses columns
 - CMS or component instruction when existing forms, sliders, menus, blog feeds, or testimonials must be retained

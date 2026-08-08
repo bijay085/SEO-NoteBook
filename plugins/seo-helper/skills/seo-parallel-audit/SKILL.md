@@ -17,7 +17,7 @@ compatibility: >-
 # SEO Parallel Audit Orchestrator
 
 One trigger that runs several `seo-*` audits at once and returns a single merged, branded
-deliverable. This is a **personal skill** — it loads in every session and works for any
+deliverable. This is a **personal skill** : it loads in every session and works for any
 client. It orchestrates; the real work is done by the individual audit skills, run as
 **parallel workers**.
 
@@ -29,9 +29,9 @@ client. It orchestrates; the real work is done by the individual audit skills, r
 /seo-parallel-audit <target> [audits] [--out DIR]
 ```
 
-- **target** — a URL (page), several URLs, or a client + site root ("AMR homepage",
+- **target** : a URL (page), several URLs, or a client + site root ("AMR homepage",
   `https://amrgaragedoors.com/`, or a `sitemap.xml`).
-- **audits** (optional) — explicit comma list (`render,a11y,cro`). **If omitted → auto-select
+- **audits** (optional) : explicit comma list (`render,a11y,cro`). **If omitted → auto-select
   by page type** (Phase 1). Aliases: `render`=seo-render-audit · `a11y`=seo-accessibility-completeness-audit ·
   `foundational`=seo-after-foundational-setup-audit · `cro`=seo-cro-conversion-audit ·
   `offpage`=seo-off-page-audit · `topical`=seo-topical-map · `gsc`=seo-gsc-diagnosis ·
@@ -42,7 +42,7 @@ If the target is only a client name with no URL, ask for the URL(s) / GSC proper
 
 ---
 
-## Phase 1 — Classify the target & choose the bundle (auto mode)
+## Phase 1 : Classify the target & choose the bundle (auto mode)
 
 Determine what the target is (URL pattern + a quick fetch/render of the page), then map to a bundle.
 Always honor an explicit `audits` list over auto-selection.
@@ -61,7 +61,7 @@ State the detected type and the chosen bundle before firing, so the user can cor
 
 ---
 
-## Phase 2 — Connector preflight (do this before fanning out)
+## Phase 2 : Connector preflight (do this before fanning out)
 
 Some audits need live connectors. Check availability in THIS session:
 
@@ -76,7 +76,7 @@ would have supplied. (render / a11y / cro-heuristic run anywhere with a browser 
 
 ---
 
-## Phase 3 — Fan out (the actual parallelism)
+## Phase 3 : Fan out (the actual parallelism)
 
 Launch **one worker per selected audit** so they can run concurrently when the host
 supports parallel agents (Cursor Task/workers, Claude workers, Codex workers, etc.).
@@ -87,7 +87,7 @@ Prompt template per worker:
 > Run the SEO **`seo-<audit>`** audit against **`<target>`**. Load and follow
 > that audit’s `SKILL.md` in this pack (sibling under `skills/`) exactly (use its scripts + the session's MCP data
 > tools; render DOM via the browser / Playwright tool where the skill calls for it). Do NOT write any client
-> files or reports — instead RETURN your findings as JSON matching this schema:
+> files or reports : instead RETURN your findings as JSON matching this schema:
 > `{ "audit": "<audit>", "page_scope": "<url-or-template>", "summary": "<=40 words",
 > "findings": [ { "id": "", "area": "", "severity": "High|Medium|Low|Info",
 > "confidence": "Confirmed|Strong|Moderate", "evidence": "", "consequence": "", "fix": "" } ],
@@ -95,29 +95,29 @@ Prompt template per worker:
 > is unavailable, return `findings: []` and set `summary` to the limitation.
 
 Notes:
-- Worker final reports are NOT shown to the user — YOU collect the JSON and merge it. Relay a
+- Worker final reports are NOT shown to the user : YOU collect the JSON and merge it. Relay a
   one-line status per audit as they land.
-- Respect the host’s concurrency limits; queue extras if needed — still schedule them all.
-- For **many pages × many audits** (site-wide at scale), don't hand-fan hundreds of agents — say so
+- Respect the host’s concurrency limits; queue extras if needed : still schedule them all.
+- For **many pages × many audits** (site-wide at scale), don't hand-fan hundreds of agents : say so
   and offer the saved **Workflow** path (pipeline over pages with auto-dedupe) instead.
 
 ---
 
-## Phase 4 — Merge & dedupe (you do this, in-context)
+## Phase 4 : Merge & dedupe (you do this, in-context)
 
 1. Pool all findings from every worker.
 2. **Dedupe** by `(page_scope + normalized issue)`. Exact same defect from two audits → keep one,
    list both audits in `source_audit`.
 3. **Cross-lens link, don't delete**: when two audits describe the same element from different
    angles (e.g. SEO "images missing alt" ↔ a11y "unnamed control", or CRO "iframe form renders
-   blank" ↔ a11y "iframe title wrong"), keep BOTH and tag them `↔` as related — they're
+   blank" ↔ a11y "iframe title wrong"), keep BOTH and tag them `↔` as related : they're
    complementary, not duplicates.
 4. Rank: High → Medium → Low → Info; Confirmed above lower-confidence within a tier.
 5. Produce a master findings table + per-audit sections.
 
 ---
 
-## Phase 5 — One branded deliverable
+## Phase 5 : One branded deliverable
 
 Emit a single output using **built-in report branding** (colors, text mark, Inter/Arial,
 section order). Default: **HTML + XLSX** to the target's project folder (or `--out DIR`):
@@ -128,7 +128,7 @@ section order). Default: **HTML + XLSX** to the target's project folder (or `--o
 - Reuse the enhancement layer pattern (sticky nav, severity filter, dark/light, print) if the
   client wants an interactive report.
 
-Report which audits ran, which were skipped (and why — usually a missing connector), and the
+Report which audits ran, which were skipped (and why : usually a missing connector), and the
 deduped finding count.
 
 ---

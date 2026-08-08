@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Topical Map (Claude-native) — source extraction + deterministic branded export.
+"""Topical Map (Claude-native) : source extraction + deterministic branded export.
 
 The ONLY Python in this skill. Claude does all ontology + QDP reasoning in-context and
 writes an `ontology.json`; this script just (a) pulls clean text from DOCX/URL sources
 and (b) renders the branded deliverables. No LLM/scraper deps.
 
     python topical_map.py sources --docx a.docx --url https://x --out corpus.txt
-    python topical_map.py export  --in ontology.json --out ./Deliverables
+    python topical_map.py export --in ontology.json --out ./Deliverables
 
 Deps: openpyxl (export only). Everything else is stdlib.
 """
@@ -52,7 +52,7 @@ def cmd_sources(a):
         parts.append(f"\n===== DOCX: {os.path.basename(d)} =====\n"+docx_text(d)); print("read docx", d)
     for u in a.url or []:
         try: parts.append(f"\n===== URL: {u} =====\n"+url_text(u)); print("fetched", u)
-        except Exception as e: print("  URL failed", u, e)
+        except Exception as e: print(" URL failed", u, e)
     for t in a.txt or []:
         parts.append(f"\n===== FILE: {os.path.basename(t)} =====\n"+plain_text(t)); print("read", t)
     text="\n".join(parts).strip()
@@ -199,8 +199,8 @@ def cmd_export(a):
     jpath=os.path.join(a.out,"entity_ontology.json"); json.dump(d, open(jpath,"w",encoding="utf-8"), indent=2, ensure_ascii=False)
     hpath=os.path.join(a.out,"entity_ontology.html"); open(hpath,"w",encoding="utf-8").write(_html(d,ce,ents,attrs,kws,BT))
     print("SAVED:", xlsx); print("SAVED:", jpath); print("SAVED:", hpath)
-    if pages: print(f"  page plan: {len(pages)} candidates")
-    if review: print(f"  review (noise): {len(review)} rows")
+    if pages: print(f" page plan: {len(pages)} candidates")
+    if review: print(f" review (noise): {len(review)} rows")
 
 def _esc(x): return html.escape(str(x if x is not None else ""))
 def _html(d,ce,ents,attrs,kws,BT):
@@ -235,9 +235,9 @@ def _html(d,ce,ents,attrs,kws,BT):
       "text-align:left;padding:9px 11px;font-size:10.5px;text-transform:uppercase}tbody td{padding:8px 11px;border-bottom:1px solid #eee;vertical-align:top}"
       "tbody tr:nth-child(even){background:#F6F6F6}")
     return (f"<!doctype html><html><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>"
-      f"<title>Topical Map — {_esc(ce.get('name',''))} | SEO</title><style>{css}</style></head><body>"
+      f"<title>Topical Map : {_esc(ce.get('name',''))} | SEO</title><style>{css}</style></head><body>"
       f"<div class=h><h1>Topical Authority <span>Map</span></h1><p>{_esc(ce.get('name',''))} &nbsp;|&nbsp; {_esc(ce.get('type',''))} &nbsp;|&nbsp; SEO</p></div><main>"
-      f"<div class=card><b>Central entity:</b> {_esc(ce.get('name',''))} — {_esc(ce.get('definition',''))}<br><br>{_esc(d.get('summary',''))}"
+      f"<div class=card><b>Central entity:</b> {_esc(ce.get('name',''))} : {_esc(ce.get('definition',''))}<br><br>{_esc(d.get('summary',''))}"
       f"<br><br><b>{len(ents)}</b> entities · <b>{len(attrs)}</b> attribute rows · <b>{len(kws)}</b> keyword rows"
       + (f" · <b>{len(pages)}</b> page candidates" if pages else "") + "</div>"
       f"<h2>Entity Ontology</h2>{table(['#','Relevance Layer','Entity','Type','Salience','Bucket','Short Definition'],ent_rows)}"

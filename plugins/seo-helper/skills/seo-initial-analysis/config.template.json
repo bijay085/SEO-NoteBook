@@ -2,22 +2,22 @@
   "client": {
     "name": "<Client legal / brand name>",
     "short_name": "<Short name for filenames & headers>",
-    "domain": "<example.com — null if no live site yet>",
-    "platform": "<CMS / stack, e.g. Webflow, WordPress — optional>",
+    "domain": "<example.com : null if no live site yet>",
+    "platform": "<CMS / stack, e.g. Webflow, WordPress : optional>",
     "business_model": "<how they make money, one line>",
     "primary_market": "<geography served, or 'national / online'>",
     "buying_intent": "<the core commercial action a buyer takes, e.g. 'buy a food-photoshoot service'>",
-    "target_persona": "<ICP: who buys — role, size, region>",
+    "target_persona": "<ICP: who buys : role, size, region>",
     "stated_goal": "<the client's own goal, verbatim if given>",
     "differentiators": ["<what makes them different 1>", "<2>"],
     "do_not_call": ["<terms the client refuses to be branded with>"],
-    "_comment": "Only name is truly needed. Fill what you know; leave the rest null — every field degrades gracefully."
+    "_comment": "Only name is truly needed. Fill what you know; leave the rest null : every field degrades gracefully."
   },
   "entity": {
     "_comment": "The EAV brief. Enough to build Report 3 + the topical map even with ZERO input files.",
     "central_entity": "<e.g. Food Photography>",
-    "wikipedia_url": "<https://en.wikipedia.org/wiki/... — optional KG anchor>",
-    "wikidata_id": "<Qxxxxx — optional KG anchor>",
+    "wikipedia_url": "<https://en.wikipedia.org/wiki/... : optional KG anchor>",
+    "wikidata_id": "<Qxxxxx : optional KG anchor>",
     "dimensions": ["<Attribute 1, e.g. Food Type>", "<Drink Type>", "<Food Store Type>", "<Social Platform + entity>", "<Stylist>", "<Studio & Equipment>"],
     "bridge": "<the L2 bridge, e.g. 'Food Photography by AI'>",
     "convincing_dimensions": ["<why choose the bridge, e.g. low cost>", "<no heavy equipment>", "<no large crew>", "<minutes not days>"],

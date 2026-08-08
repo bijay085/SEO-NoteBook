@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""entity_trust_audit.py — score the homepage's ENTITY/brand-trust signals, the #1 invisible
+"""entity_trust_audit.py : score the homepage's ENTITY/brand-trust signals, the #1 invisible
 sandbox cause ("dead brand entity trap": Google has indexed the site but has NOT established the
 business as a trusted entity, so it will not rank it for non-brand demand).
 
 Reads the homepage HTML (live via --url, or a saved snapshot via --file) and extracts the
 Organization / LocalBusiness JSON-LD plus a few HTML signals, then reports what's PRESENT vs
-MISSING against the entity-establishment checklist. It does NOT invent facts — every line is
+MISSING against the entity-establishment checklist. It does NOT invent facts : every line is
 either found in the markup or flagged absent.
 
 Also sanity-checks aggregateRating (a fabricated/hardcoded 5.0 across the site is a spam-policy
-risk found in real audits — see references/methodology.md), which actively suppresses trust.
+risk found in real audits : see references/methodology.md), which actively suppresses trust.
 
-Usage: python3 entity_trust_audit.py --url https://site/   [--out entity.json]
+Usage: python3 entity_trust_audit.py --url https://site/ [--out entity.json]
        python3 entity_trust_audit.py --file homepage.html
 Stdlib only (urllib). For anti-bot sites, pass --file with a snapshot fetched via the
 SCRAPINGBEE_KEY path (see references/data-sources-and-tools.md)."""
@@ -74,16 +74,16 @@ def main():
             rv=str(ar.get('ratingValue','')); rc=str(ar.get('reviewCount') or ar.get('ratingCount') or '')
             sig('aggregateRating', True, f"{rv} / {rc}")
             if rv in ('5','5.0') :
-                res['flags'].append(f"aggregateRating is a perfect {rv} ({rc}) — verify it is REAL and per-entity, "
+                res['flags'].append(f"aggregateRating is a perfect {rv} ({rc}) : verify it is REAL and per-entity, "
                                     "not a hardcoded sitewide value (fabricated ratings are a spam-policy / trust risk).")
         else:
             sig('aggregateRating', False, '')
         # missing-signal flags
-        if not same: res['flags'].append("No sameAs — the entity has no declared links to its own social/authoritative profiles (KG starvation).")
+        if not same: res['flags'].append("No sameAs : the entity has no declared links to its own social/authoritative profiles (KG starvation).")
         if not org.get('founder') and not org.get('founders'):
-            res['flags'].append("No founder/person entity — weak for E-E-A-T, especially YMYL.")
+            res['flags'].append("No founder/person entity : weak for E-E-A-T, especially YMYL.")
     else:
-        res['flags'].append("NO Organization/LocalBusiness JSON-LD on the homepage — Google has no structured "
+        res['flags'].append("NO Organization/LocalBusiness JSON-LD on the homepage : Google has no structured "
                             "entity anchor. This is the classic 'dead brand entity trap' starting point.")
     # HTML-level corroboration (independent of schema, which is authorable)
     res['html_signals']={

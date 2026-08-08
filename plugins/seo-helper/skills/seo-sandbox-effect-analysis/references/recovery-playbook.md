@@ -1,4 +1,4 @@
-# Recovery playbook — graduation levers
+# Recovery playbook : graduation levers
 
 Recovery = graduating the site out of suppression. The levers are shared across niches; the
 **weighting** changes with the diagnosed mode (methodology.md) and the niche. Sequence matters:
@@ -16,14 +16,14 @@ change into active recovery (it resets `last-modified` and can trigger another r
    an About/《trust》surface with real people, licenses, guarantees. This is the single biggest lever
    on a YMYL site.
 3. **Off-page trust (mode 5).** Detox: anchor-text distribution should be brand/URL/generic-heavy,
-   not exact-match-money-heavy; disavow at **domain** level (conservative, human-reviewed —
+   not exact-match-money-heavy; disavow at **domain** level (conservative, human-reviewed : 
    `backlink_trust.py` proposes, a human approves). Earn a few genuinely authoritative links; stop
    any manufactured "we're #1" link posts.
 4. **Commercial / money-page architecture (mode 3/4).** Strengthen collection/service/location pages
    for the terms that *convert*; separate intents into distinct interlinked page types
    (blog → collection → product, or informational → service → location) rather than merging;
    in-content contextual links, not boilerplate.
-5. **SERP-feature capture (mode 3).** 40–55-word answer blocks, FAQ schema, tables/lists — to win
+5. **SERP-feature capture (mode 3).** 40 to 55-word answer blocks, FAQ schema, tables/lists : to win
    the click back on zero-click terms, or pivot effort to intents that still get clicks.
 6. **Technical graduation (all modes).** Kill the invisibility: fix noindex on pages that should
    rank, add them to the sitemap, resolve 301-to-junk, consolidate duplicate hubs, fix render-gaps
@@ -46,18 +46,18 @@ change into active recovery (it resets `last-modified` and can trigger another r
 
 ## Phased roadmap template (structure the plan as phases, not a flat list)
 
-- **Immediate (days):** active policy/trust risks + invisibility bugs — fabricated schema, noindex on
+- **Immediate (days):** active policy/trust risks + invisibility bugs : fabricated schema, noindex on
   money pages, 301-to-junk, stop manipulative link posts.
-- **This sprint (2–4 wks):** entity schema fix, E-E-A-T surfaces on top money/YMYL pages, technical
+- **This sprint (2 to 4 wks):** entity schema fix, E-E-A-T surfaces on top money/YMYL pages, technical
   crawlability, sitemap hygiene.
 - **Sequenced (dependency-gated):** commercial-page build/strengthen, intent funnels, then any
   prune/noindex of the redundant tail **after** replacements are confirmed indexed and holding.
 - **Ongoing:** earned links + anchor health, content depth on money clusters, monitoring.
-- **Watch, don't chase:** for mode 2, broad ranking recovery may be gated to the next core update —
+- **Watch, don't chase:** for mode 2, broad ranking recovery may be gated to the next core update : 
   say so; deliver the non-gated wins meanwhile.
 
 ## Monitoring KPI (name the real one)
 
-Track **non-brand clicks, non-brand position, and the Graduation Score** re-run each period — NOT
+Track **non-brand clicks, non-brand position, and the Graduation Score** re-run each period : NOT
 blended average position (compositional artifact) and NOT impressions alone (visibility ≠ ranking).
 Carry the prior period's numbers as the baseline on every re-run.

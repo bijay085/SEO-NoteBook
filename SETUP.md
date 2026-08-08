@@ -13,7 +13,7 @@ That is the setup app. If Python is missing, the launcher asks before installing
 ```text
 1. Recommended: Install once on this computer
    Choose this if you want SEO Helper available in future projects.
-   What happens: copies SEO skills and registers SEO Helper for app/plugin pickers and installs one `/seo-decision` command file for tools that support local command folders.
+   What happens: copies SEO skills and registers SEO Helper for app/plugin pickers and installs all `/seo-*` command files for tools that support local command folders.
 
 2. Use only in one project or Custom GPT
    Choose this for ChatGPT GPT Builder, Claude Project, another account, or one-time sharing.
@@ -42,9 +42,9 @@ It installs required Python packages and syncs SEO Helper skills into common loc
 
 ```text
 %USERPROFILE%\.codex\skills
-%USERPROFILE%\.codex\commands\seo-decision.md
+%USERPROFILE%\.codex\commands\seo-*.md  (18 commands)
 %USERPROFILE%\.claude\skills
-%USERPROFILE%\.claude\commands\seo-decision.md
+%USERPROFILE%\.claude\commands\seo-*.md  (18 commands)
 %USERPROFILE%\.cursor\skills
 %USERPROFILE%\.agents\plugins
 ```

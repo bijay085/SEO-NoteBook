@@ -103,7 +103,7 @@ Example:
 
 If no verified value exists, the page should explain the factors involved instead of inventing a number.
 
-## 7. Entity–Attribute–Value Relationship
+## 7. Entity to Attribute to Value Relationship
 
 This is a basic factual unit behind semantic content.
 
@@ -113,7 +113,7 @@ Examples:
 > Contractor → service area → named locations  
 > Installation → price → verified range
 
-The article discusses entity–attribute–context relationships as well. Context may replace or qualify the value:
+The article discusses entity to attribute to context relationships as well. Context may replace or qualify the value:
 
 > AC installation → price → in Houston  
 > Drain cleaning → customer experience → emergency appointment
@@ -967,8 +967,8 @@ The future system should therefore use:
 
 # Sources
 
-1. [How semantics and topical authority improve local SEO — Search Engine Land](https://searchengineland.com/how-semantics-and-topical-authority-improve-local-seo-482980)
-2. [Visual semantics: The missing piece of topical authority — Search Engine Land](https://searchengineland.com/visual-semantics-topical-authority-482254)
+1. [How semantics and topical authority improve local SEO : Search Engine Land](https://searchengineland.com/how-semantics-and-topical-authority-improve-local-seo-482980)
+2. [Visual semantics: The missing piece of topical authority : Search Engine Land](https://searchengineland.com/visual-semantics-topical-authority-482254)
 3. [Google Search Quality Rater Guidelines](https://static.googleusercontent.com/media/guidelines.raterhub.com/en/assets/searchqualityevaluatorguidelines.pdf)
 4. [Google Search Central: Link best practices](https://developers.google.com/search/docs/crawling-indexing/links-crawlable)
 5. [Google Business Profile Help: Tips to improve your local ranking](https://support.google.com/business/answer/7091)

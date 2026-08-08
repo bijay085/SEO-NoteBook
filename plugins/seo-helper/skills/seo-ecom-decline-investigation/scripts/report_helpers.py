@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 """
-report_helpers.py — reusable branded-openpyxl primitives for the Phase 8 XLSX build.
+report_helpers.py : reusable branded-openpyxl primitives for the Phase 8 XLSX build.
 
-Import this module rather than re-deriving these functions — it has two real bugs from the
+Import this module rather than re-deriving these functions : it has two real bugs from the
 source investigation's report build already found and fixed, both documented in
 references/pitfalls.md #12 and #13. Re-deriving these primitives from scratch risks
 re-introducing the same bugs.
 
-Colors follow built-in report branding palette exactly — see that skill for the full spec
+Colors follow built-in report branding palette exactly : see that skill for the full spec
 (logo processing, DOCX/HTML patterns, etc.). This module only covers the XLSX primitives.
 
 No external AI/LLM API is called anywhere in this file.
@@ -84,7 +84,7 @@ def header_row(ws, row, col, values, widths=None):
     """Black-background, yellow-text table header row.
 
     IMPORTANT (pitfalls.md #14): if a sheet has multiple tables with DIFFERENT column counts,
-    do not pass `widths` per-table — column widths are a worksheet-level property and later
+    do not pass `widths` per-table : column widths are a worksheet-level property and later
     calls silently overwrite earlier ones. Set widths ONCE at the end of the sheet, sized to a
     layout that works for every table on that sheet (pad narrower tables with empty header
     cells rather than fighting the column count)."""
@@ -128,7 +128,7 @@ def stat_card(ws, row, col, number, change, label, change_color=GREEN):
 
     IMPORTANT (pitfalls.md #12): merge each LINE separately (number / change / label as three
     distinct 1-row x 2-col merges), never merge the whole multi-row card as one block. openpyxl
-    only exposes the top-left cell of a merged range as writable — merging rows [row, row+3] as
+    only exposes the top-left cell of a merged range as writable : merging rows [row, row+3] as
     one cell and then trying to write to row+2 and row+3 individually throws
     `AttributeError: 'MergedCell' object attribute 'value' is read-only`."""
     for cc in [col, col + 1]:
@@ -161,7 +161,7 @@ def finalize(ws, freeze="B8"):
 
 
 def process_logo(source_url, out_path, pad=200):
-    """Optional legacy helper — unused when shipping without a logo."""
+    """Optional legacy helper : unused when shipping without a logo."""
     import io
     import requests
     import numpy as np

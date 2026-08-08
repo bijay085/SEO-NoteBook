@@ -17,7 +17,7 @@ def main():
     vc=Counter((f.get("verdict") or "n/a").title() for f in fs)
     def card(f):
         sev=(f.get("severity") or "info").lower()
-        return {"issue":f'{f.get("rule_id","")} — {f.get("observed") or f.get("expected","")}',
+        return {"issue":f'{f.get("rule_id","")} : {f.get("observed") or f.get("expected","")}',
                 "sev":sev,"evidence":f.get("observed",""),
                 "solution":f.get("solution",""),
                 "execution":f.get("execution") or f.get("expected",""),

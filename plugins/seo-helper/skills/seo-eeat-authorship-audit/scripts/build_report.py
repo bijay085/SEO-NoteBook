@@ -32,7 +32,7 @@ def main():
         sev = (f.get("severity") or "info").lower()
         tag = f' [{f.get("evidence_basis")}]' if f.get("evidence_basis") == "Interpretation" else ""
         return {
-            "issue": f'{f.get("rule_id", "")} ({f.get("checklist_ref", "")}) — {f.get("element") or f.get("expected", "")}{tag}',
+            "issue": f'{f.get("rule_id", "")} ({f.get("checklist_ref", "")}) : {f.get("element") or f.get("expected", "")}{tag}',
             "sev": sev, "evidence": f.get("observed", ""),
             "solution": f.get("solution", ""),
             "execution": f.get("execution") or f.get("consequence", ""),

@@ -2,12 +2,12 @@
 
 What the initial analysis can ingest, what each input unlocks, and how to handle
 **limited or custom** inputs. **Nothing here is required.** The analysis degrades
-gracefully — a missing input drops or lightens its report(s); it never blocks the
+gracefully : a missing input drops or lightens its report(s); it never blocks the
 run. At intake, tell the user exactly what's present, what that builds, and what is
 skipped and why.
 
 ## The golden rule: no input is mandatory
-The only thing the skill truly needs is a way to name the central **entity** — and
+The only thing the skill truly needs is a way to name the central **entity** : and
 even that can be inferred from a domain or a one-line description. From there it
 scales to whatever exists:
 
@@ -20,7 +20,7 @@ scales to whatever exists:
 
 Never wait for "complete" inputs. Run with what exists; label the gaps.
 
-## Optional inputs — each deepens a specific report
+## Optional inputs : each deepens a specific report
 | Input | Typical file | Feeds | If missing |
 |---|---|---|---|
 | Initial questionnaire (client Q&A) | `Initial Questionaires…csv` | Report 1, EAV seeds, differentiators, do-not-call | Build Report 1 from live site + entity only |
@@ -34,7 +34,7 @@ Never wait for "complete" inputs. Run with what exists; label the gaps.
 | Strategist / client concerns | `After Analysis Questions.csv` | Report 7 playbook | Skip Report 7 (nothing to answer) |
 | Client pre-work dir | brand guide, CLV, deck, screenshots | Report 1, differentiators, proof | Skip; note a thinner proof layer |
 
-## Custom / unexpected inputs — never rejected
+## Custom / unexpected inputs : never rejected
 Anything else the client hands over is in-scope. Read it, say what it is, and fold
 it into the closest report (or an appendix). Examples seen in real runs:
 - A **screenshot** of an Airbnb / GBP profile → verified review counts into Report 2
@@ -50,16 +50,16 @@ landed, so the run is auditable.
 1. Load `config.json`; resolve every `inputs.*` path relative to the client folder.
 2. For each input: exists? → ✓ + what it unlocks; missing → which report(s) drop/lighten.
 3. If a `domain` is set, fetch the live homepage + sitemap now (Report 1/2 grounding).
-4. Confirm the `entity` block is filled (at least `central_entity`) — it's the spine
+4. Confirm the `entity` block is filled (at least `central_entity`) : it's the spine
    of Report 3 and the seeds for the keyword engine.
 5. Report the plan to the user: "These N reports will build; these M are skipped for
-   missing inputs — here's what would unlock each." Then proceed.
+   missing inputs : here's what would unlock each." Then proceed.
 
 ## File-format notes
-- **CSV / XLSX** — read with Desktop Commander (`read_file` parses XLSX → JSON rows)
+- **CSV / XLSX** : read with Desktop Commander (`read_file` parses XLSX → JSON rows)
   under `~/Downloads`, where Bash `cat`/`head` is TCC-blocked.
-- **Sitemaps** — the `<loc>` list is the live URL inventory; split page vs post maps.
-- **Screenshots / PDF** — read visually; extract the specific claim (count, name,
+- **Sitemaps** : the `<loc>` list is the live URL inventory; split page vs post maps.
+- **Screenshots / PDF** : read visually; extract the specific claim (count, name,
   date), not the whole document.
-- **Odd headers / encodings** — read the first 2 rows, map columns, then process.
+- **Odd headers / encodings** : read the first 2 rows, map columns, then process.
   Never assume a schema; confirm it against the actual file.

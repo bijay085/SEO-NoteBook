@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-fetch_affiliate_links.py — deterministic engine for the seo-affiliate-and-review-audit skill.
+fetch_affiliate_links.py : deterministic engine for the seo-affiliate-and-review-audit skill.
 
 For each target page it:
   1. fetches the HTML (requests; ScrapingBee render fallback when blocked / JS-rendered),
@@ -11,10 +11,10 @@ For each target page it:
      (a flat top-level parse misses nested @graph nodes -- the FWD schema bug).
 
 Outputs (to config.output_dir):
-  affiliate_links.json  one row per monetized link (page/anchor/destination/final_url/
+  affiliate_links.json one row per monetized link (page/anchor/destination/final_url/
                         network/http_status/rel/placement)
-  review_schema.json    per-page JSON-LD @type inventory
-  fetch_summary.json    counts + which pages used the render fallback / failed
+  review_schema.json per-page JSON-LD @type inventory
+  fetch_summary.json counts + which pages used the render fallback / failed
 
 Credentials: loaded from project `.env` / host environment variables at runtime with a stdlib parser. python-dotenv is
 NOT installed and must not be imported. Only SCRAPINGBEE_KEY is used here, and only inside
@@ -234,7 +234,7 @@ def main():
             href = urljoin(final_url, a["href"].strip())
             net = classify_network(href, networks, amazon_tag)
             if not net:
-                continue  # only inventory monetized links
+                continue # only inventory monetized links
             st, fin = check_destination(href, dest_cache)
             rel = " ".join(a.get("rel", [])) if a.get("rel") else ""
             rows.append({
@@ -247,7 +247,7 @@ def main():
                 "rel": rel,
                 "placement": placement_of(a),
             })
-            time.sleep(0.15)  # be gentle on destinations
+            time.sleep(0.15) # be gentle on destinations
 
     summary["affiliate_links"] = len(rows)
     for fname, payload in (

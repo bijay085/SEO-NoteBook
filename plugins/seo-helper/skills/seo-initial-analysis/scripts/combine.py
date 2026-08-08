@@ -27,7 +27,7 @@ def _inner(html):
     return body[start:end].strip()
 
 def _title(html, fallback):
-    m = re.search(r"<title>.*?[—-]\s*(.*?)</title>", html, re.S | re.I)
+    m = re.search(r"<title>.*?[: -]\s*(.*?)</title>", html, re.S | re.I)
     return m.group(1).strip() if m else fallback
 
 def main():

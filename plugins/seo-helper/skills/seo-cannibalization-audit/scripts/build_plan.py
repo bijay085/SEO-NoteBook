@@ -7,7 +7,7 @@ score-based winner-pick could override a correct direction), `overlap_watch`
 (monitor-only) and `differentiate` (keep both). Those are flat post-passes.
 
 Cluster-strength gate: an ongoing verdict on a SINGLE qualifying query with low
-absolute volume is technically valid but noise-prone — usually a coincidence on
+absolute volume is technically valid but noise-prone : usually a coincidence on
 one ambiguous term. It stays visible in pair_verdicts but does not drag two pages
 into the same cluster.
 
@@ -29,7 +29,7 @@ from cannib_config import load_cfg
 # Priority = the cascade order the client works top-down.
 STATUS_ORDER = {
     'duplicate': 1, 'ongoing cannibal': 2, 'affected_handoff (loser)': 3,
-    'redundant duplicate': 4, 'differentiate — keep both': 5, 'overlap watch': 6,
+    'redundant duplicate': 4, 'differentiate : keep both': 5, 'overlap watch': 6,
     'cluster winner': 7, 'affected_handoff (winner)': 7,
     'standalone': 8, 'standalone (0 clicks)': 9,
 }
@@ -49,7 +49,7 @@ def strong_enough_for_cluster(v, cfg):
         return False
     qq = (v.get('ongoing') or {}).get('qualifying_queries') or []
     if len(qq) >= 2:
-        return True          # the redundancy across queries is itself the signal
+        return True # the redundancy across queries is itself the signal
     if len(qq) == 1:
         ev = qq[0].get('evidence', {})
         floor = cfg['cluster_min_clicks_for_single_query_ongoing']
@@ -72,8 +72,8 @@ def score_cluster(urls_in_cluster, pages_idx, weights):
 
 
 def redirect_plan(winner, loser, pages_idx, cfg):
-    """Default is an immediate 301. But when the loser is a *rising challenger* —
-    newer than the winner and gaining while the winner is flat or declining — an
+    """Default is an immediate 301. But when the loser is a *rising challenger* : 
+    newer than the winner and gaining while the winner is flat or declining : an
     immediate redirect kills content that is winning on merit. Stage it."""
     if winner not in pages_idx.index or loser not in pages_idx.index:
         return f'Permanently (301) redirect {loser} → {winner}.'
@@ -83,9 +83,9 @@ def redirect_plan(winner, loser, pages_idx, cfg):
               and 'Positive' not in str(w.get('trend', ''))
               and l_first and w_first and l_first > w_first)
     if rising:
-        return (f'STAGED — do NOT redirect yet. {loser} is newer and gaining while {winner} is '
+        return (f'STAGED : do NOT redirect yet. {loser} is newer and gaining while {winner} is '
                 f'flat/declining. 1) Audit what {loser} does better. 2) Port that into {winner}. '
-                f'3) rel=canonical on {loser} → {winner}. 4) Observe 4–6 weeks. '
+                f'3) rel=canonical on {loser} → {winner}. 4) Observe 4 to 6 weeks. '
                 f'5) 301 only if {winner} re-takes the shared queries.')
     return (f'Permanently (301) redirect {loser} → {winner}, and update internal links pointing '
             f'at {loser}.')
@@ -98,7 +98,7 @@ def shared_str(v, limit=6):
 
 
 def evidence_rows(verdicts):
-    """One row per qualifying shared query — the audit trail. Read this before
+    """One row per qualifying shared query : the audit trail. Read this before
     acting on any large consolidation: one marginal query is far weaker evidence
     than ten in the green."""
     out = []
@@ -156,7 +156,7 @@ def main():
         scored = score_cluster(cluster_urls, pages_idx, weights)
         winner = scored.index[0] if scored is not None and len(scored) else primary
         for u in cluster_urls:
-            # A single-page cluster has nothing to point at — leave `winner`
+            # A single-page cluster has nothing to point at : leave `winner`
             # blank there, or every standalone row would name itself.
             url_meta[u] = {'cluster_id': cid if members else '',
                            'winner': winner if members else ''}
@@ -190,7 +190,7 @@ def main():
         if winner not in handled:
             handled.add(winner)
             rows.append(make_row(winner, status='cluster winner', confidence='High',
-                                 action=f'Keep — canonical for cluster #{cid}.',
+                                 action=f'Keep : canonical for cluster #{cid}.',
                                  reason=f'Strongest page in cluster #{cid} by clicks, trend and '
                                         f'position.',
                                  shared_queries='', verdict='cluster_winner'))
@@ -208,17 +208,17 @@ def main():
                 if u == hwinner:
                     rows.append(make_row(u, status='affected_handoff (winner)', confidence='High',
                                          winner=u,
-                                         action='Keep — this page already won the handoff.',
+                                         action='Keep : this page already won the handoff.',
                                          reason=v['reason'], shared_queries=shared_str(v),
                                          verdict=v['verdict']))
                     continue
                 if sev == 'critical':
                     action = (f'MIGRATE THEN 301 → {hwinner}. {lost} queries this page held were '
-                              f'never picked up — port that content across BEFORE redirecting.')
+                              f'never picked up : port that content across BEFORE redirecting.')
                 elif sev == 'warning':
                     action = f'Review the {lost} lost queries, then 301 → {hwinner}.'
                 else:
-                    action = f'301 → {hwinner} — nothing valuable was left behind.'
+                    action = f'301 → {hwinner} : nothing valuable was left behind.'
                 rows.append(make_row(u, status='affected_handoff (loser)', confidence='High',
                                      winner=hwinner, action=action,
                                      reason=(f'{v["reason"]}. Crossover '
@@ -255,7 +255,7 @@ def main():
             if distinct in handled:
                 continue
             handled.add(distinct)
-            rows.append(make_row(distinct, status='differentiate — keep both', confidence='Medium',
+            rows.append(make_row(distinct, status='differentiate : keep both', confidence='Medium',
                                  winner='',
                                  action=(f'Keep BOTH {distinct} and {other}. Consolidate only the '
                                          f'genuinely overlapping search terms (trim or canonical '
@@ -269,7 +269,7 @@ def main():
                 continue
             handled.add(weaker)
             rows.append(make_row(weaker, status='overlap watch', confidence='Low', winner=stronger,
-                                 action=(f'No action now — monitor. Re-check next analysis; if a '
+                                 action=(f'No action now : monitor. Re-check next analysis; if a '
                                          f'click split appears, consolidate into {stronger}.'),
                                  reason=v['reason'], shared_queries=shared_str(v), verdict=kind))
 
@@ -281,10 +281,10 @@ def main():
         handled.add(u)
         if int(r['clicks_window'] or 0) == 0:
             status = 'standalone (0 clicks)'
-            action = ('Impressions but no clicks — check title, meta description, intent match '
+            action = ('Impressions but no clicks : check title, meta description, intent match '
                       'and position. Not cannibalization.')
         else:
-            status, action = 'standalone', 'Keep — no other URL competes with it.'
+            status, action = 'standalone', 'Keep : no other URL competes with it.'
         rows.append(make_row(u, status=status, confidence='', action=action,
                              reason='No verdict-positive pair.', shared_queries='',
                              verdict='standalone'))
@@ -308,7 +308,7 @@ def main():
         'queries_distinct': meta.get('queries_distinct', 0),
         'brand_tokens': universe.get('brand_tokens', []),
         # The weekly series is what the ongoing/handoff detectors run on. The
-        # matrix's own date column is irrelevant to them — reporting that here
+        # matrix's own date column is irrelevant to them : reporting that here
         # would understate a run whose per-URL pulls were fully dated.
         'weekly_series_urls': pv.get('weekly_urls_loaded', 0),
         'weekly_series_expected': pv.get('weekly_urls_expected', 0),

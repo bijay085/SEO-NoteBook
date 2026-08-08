@@ -1,4 +1,4 @@
-"""Build report sections straight from analysis.json — no authoring step.
+"""Build report sections straight from analysis.json : no authoring step.
 
 WHY THIS EXISTS: the XLSX got its measured content from build_data_tabs.py while
 the HTML rendered only `report_data.REPORT`, so an engine-only run produced a
@@ -8,10 +8,10 @@ the same content and differ only in presentation: the XLSX is a filterable
 grid, the HTML a narrative of Issue · Evidence · Solution · Execution cards.
 
 Every field the engine computes survives the mapping:
-    detail, evidence, root_cause, impact  ->  the card's evidence block
-    action                                ->  solution (the literal fix)
-    verify                                ->  execution (how to prove it)
-    effort, urgency                       ->  effort, priority, severity
+    detail, evidence, root_cause, impact -> the card's evidence block
+    action -> solution (the literal fix)
+    verify -> execution (how to prove it)
+    effort, urgency -> effort, priority, severity
 
 Authored sections from report_data.py are LAYERED ON TOP: anything Claude has
 written for a section id replaces the auto-generated one, so the interpretation
@@ -20,8 +20,8 @@ upgrade never fights the measured baseline.
 build_report(analysis, authored=None) -> report dict for report_kit.render_*
 """
 
-MAX_PER_SECTION = 25      # findings rendered per section; the rest are counted,
-                          # never silently dropped — the note says how many.
+MAX_PER_SECTION = 25 # findings rendered per section; the rest are counted,
+                          # never silently dropped : the note says how many.
 
 SEV_FROM_URGENCY = {
     "P1 - Critical": "critical",
@@ -38,11 +38,11 @@ PRIORITY_FROM_URGENCY = {
 CATEGORY_SECTIONS = [
     ("HTTP Errors", "errors", "1 · HTTP Errors (4xx / 5xx)",
      "Errors crawlers actually received. A status Googlebot saw is an indexing "
-     "event; the same status seen only by humans is link hygiene — each finding's "
+     "event; the same status seen only by humans is link hygiene : each finding's "
      "evidence line says which."),
     ("Redirects", "redirects", "2 · Redirects & Chains",
      "301s still being crawled (stale internal links), 302s on content URLs, and "
-     "multi-hop chains. Auth and checkout 302s are excluded — those are correct."),
+     "multi-hop chains. Auth and checkout 302s are excluded : those are correct."),
     ("Crawl Budget", "budget", "3 · Crawl Budget Waste",
      "Where crawl was spent instead of on money pages: backend endpoints, "
      "parameter explosion, static assets, taxonomy archives, internal traffic."),
@@ -50,14 +50,14 @@ CATEGORY_SECTIONS = [
      "robots.txt and sitemap health, trailing-slash duplicates, the mobile-first "
      "crawl split, and overall Googlebot presence."),
     ("Performance", "performance", "5 · Performance",
-     "Response weight as the server actually served it — bytes on the wire, not a "
+     "Response weight as the server actually served it : bytes on the wire, not a "
      "lab estimate."),
-    ("Security", "security", "6 · Security — File Exposure & Probing",
+    ("Security", "security", "6 · Security : File Exposure & Probing",
      "Sensitive files served (200 = active exposure, rotate credentials now) or "
      "probed (403/404 = reconnaissance)."),
     ("Security / Spam", "spam", "7 · Suspicious Traffic",
      "High-volume IPs that survived the admin/polling gate. Logged-in admin and "
-     "PWA traffic is deliberately excluded — it is not scraping."),
+     "PWA traffic is deliberately excluded : it is not scraping."),
 ]
 
 
@@ -74,7 +74,7 @@ def _finding(f):
     head = (f"[{f.get('confidence', '?')} confidence · {f.get('hits', 0):,} hits · "
             f"status {f.get('status_code', '?')} · segment {f.get('segment', '?')}]")
     return {
-        "issue": f"{f.get('issue', '')} — {scope}" if scope else f.get("issue", ""),
+        "issue": f"{f.get('issue', '')} : {scope}" if scope else f.get("issue", ""),
         "sev": SEV_FROM_URGENCY.get(f.get("urgency", ""), "medium"),
         "evidence": f"{head}\n\n{evidence}",
         "solution": f.get("action", ""),
@@ -112,7 +112,7 @@ def _summary_section(a):
 
 
 def _traffic_section(a):
-    """Bot identification — who made the requests, and how we know."""
+    """Bot identification : who made the requests, and how we know."""
     agents = a.get("agents", [])
     if not agents:
         return None
@@ -120,7 +120,7 @@ def _traffic_section(a):
     return {
         "id": "traffic", "title": "A · Traffic & Bot Identification",
         "intro": (f"Top {len(agents)} agents by volume. {verified} of them identified "
-                  f"by OFFICIAL IP RANGE rather than by User-Agent — a UA string is "
+                  f"by OFFICIAL IP RANGE rather than by User-Agent : a UA string is "
                   f"free text and proves nothing. "
                   f"{a.get('meta', {}).get('verified_bot_coverage', '')}"),
         "table": {"cols": ["Agent", "Class", "Requests", "% of Total",
@@ -140,7 +140,7 @@ def _crawl_section(a):
     intro = "The URLs search-engine crawlers actually requested, by volume."
     trend = a.get("crawl_trend", [])
     if trend:
-        intro += ("  Daily totals: "
+        intro += (" Daily totals: "
                   + ", ".join(f'{t["date"]} = {t["total"]:,}' for t in trend) + ".")
     return {
         "id": "crawl", "title": "B · Search-Engine Crawl Detail", "intro": intro,
@@ -189,7 +189,7 @@ def _coverage_section(a):
     return {
         "id": "coverage", "title": "D · Crawl Coverage (Sitemap / GSC)",
         "intro": ("What the log does NOT contain. A log proves presence, never "
-                  "absence — every row here is true for this window only."),
+                  "absence : every row here is true for this window only."),
         "table": {"cols": ["Source", "Finding", "Detail / URL"], "rows": rows},
         "findings": [],
     }
@@ -216,9 +216,9 @@ def build_report(analysis, authored=None):
             continue
         note = ""
         if len(items) > MAX_PER_SECTION:
-            # Never truncate silently — a capped section that does not say so
+            # Never truncate silently : a capped section that does not say so
             # reads as "that is all of them".
-            note = (f"  Showing the {MAX_PER_SECTION} highest-volume of {len(items)} "
+            note = (f" Showing the {MAX_PER_SECTION} highest-volume of {len(items)} "
                     f"findings in this category; all {len(items)} are in the Issue "
                     f"Analysis tab of the workbook and in analysis.json.")
         sections.append({
@@ -246,7 +246,7 @@ def build_report(analysis, authored=None):
         sections = [by_id[i] for i in order]
 
     def authored_val(key):
-        """An unfilled ‹placeholder› is not a value — fall through to measured
+        """An unfilled ‹placeholder› is not a value : fall through to measured
         data, or the deliverable ships as `Client_Period_...`."""
         v = str((authored or {}).get(key) or "").strip()
         return "" if (not v or "‹" in v or "›" in v) else v
@@ -257,7 +257,7 @@ def build_report(analysis, authored=None):
         "client": authored_val("client") or m.get("site") or "Client",
         "period": authored_val("period") or _period_label(m.get("date_range", {})),
         "subtitle": (authored_val("subtitle")
-                     or "What crawlers and visitors actually did on the server — "
+                     or "What crawlers and visitors actually did on the server : "
                         "measured from raw access logs, with an executable fix for "
                         "each finding."),
         "sections": sections,

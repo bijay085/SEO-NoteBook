@@ -1,4 +1,4 @@
-# Chart wiring — seo-initial-analysis
+# Chart wiring : seo-initial-analysis
 
 `charts.py` is installed here. `combine.py` only *concatenates* the section
 HTMLs you author (and builds the TOC), so the chart goes **inside a section**,

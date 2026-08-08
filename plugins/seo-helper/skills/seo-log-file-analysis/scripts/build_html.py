@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Render the branded HTML deliverable.
 
-Content comes from `<output_dir>/analysis.json` — every measured finding with
-its root cause, impact, literal fix and verification — with anything authored
+Content comes from `<output_dir>/analysis.json` : every measured finding with
+its root cause, impact, literal fix and verification : with anything authored
 in report_data.py layered on top. That ordering matters: this used to render
 report_data.py ALONE, so an engine-only run produced a full workbook and an
 EMPTY html file. Measured content is now the baseline in both formats;
@@ -15,9 +15,9 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import report_data as RD              # noqa: E402
-from auto_report import build_report  # noqa: E402
-from report_kit import render_html    # noqa: E402
+import report_data as RD # noqa: E402
+from auto_report import build_report # noqa: E402
+from report_kit import render_html # noqa: E402
 
 
 def _fname(rep):
@@ -75,7 +75,7 @@ def main():
         # rather than writing a near-empty page and calling it a deliverable.
         rep = authored
         print(f"[build_html] WARNING: {os.path.join(outdir, 'analysis.json')} not "
-              f"found — rendering authored content only. Run analyze_logs.py "
+              f"found : rendering authored content only. Run analyze_logs.py "
               f"--out {outdir} first.")
         src = "authored content only"
 
@@ -83,7 +83,7 @@ def main():
     html = render_html(rep)
     with open(path, "w", encoding="utf-8") as fh:
         fh.write(html)
-    print(f"[build_html] wrote {path}  ({len(html):,} bytes, "
+    print(f"[build_html] wrote {path} ({len(html):,} bytes, "
           f"{len(rep.get('sections') or [])} sections, from {src})")
 
 

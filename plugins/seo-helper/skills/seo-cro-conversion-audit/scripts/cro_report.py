@@ -10,7 +10,7 @@ its input being present, so a partial run still produces a valid workbook.
 
 Styling here is clean and neutral. Final client-facing brand polish (colors,
 logo, the narrative HTML/DOCX) is applied by the built-in report branding
-skill — this script does not hard-code a brand palette it cannot verify.
+skill : this script does not hard-code a brand palette it cannot verify.
 """
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from openpyxl.utils import get_column_letter
 
 from common import read_json
 
-# Neutral placeholder palette — the branding skill overrides for delivery.
+# Neutral placeholder palette : the branding skill overrides for delivery.
 BRAND_PRIMARY = "1F3A5F"
 BRAND_LIGHT = "EAF0F6"
 WHITE = "FFFFFF"

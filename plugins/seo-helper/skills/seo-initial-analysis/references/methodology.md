@@ -1,7 +1,7 @@
 # Methodology
 
 The non-obvious rules behind the initial analysis. Read before authoring Reports
-3, 5 and 8 — they are where a run goes wrong if improvised. Everything here turns an
+3, 5 and 8 : they are where a run goes wrong if improvised. Everything here turns an
 entity into a defensible page architecture grounded in **real** demand, without
 fabricating a single number.
 
@@ -11,17 +11,17 @@ Google's Knowledge Graph models it. Four passes:
 
 1. **Anchor the entity.** Pull the Wikipedia article + Wikidata item for the central
    entity. Record the real relationships: `instance of`, `subclass of`, `part of`,
-   `practiced by`, `uses`. These are the spine — the parent classes and sibling
+   `practiced by`, `uses`. These are the spine : the parent classes and sibling
    entities Google already associates with the entity (e.g. Food Photography →
    `instance of` photography genre, `subclass of` still-life / commercial photography).
 2. **Salience layers.** Place every related concept on a layer:
-   - **L0 — core identity / money terms.** What a buyer types to buy the thing
+   - **L0 : core identity / money terms.** What a buyer types to buy the thing
      ("<entity> service", "hire <entity>", "<entity> pricing / cost").
-   - **L1 — attributes / dimensions.** The facets that multiply the entity into many
+   - **L1 : attributes / dimensions.** The facets that multiply the entity into many
      pages (the client's `entity.dimensions`): type, use-case, audience, platform,
      equipment, style, location. Each dimension is an **Attribute**.
-   - **L2 — the bridge.** The client's angle onto the entity (`entity.bridge`, e.g.
-     "…by AI"). Low current demand, high conversion — introduced *on* the page, not
+   - **L2 : the bridge.** The client's angle onto the entity (`entity.bridge`, e.g.
+     "…by AI"). Low current demand, high conversion : introduced *on* the page, not
      chased as a head term.
 3. **EAV rows.** For each dimension: Entity → Attribute → **Values** (the child
    entities, from the KG + real keyword data) → the human-language **query patterns**
@@ -39,14 +39,14 @@ a ranking asset. Audit every planned page against the six roles.
 ## 3. Salience-driven funnel (Report 8)
 Demand is a pyramid: broad **L1 "Dimension + <entity>"** searches at the top, the
 narrow **L2 bridge** at the bottom. So:
-- **TOFU** — capture broad L1 dimension demand ("<food type> photography",
+- **TOFU** : capture broad L1 dimension demand ("<food type> photography",
   "<platform> food photos") with informational + category pages.
-- **MOFU** — the entity's commercial terms ("<entity> service / pricing / examples").
-- **BOFU** — introduce the **bridge + convincing dimensions** on the page (cost, no
+- **MOFU** : the entity's commercial terms ("<entity> service / pricing / examples").
+- **BOFU** : introduce the **bridge + convincing dimensions** on the page (cost, no
   equipment, no crew, minutes-not-days) to convert the L1 visitor to the L2 offer.
-Never build a site that only targets the L2 conclusion — its demand is too thin.
+Never build a site that only targets the L2 conclusion : its demand is too thin.
 
-## 4. Keyword engine → topical map (Reports 4–5)
+## 4. Keyword engine → topical map (Reports 4 to 5)
 - Seed the engine from the EAV dimensions + L0 money terms, not from guesswork.
 - Enrich every keyword with **search volume + difficulty + SERP intent** (DataForSEO).
 - Cluster by SERP overlap / head-term; per cluster record **aggregate SV**,
@@ -74,4 +74,4 @@ Every given claim is checked against the live source before it enters a report:
 ## 7. Never fabricate
 No search volume, review count, ranking, or "typical" figure is invented. If it is not
 measured, write "not yet measured" and name the exact pull that would get it. A faithful
-gap beats a confident fabrication — that is the line the whole deliverable is trusted on.
+gap beats a confident fabrication : that is the line the whole deliverable is trusted on.

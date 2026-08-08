@@ -84,13 +84,13 @@ def _click(path):
         if len(r) < 3:
             continue
         sel, clicks = r[1], _to_int(r[2])
-        leaf = sel.split(">")[-1]           # the element actually clicked
+        leaf = sel.split(">")[-1] # the element actually clicked
         total += clicks
-        if _NONCONV.search(sel):            # nav / menu / footer / carousel are ancestors
+        if _NONCONV.search(sel): # nav / menu / footer / carousel are ancestors
             nonconv += clicks
             if distractor is None or clicks > distractor[1]:
                 distractor = (sel[:60], clicks)
-        elif _CONV.search(leaf):            # conversion intent must sit on the leaf control
+        elif _CONV.search(leaf): # conversion intent must sit on the leaf control
             conv += clicks
         else:
             ambig += clicks
@@ -170,7 +170,7 @@ def _label_url_mismatch(label, url_regex):
     if not words:
         return None
     missing = [w for w in words if w not in url]
-    if missing:                            # a distinctive topic token is absent from the URL
+    if missing: # a distinctive topic token is absent from the URL
         return f"Folder '{label}' token(s) {missing} absent from recorded URL ({url_regex})."
     return None
 

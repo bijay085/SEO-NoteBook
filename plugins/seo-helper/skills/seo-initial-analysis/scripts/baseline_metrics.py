@@ -8,21 +8,21 @@ Usage:
 <raw_baseline_dir> holds the saved MCP responses, one JSON per pull
 (engine-run/raw-baseline/*.json), using these exact filenames -- any missing file
 just drops that module from the output, never blocks the run:
-  gsc-16mo-query.json / gsc-16mo-page.json     query_search_analytics, dimensions=[query]/[page], ~16mo window
-  gsc-3mo-query.json  / gsc-3mo-page.json      same, ~3mo window
-  backlinks-summary.json                        backlinks_summary
-  backlinks-domains.json                        backlinks_referring_domains
-  backlinks-spam.json                           backlinks_bulk_spam_score, targets = the domains from backlinks-domains.json
-  lighthouse.json                               on_page_lighthouse
-  ranked-keywords.json                          dataforseo_labs_google_ranked_keywords
-  gbp-listing.json                              business_data_business_listings_search
+  gsc-16mo-query.json / gsc-16mo-page.json query_search_analytics, dimensions=[query]/[page], ~16mo window
+  gsc-3mo-query.json / gsc-3mo-page.json same, ~3mo window
+  backlinks-summary.json backlinks_summary
+  backlinks-domains.json backlinks_referring_domains
+  backlinks-spam.json backlinks_bulk_spam_score, targets = the domains from backlinks-domains.json
+  lighthouse.json on_page_lighthouse
+  ranked-keywords.json dataforseo_labs_google_ranked_keywords
+  gbp-listing.json business_data_business_listings_search
 
 Outputs into out_dir:
-  baseline-summary.json          one JSON: every module's headline numbers
-  baseline-gsc-queries.tsv       query  clicks_16mo  impr_16mo  pos_16mo  clicks_3mo  impr_3mo  pos_3mo  clicks_delta  impr_delta  pos_delta
-  baseline-gsc-pages.tsv         same, keyed by page
-  baseline-backlink-domains.tsv  domain  rank  spam_score  spam_flag  backlinks  first_seen
-  baseline-ranked-keywords.tsv   keyword  position  search_volume  url
+  baseline-summary.json one JSON: every module's headline numbers
+  baseline-gsc-queries.tsv query clicks_16mo impr_16mo pos_16mo clicks_3mo impr_3mo pos_3mo clicks_delta impr_delta pos_delta
+  baseline-gsc-pages.tsv same, keyed by page
+  baseline-backlink-domains.tsv domain rank spam_score spam_flag backlinks first_seen
+  baseline-ranked-keywords.tsv keyword position search_volume url
 
 NOTE ON FIELD-SHAPE CONFIDENCE: GSC extraction follows Google's public Search
 Analytics API response shape (stable, high confidence). Lighthouse extraction

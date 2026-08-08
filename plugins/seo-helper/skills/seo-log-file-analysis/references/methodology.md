@@ -1,8 +1,8 @@
-# Methodology — how to read a log without lying
+# Methodology : how to read a log without lying
 
 ## 1. Pick the source of truth before you count anything
 A stack emits several logs and they do not agree. Routing (`route_log_roles`):
-- **Cloudways**: `backend_*.access.log` is authoritative — it carries the User-Agent.
+- **Cloudways**: `backend_*.access.log` is authoritative : it carries the User-Agent.
   The PHP and static logs are supplemental context, summarised on the Log Sources tab
   and never mixed into the SEO totals (double-counting one request as three).
 - **Standard hosting**: the access log is primary; error logs are excluded from traffic
@@ -42,8 +42,8 @@ a long one the client disproves in ten minutes.
 ## 4. Absence is not evidence
 The log records what happened. It cannot record what did not. Every negative claim gets
 its window attached: not "Googlebot never crawls /services/", but "Googlebot did not
-request /services/ in the 14-day window 1–14 Aug". This applies to the whole of
-dimension 7 — the crossref block ships that caveat in its own `note` field; keep it.
+request /services/ in the 14-day window 1 to 14 Aug". This applies to the whole of
+dimension 7 : the crossref block ships that caveat in its own `note` field; keep it.
 
 ## 5. Severity mapping and what earns P0
 Engine urgency → report severity: P1 - Critical → `critical`, P2 - High → `high`,
@@ -52,7 +52,7 @@ P3 - Monitor → `medium`. `good` and `info` are authored, not emitted by the en
 P0 in the Action Items section is reserved for the two things that stop the site being
 crawled or expose it:
 - robots.txt or sitemap returning an error (crawl-halting)
-- a sensitive file served with 200 (active exposure — credentials must be rotated)
+- a sensitive file served with 200 (active exposure : credentials must be rotated)
 Everything else is P1 or P2, however large the number.
 
 ## 6. Recommend the smallest sufficient fix
@@ -60,7 +60,7 @@ Everything else is P1 or P2, however large the number.
   Disallow stops crawling, so the URLs vanish from the logs and from GSC and you lose
   the ability to measure the fix; noindex,follow keeps them visible, un-indexed, and
   still passing equity.
-- **Do not nofollow legitimate outbound links** — that is the off-page skill's territory
+- **Do not nofollow legitimate outbound links** : that is the off-page skill's territory
   and over-tagging is a myth-driven anti-pattern.
 - **Do not block an IP without checking it.** `ipinfo.io/<ip>` first: datacenter, block;
   residential, rate-limit instead. A wrong block costs real customers.

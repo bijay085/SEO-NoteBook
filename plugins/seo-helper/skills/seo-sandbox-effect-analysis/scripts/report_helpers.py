@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""report_helpers.py — branded openpyxl primitives for the master XLSX (SEO report branding,
+"""report_helpers.py : branded openpyxl primitives for the master XLSX (SEO report branding,
 config-driven). Mirrors the look of brand_lib.py's HTML so the two deliverables match.
 
     import report_helpers as R

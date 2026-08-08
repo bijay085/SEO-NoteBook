@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Log-file analysis orchestrator — parse, classify, detect, emit the facts.
+"""Log-file analysis orchestrator : parse, classify, detect, emit the facts.
 
 This is the deterministic half of the skill. It never writes prose: it produces
 `analysis.json` (every measured number) and `facts.md` (the same numbers, human
@@ -7,7 +7,7 @@ readable), and Claude authors the findings narrative from those. Nothing in the
 report may cite a number this script did not measure.
 
 WHY TWO PASSES: classification depends on per-IP context that is only knowable
-after seeing the whole log — how many hits that IP made, and what share of them
+after seeing the whole log : how many hits that IP made, and what share of them
 were admin/polling URLs. Pass 1 accumulates just those two counters; pass 2
 re-streams and classifies. Memory stays O(unique URLs + unique IPs) rather than
 O(requests), so a large rotated log set runs on a laptop.
@@ -15,10 +15,10 @@ O(requests), so a large rotated log set runs on a laptop.
 Usage:
   python analyze_logs.py --logs LOG [LOG ...] --site example.com --out ./Log-Analysis
 Options:
-  --offline            skip live bot-IP fetches; use the on-disk cache only
-  --sitemap FILE       cross-reference: sitemap URLs never crawled (discovery gap)
-  --gsc-csv FILE       cross-reference: GSC pages with impressions but no crawl
-  --top-urls N         rows in the URL Detail tab (default 1000)
+  --offline skip live bot-IP fetches; use the on-disk cache only
+  --sitemap FILE cross-reference: sitemap URLs never crawled (discovery gap)
+  --gsc-csv FILE cross-reference: GSC pages with impressions but no crawl
+  --top-urls N rows in the URL Detail tab (default 1000)
 """
 import argparse
 import json
@@ -29,17 +29,17 @@ from datetime import timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-import bot_verification                                           # noqa: E402
-import log_parser as LP                                           # noqa: E402
-from detect_issues import detect_issues                           # noqa: E402
-from health_score import calc_health                              # noqa: E402
-from traffic_classify import (ADMIN_LIKE_PURPOSES, CLASS_LABELS,   # noqa: E402
+import bot_verification # noqa: E402
+import log_parser as LP # noqa: E402
+from detect_issues import detect_issues # noqa: E402
+from health_score import calc_health # noqa: E402
+from traffic_classify import (ADMIN_LIKE_PURPOSES, CLASS_LABELS, # noqa: E402
                               SE_BOT_MAP, classify_content,
                               classify_traffic, url_purpose)
 
-MAX_CHAIN_KEYS = 50_000          # bound the redirect-chain candidate table
-MAX_URLS_PER_SUSPECT = 50        # bound per-suspicious-IP URL detail
-DETAIL_LIMIT = 60                # findings expanded in full in facts.md
+MAX_CHAIN_KEYS = 50_000 # bound the redirect-chain candidate table
+MAX_URLS_PER_SUSPECT = 50 # bound per-suspicious-IP URL detail
+DETAIL_LIMIT = 60 # findings expanded in full in facts.md
                                  # (all of them are always in analysis.json + XLSX)
 
 
@@ -103,7 +103,7 @@ def _norm_ts(ts):
 
 
 def pass_one(files, log):
-    """Per-IP hit counts and admin-URL share — the inputs classification needs."""
+    """Per-IP hit counts and admin-URL share : the inputs classification needs."""
     ip_counts, admin_by_ip, total = Counter(), Counter(), 0
     for path in files:
         for rec in LP.iter_records(path, log=_quiet):
@@ -114,7 +114,7 @@ def pass_one(files, log):
             ip_counts[ip] += 1
             if url_purpose(rec.get("url", "")) in ADMIN_LIKE_PURPOSES:
                 admin_by_ip[ip] += 1
-    log(f"   Pass 1: {total:,} records, {len(ip_counts):,} distinct IPs")
+    log(f" Pass 1: {total:,} records, {len(ip_counts):,} distinct IPs")
     return ip_counts, admin_by_ip, total
 
 
@@ -208,12 +208,12 @@ def pass_two(files, ip_counts, admin_by_ip, grand_total, log):
 
     if agg["ts_min"] and agg["ts_max"]:
         agg["span_hours"] = (agg["ts_max"] - agg["ts_min"]).total_seconds() / 3600
-    log(f"   Pass 2: {agg['total']:,} classified, {len(agg['url_hits']):,} unique URLs")
+    log(f" Pass 2: {agg['total']:,} classified, {len(agg['url_hits']):,} unique URLs")
     return agg
 
 
 def summarise_sources(files, roles, primary_roles, log):
-    """Row counts and provenance per log role — primary vs supplemental."""
+    """Row counts and provenance per log role : primary vs supplemental."""
     out = []
     by_role = defaultdict(list)
     for p in files:
@@ -241,7 +241,7 @@ def summarise_sources(files, roles, primary_roles, log):
             "purpose": purpose.get(role, "Parsed traffic source."),
             "filenames": [os.path.basename(p) for p in paths][:20],
         })
-        log(f"   {role:<18} {rows:>9,} rows  "
+        log(f" {role:<18} {rows:>9,} rows "
             f"({'primary' if role in primary_roles else 'supplemental/skipped'})")
     return out
 
@@ -289,8 +289,8 @@ def crossref(agg, sitemap_urls, gsc_pages):
 
     A log says what WAS crawled. It cannot say what SHOULD have been. Comparing
     against the sitemap and against GSC turns absence into a finding:
-      * in the sitemap, never crawled          -> a discovery gap
-      * earning impressions, never crawled     -> ranking on a stale copy
+      * in the sitemap, never crawled -> a discovery gap
+      * earning impressions, never crawled -> ranking on a stale copy
     Both are reported as counts + samples, never as certainty: a short log
     window legitimately misses low-frequency crawls, and the note says so."""
     if not sitemap_urls and not gsc_pages:
@@ -311,7 +311,7 @@ def crossref(agg, sitemap_urls, gsc_pages):
             "never_crawled": len(missing),
             "sample": missing[:50],
             "note": ("A URL absent from this log window is not proof it is never "
-                     "crawled — widen the window before acting on a long list."),
+                     "crawled : widen the window before acting on a long list."),
         }
     if gsc_pages:
         missing = [(u, i) for u, i in sorted(gsc_pages.items(), key=lambda kv: -kv[1])
@@ -321,7 +321,7 @@ def crossref(agg, sitemap_urls, gsc_pages):
             "impressions_but_no_crawl": len(missing),
             "sample": [{"url": u, "impressions": i} for u, i in missing[:50]],
             "note": ("These pages earn impressions but were not crawled in this "
-                     "window — they rank on an increasingly stale copy."),
+                     "window : they rank on an increasingly stale copy."),
         }
     return res
 
@@ -329,12 +329,12 @@ def crossref(agg, sitemap_urls, gsc_pages):
 def summarise_findings(findings):
     """Group findings by (category, issue) for authoring.
 
-    The detectors are deliberately per-URL — the XLSX fix list needs one row per
+    The detectors are deliberately per-URL : the XLSX fix list needs one row per
     broken URL. But a real site produces 131 separate "404 Not Found" findings,
     and authoring 131 report cards is neither possible nor useful. This groups
     them so the author writes ONE finding per pattern ("131 URLs returned 404,
     43,xxx hits, worst offenders listed") and links to the URL Detail tab for
-    the full list. Nothing is discarded — `findings` still holds every row."""
+    the full list. Nothing is discarded : `findings` still holds every row."""
     order = {"P1 - Critical": 0, "P2 - High": 1, "P3 - Monitor": 2}
     groups = {}
     for f in findings:
@@ -448,7 +448,7 @@ def write_facts_md(payload, path):
     p2 = sum(1 for f in payload["findings"] if f["urgency"] == "P2 - High")
     p3 = sum(1 for f in payload["findings"] if f["urgency"] == "P3 - Monitor")
     lines = [
-        f"# Log-file facts — {m['site']}", "",
+        f"# Log-file facts : {m['site']}", "",
         f"- Requests analysed: **{m['total_requests']:,}** across "
         f"**{m['unique_urls']:,}** unique URLs",
         f"- Window: {m['date_range']['start'] or 'unknown'} -> "
@@ -456,12 +456,12 @@ def write_facts_md(payload, path):
         f"({m['date_range']['span_hours'] or '?'}h)",
         f"- Lines read {m['lines_read']:,}, failed {m['lines_failed']:,} "
         f"(parse rate {m['parse_rate_pct']}%)",
-        f"- Primary log roles: {', '.join(m['primary_roles']) or 'none'} — "
+        f"- Primary log roles: {', '.join(m['primary_roles']) or 'none'} : "
         f"{m['routing_reason']}",
         f"- {m['verified_bot_coverage']}",
         f"- User-Agent data present: {m['has_user_agent_data']}",
         "", f"## Findings: {len(payload['findings'])} (P1 {p1} · P2 {p2} · P3 {p3})", "",
-        "### Grouped — author ONE report finding per row here, not one per URL", "",
+        "### Grouped : author ONE report finding per row here, not one per URL", "",
         "| Worst | Category | Issue | URLs | Total hits | Confidence |",
         "|---|---|---|---|---|---|",
     ]
@@ -470,15 +470,15 @@ def write_facts_md(payload, path):
         lines.append(f"| {g['worst_urgency']} | {g['category']} | {g['issue']} | "
                      f"{g['count']} | {g['total_hits']:,} | {conf} |")
     # Full detail per finding. The whole point of the rule engine is the
-    # root cause / impact / literal fix / verification chain — printing only a
+    # root cause / impact / literal fix / verification chain : printing only a
     # summary table throws away everything that makes a finding actionable.
     lines += ["", "---", "", "## Findings in full", ""]
     for i, f in enumerate(payload["findings"][:DETAIL_LIMIT], 1):
         lines += [
-            f"### {i}. [{f['urgency']}] {f['issue']} — {f['category']}", "",
-            f"- **Scope:** `{f['url']}`  ·  **Segment:** {f['segment']}  ·  "
-            f"**Status:** {f['status_code']}  ·  **Hits:** {f['hits']:,}",
-            f"- **Confidence:** {f['confidence']}  ·  **Effort:** {f['effort']}",
+            f"### {i}. [{f['urgency']}] {f['issue']} : {f['category']}", "",
+            f"- **Scope:** `{f['url']}` · **Segment:** {f['segment']} · "
+            f"**Status:** {f['status_code']} · **Hits:** {f['hits']:,}",
+            f"- **Confidence:** {f['confidence']} · **Effort:** {f['effort']}",
             f"- **What:** {f['detail']}",
             f"- **Evidence:** {f['evidence']}",
             f"- **Root cause:** {f['root_cause']}",
@@ -488,7 +488,7 @@ def write_facts_md(payload, path):
         ]
     if len(payload["findings"]) > DETAIL_LIMIT:
         lines += [f"_{len(payload['findings']) - DETAIL_LIMIT} further findings are not "
-                  f"expanded here — every one is in `analysis.json` and in the "
+                  f"expanded here : every one is in `analysis.json` and in the "
                   f"**Issue Analysis** tab of the XLSX with the same 16 fields._", ""]
     lines += ["", "## Traffic segments", "", "| Segment | Requests | % |", "|---|---|---|"]
     for s in payload["segments"]:
@@ -535,22 +535,22 @@ def main():
     if not files:
         log("No log files found. Check --logs.")
         if skipped:
-            log(f"  {len(skipped)} file(s) present but not recognised as logs: "
+            log(f" {len(skipped)} file(s) present but not recognised as logs: "
                 f"{', '.join(os.path.basename(p) for p in skipped[:10])}")
         return 2
     log(f"Discovered {len(files)} log file(s).")
     for p in files:
-        log(f"    + {os.path.basename(p)} ({os.path.getsize(p):,} bytes)")
+        log(f" + {os.path.basename(p)} ({os.path.getsize(p):,} bytes)")
     if skipped:
         # Never drop input silently: a sweep that matched 1 of 5 rotated files
         # would still render a confident-looking report on a fraction of the data.
-        log(f"  SKIPPED {len(skipped)} non-log file(s): "
+        log(f" SKIPPED {len(skipped)} non-log file(s): "
             f"{', '.join(os.path.basename(p) for p in skipped[:10])}"
             f"{' ...' if len(skipped) > 10 else ''}")
 
     roles = {p: LP.infer_log_role(p) for p in files}
     primary_roles, reason = LP.route_log_roles(Counter(roles.values()))
-    log(f"Log source routing: primary = {primary_roles or 'none'} — {reason}")
+    log(f"Log source routing: primary = {primary_roles or 'none'} : {reason}")
 
     primary_files = [p for p in files if roles[p] in primary_roles]
     if not primary_files:
@@ -560,20 +560,20 @@ def main():
     log("\nParsing (format detection per file):")
     lines_total, failed_total = 0, 0
     for p in primary_files:
-        log(f"  {os.path.basename(p)}")
+        log(f" {os.path.basename(p)}")
         _recs, ln, fl = LP.parse_file(p, log=log, collect=False)
         lines_total += ln
         failed_total += fl
 
     log("\nLoading verified search-bot IP ranges...")
     bot_verification.load_networks(offline=args.offline)
-    log("  " + bot_verification.coverage_summary())
+    log(" " + bot_verification.coverage_summary())
 
     log("\nClassifying:")
     ip_counts, admin_by_ip, grand_total = pass_one(primary_files, log)
     agg = pass_two(primary_files, ip_counts, admin_by_ip, grand_total, log)
     if agg["total"] == 0:
-        log("Parsed zero records — check the log format.")
+        log("Parsed zero records : check the log format.")
         return 2
 
     log("\nLog sources:")
@@ -585,9 +585,9 @@ def main():
     p1 = sum(1 for f in findings if f["urgency"] == "P1 - Critical")
     p2 = sum(1 for f in findings if f["urgency"] == "P2 - High")
     p3 = sum(1 for f in findings if f["urgency"] == "P3 - Monitor")
-    log(f"  {len(findings)} findings — P1 {p1} · P2 {p2} · P3 {p3}")
+    log(f" {len(findings)} findings : P1 {p1} · P2 {p2} · P3 {p3}")
     for cat, n in Counter(f["category"] for f in findings).most_common():
-        log(f"    {cat}: {n}")
+        log(f" {cat}: {n}")
 
     cross = crossref(
         agg,
@@ -597,10 +597,10 @@ def main():
     if cross:
         log("\nCross-reference:")
         if "sitemap" in cross:
-            log(f"  sitemap: {cross['sitemap']['never_crawled']} of "
+            log(f" sitemap: {cross['sitemap']['never_crawled']} of "
                 f"{cross['sitemap']['sitemap_urls']} URLs never crawled in this window")
         if "gsc" in cross:
-            log(f"  GSC: {cross['gsc']['impressions_but_no_crawl']} pages have "
+            log(f" GSC: {cross['gsc']['impressions_but_no_crawl']} pages have "
                 f"impressions but no crawl in this window")
 
     payload = build_payload(

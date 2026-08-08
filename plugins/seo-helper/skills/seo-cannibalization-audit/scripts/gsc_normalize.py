@@ -1,12 +1,12 @@
 """Normalise raw GSC pulls into the tidy frames the rest of the pipeline reads.
 
-Input  : whatever the Search Console MCP wrote to disk (raw API JSON, flattened
+Input : whatever the Search Console MCP wrote to disk (raw API JSON, flattened
          JSON, or CSV). Shapes are sniffed, not assumed.
-Output : <work>/matrix.csv        page, query, clicks, impressions, position [, date]
-         <work>/pages.csv         per-URL rollup + trend
-         <work>/universe.json     brand-normalised query universe + IDF
-         <work>/appearance.json   per-page SERP surface mix (when supplied)
-         <work>/meta.json         what was analysed, capped, excluded
+Output : <work>/matrix.csv page, query, clicks, impressions, position [, date]
+         <work>/pages.csv per-URL rollup + trend
+         <work>/universe.json brand-normalised query universe + IDF
+         <work>/appearance.json per-page SERP surface mix (when supplied)
+         <work>/meta.json what was analysed, capped, excluded
 
 Usage:
     python gsc_normalize.py --work <dir> --site sc-domain:example.com \
@@ -75,11 +75,11 @@ def _parse_pipe_table(text):
         return None
     records = []
     for ln in lines[header_i + 1:]:
-        if set(ln.strip()) <= set('-| '):        # the ---- separator
+        if set(ln.strip()) <= set('-| '): # the ---- separator
             continue
         parts = [p.strip() for p in ln.split('|')]
         if len(parts) != len(cols):
-            continue                             # a value containing '|' — skip, don't guess
+            continue # a value containing '|' : skip, don't guess
         records.append(dict(zip(cols, parts)))
     if not records:
         return None
@@ -142,7 +142,7 @@ _DATE_RE = re.compile(r'^\d{4}-\d{2}-\d{2}$')
 
 
 def _infer_dimensions(keys, width):
-    """Name each key slot from its content — the MCP does not always echo back
+    """Name each key slot from its content : the MCP does not always echo back
     the `dimensions` it was called with."""
     names = []
     for i in range(width):
@@ -189,7 +189,7 @@ def site_domain(site_url):
 def detect_brand_tokens(site_url, configured=None):
     """Brand tokens used to brand-normalise the query universe. Explicit config
     wins. Otherwise derive from the domain: the full core ("acmeeducation"), the
-    short prefix ("acme") and the spaced form ("acme education") — a brand gets
+    short prefix ("acme") and the spaced form ("acme education") : a brand gets
     searched all three ways."""
     if configured:
         return [t.strip().lower() for t in configured if t and t.strip()]
@@ -215,7 +215,7 @@ def detect_brand_tokens(site_url, configured=None):
 
 def normalize_brand_query(q, brand_tokens):
     """Strip brand tokens, leaving the topic remainder. A brand+topic query is
-    not noise — it is a topic query with a brand modifier, and two of the site's
+    not noise : it is a topic query with a brand modifier, and two of the site's
     own pages competing for it is real branded cannibalization. Only a query
     that is *nothing but* brand normalises to '' and gets dropped."""
     if not q:
@@ -232,7 +232,7 @@ def norm_url(u):
     return (u or '').rstrip('/')
 
 
-# Tracking parameters carry no page identity — GSC reports the tagged URL as a
+# Tracking parameters carry no page identity : GSC reports the tagged URL as a
 # separate row, and without this the homepage "cannibalizes itself".
 _TRACKING_PARAMS = ('utm_', 'gclid', 'fbclid', 'msclkid', 'gclsrc', 'dclid',
                     'mc_cid', 'mc_eid', '_ga', 'yclid', 'igshid', 'ref_src')
@@ -240,7 +240,7 @@ _TRACKING_PARAMS = ('utm_', 'gclid', 'fbclid', 'msclkid', 'gclsrc', 'dclid',
 
 def canonical_url(u):
     """Strip the fragment and known tracking parameters. Other query params are
-    KEPT — on many sites `?p=123` or a filter param is a genuinely distinct
+    KEPT : on many sites `?p=123` or a filter param is a genuinely distinct
     page, and silently merging those would fabricate duplicates."""
     if not u:
         return u
@@ -258,7 +258,7 @@ _NUM_TOKEN = re.compile(r'^(?:\d+|20\d{2})$')
 
 def slug_parts(url):
     """Split a URL's last path segment into (content_tokens, number_tokens).
-    Numbers are kept SEPARATE, not discarded — a number in a slug is often
+    Numbers are kept SEPARATE, not discarded : a number in a slug is often
     semantic (`-3` vs `-4` = Part 3 vs Part 4, distinct pages)."""
     path = urlparse(url).path.strip('/').lower()
     if not path:
@@ -276,7 +276,7 @@ def slug_parts(url):
 
 
 def url_twin(url_a, url_b):
-    """True when two URLs share the same slug *content* tokens — they LOOK like
+    """True when two URLs share the same slug *content* tokens : they LOOK like
     the same page modulo a numeric suffix. Only a HINT: whether that number is
     semantic is decided downstream by the query-demand guard, which sees the
     actual search demand."""
@@ -291,7 +291,7 @@ def url_twin(url_a, url_b):
 
 def unique_click_share(page, other, page_query_clicks, page_ranks_for):
     """Fraction of `page`'s clicks earned on queries `other` does NOT rank for.
-    High means `page` owns its own demand — a DISTINCT page, not a merge
+    High means `page` owns its own demand : a DISTINCT page, not a merge
     candidate, however twin-like the URL. None when there are too few clicks to
     judge."""
     qc = page_query_clicks.get(page) or {}
@@ -309,7 +309,7 @@ def unique_click_share(page, other, page_query_clicks, page_ranks_for):
 
 def mann_kendall(values):
     """Non-parametric monotonic-trend test. Returns (direction, z) where 'flat'
-    means not significant at p < 0.05. Scale-free — unlike a raw slope
+    means not significant at p < 0.05. Scale-free : unlike a raw slope
     threshold, which means nothing without knowing the click scale."""
     x = np.asarray([float(v) for v in values], dtype=float)
     n = len(x)
@@ -439,7 +439,7 @@ def build_pages(matrix, cfg, end_date):
 
 
 def appearance_share_per_page(by_page_appearance, page_total_impressions=None):
-    """GSC's searchAppearance dimension reports only ENRICHED surfaces — plain
+    """GSC's searchAppearance dimension reports only ENRICHED surfaces : plain
     blue links carry no label. So the WEB share is a page's total impressions
     minus its enriched ones."""
     if by_page_appearance is None or by_page_appearance.empty:
@@ -518,7 +518,7 @@ def main():
     if include:
         matrix = matrix[matrix['page'].isin(set(include))]
     if matrix.empty:
-        raise SystemExit('no rows left after URL filtering — check exclude_url_patterns')
+        raise SystemExit('no rows left after URL filtering : check exclude_url_patterns')
 
     has_date = 'date' in matrix.columns
     end_date = (pd.Timestamp(args.end_date) if args.end_date
@@ -574,7 +574,7 @@ def main():
         print(f'NOTE: capped at max_urls={max_urls}; {len(dropped_for_scale)} lower-impression '
               f'URLs excluded from this run (listed in meta.json).')
     if not has_date:
-        print('WARNING: no `date` column — the handoff detector cannot run and ongoing parity '
+        print('WARNING: no `date` column : the handoff detector cannot run and ongoing parity '
               'falls back to aggregate-window comparison. Re-pull per URL with '
               'dimensions ["date","query"] for full power.')
 

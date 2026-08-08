@@ -57,7 +57,7 @@ def parse_bot_access(robots_txt: Optional[str], url_path: str,
         return {b: "not_mentioned" for b in bots}
 
     results = {}
-    lines   = robots_txt.splitlines()
+    lines = robots_txt.splitlines()
 
     for bot in bots:
         results[bot] = _check_bot(lines, bot, url_path)
@@ -70,9 +70,9 @@ def _check_bot(lines: List[str], bot: str, path: str) -> str:
     Handles wildcards and both Allow/Disallow directives.
     Last matching rule wins per Google's implementation.
     """
-    in_block  = False
-    status    = "not_mentioned"
-    specificity = -1  # track rule specificity (longer = more specific)
+    in_block = False
+    status = "not_mentioned"
+    specificity = -1 # track rule specificity (longer = more specific)
 
     for line in lines:
         line = line.strip()

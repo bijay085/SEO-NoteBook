@@ -1,11 +1,11 @@
 """Render the SEO deliverable: branded HTML + master XLSX.
 
 Sections mirror the app's Google Sheet tabs, minus the Sheets dependency:
-  Action Plan          the client-facing summary — only the cases worth surfacing
-  All URLs (detail)    every analysed URL with its finding
-  Evidence             one row per qualifying shared query — the audit trail
-  Cluster Summary      one row per cluster
-  Coverage & limits    what this run did and did not cover
+  Action Plan the client-facing summary : only the cases worth surfacing
+  All URLs (detail) every analysed URL with its finding
+  Evidence one row per qualifying shared query : the audit trail
+  Cluster Summary one row per cluster
+  Coverage & limits what this run did and did not cover
 
 Usage:
     python build_report.py --work <dir> --out <dir> [--client "Acme"] [--config config.json]
@@ -24,22 +24,22 @@ from report_kit import render_html, render_xlsx
 EXPLAIN = {
     'duplicate': ('Two pages are effectively the same page. Google has to pick one, and the '
                   'ranking signals you have earned are split across both.', 'critical'),
-    'ongoing cannibal': ('Both pages are competing for the same searches right now — clicks, '
+    'ongoing cannibal': ('Both pages are competing for the same searches right now : clicks, '
                          'impressions and positions split between them week after week.',
                          'critical'),
     'affected_handoff (loser)': ('This page already lost its searches to another page on your '
-                                 'site. The traffic moved across; this URL is now dead weight — '
+                                 'site. The traffic moved across; this URL is now dead weight : '
                                  'but check what it held before redirecting.', 'high'),
     'redundant duplicate': ('Both pages target the same searches, but this one is consistently '
-                            'buried or out-clicked. Not a contest — dead weight diluting the '
+                            'buried or out-clicked. Not a contest : dead weight diluting the '
                             'stronger page.', 'high'),
-    'differentiate — keep both': ('These two pages overlap on some terms, but each earns most of '
+    'differentiate : keep both': ('These two pages overlap on some terms, but each earns most of '
                                   'its traffic on searches the other does not rank for. They are '
-                                  'distinct pages — merging them would destroy real traffic.',
+                                  'distinct pages : merging them would destroy real traffic.',
                                   'medium'),
     'overlap watch': ('Both pages cover the same topic, but nobody is losing traffic yet. Early '
-                      'warning only — re-check next analysis.', 'low'),
-    'cluster winner': ('The strongest page of its group — the one everything else should point '
+                      'warning only : re-check next analysis.', 'low'),
+    'cluster winner': ('The strongest page of its group : the one everything else should point '
                        'at.', 'good'),
     'affected_handoff (winner)': ('This page won a past handoff. Keep it.', 'good'),
 }
@@ -72,7 +72,7 @@ def main():
         intro = (f'{len(actionable)} pages need attention out of {s["urls_analyzed"]} analysed, '
                  f'covering {s["clicks_at_stake"]:,} clicks. Work top-down: rows are ordered by '
                  f'how clear-cut the case is, then by traffic at stake. Every row is backed by the '
-                 f'shared searches in the Evidence section — read those before acting on any large '
+                 f'shared searches in the Evidence section : read those before acting on any large '
                  f'consolidation.')
     else:
         intro = (f'No cannibalization found across {s["urls_analyzed"]} analysed pages. Every page '
@@ -85,11 +85,11 @@ def main():
             'issue': f'{r["status"]}: {r["url"]}',
             'sev': sev,
             'evidence': (f'{r["clicks_window"]:,} clicks / {r["impressions_window"]:,} impressions '
-                         f'in window; avg position {r.get("avg_position_90d") or "—"}; trend: '
-                         f'{r.get("trend") or "—"}. Shared searches: '
+                         f'in window; avg position {r.get("avg_position_90d") or ": "}; trend: '
+                         f'{r.get("trend") or ": "}. Shared searches: '
                          f'{r.get("shared_queries") or "see Evidence section"}. '
                          f'Measured basis: {r.get("reason", "")}'),
-            'solution': f'{explain} Page to keep: {r.get("winner") or "—"}.',
+            'solution': f'{explain} Page to keep: {r.get("winner") or ": "}.',
             'execution': r.get('action', ''),
             'priority': f'P{min(max(int(r.get("priority", 3)) - 1, 0), 2)}',
             'effort': 'S' if r['status'] in ('duplicate', 'overlap watch') else 'M',
@@ -104,7 +104,7 @@ def main():
         'table': {'cols': ['Priority', 'Confidence', 'Page to redirect / act on', 'Page to keep',
                            'Recommended action', 'Clicks at stake'],
                   'rows': [[r.get('priority', ''), r.get('confidence', ''), r['url'],
-                            r.get('winner') or '—', r.get('action', ''), r['clicks_window']]
+                            r.get('winner') or ': ', r.get('action', ''), r['clicks_window']]
                            for r in actionable]},
         'findings': findings,
     }]
@@ -112,7 +112,7 @@ def main():
     # ---- All URLs -------------------------------------------------------
     sections.append({
         'id': 'all-urls', 'title': 'All URLs (detail)',
-        'intro': ('Every analysed URL and its finding — the analyst view. `standalone` means no '
+        'intro': ('Every analysed URL and its finding : the analyst view. `standalone` means no '
                   'other URL competes with it.'),
         'table': {'cols': ['URL', 'Finding', 'Confidence', 'Cluster', 'Winner', 'Clicks',
                            'Impressions', 'Avg position', 'Trend', 'Reasoning'],
@@ -183,10 +183,10 @@ def main():
                        'execution': 'Raise `max_urls` in the config and re-run to widen coverage.',
                        'priority': 'P2', 'effort': 'S'})
     if s.get('pairs_skipped_missing_weekly'):
-        limits.append({'issue': (f'{s["pairs_skipped_missing_weekly"]} pairs skipped — weekly data '
+        limits.append({'issue': (f'{s["pairs_skipped_missing_weekly"]} pairs skipped : weekly data '
                                  f'missing'), 'sev': 'high',
                        'evidence': 'pair_verdicts.json pairs_skipped',
-                       'solution': 'Those pairs carry no verdict — neither cleared nor flagged.',
+                       'solution': 'Those pairs carry no verdict : neither cleared nor flagged.',
                        'execution': ('Fetch the missing per-URL weekly dumps listed in '
                                      'weekly/_fetch_list.json and re-run run_verdicts.py.'),
                        'priority': 'P0', 'effort': 'S'})
@@ -200,7 +200,7 @@ def main():
     report = {
         'title': 'Keyword Cannibalization Audit', 'client': client, 'period': period,
         'subtitle': (f'Verdict-based analysis of {s["urls_analyzed"]} URLs from Google Search '
-                     f'Console — every finding backed by the shared searches that produced it.'),
+                     f'Console : every finding backed by the shared searches that produced it.'),
         'output_dir': str(out), 'sections': sections,
     }
 
@@ -209,9 +209,9 @@ def main():
     xlsx_path = out / 'Cannibalization-Audit.xlsx'
     try:
         render_xlsx(report, str(xlsx_path))
-    except Exception as e:                                  # noqa: BLE001
+    except Exception as e: # noqa: BLE001
         xlsx_path = None
-        print(f'XLSX skipped ({type(e).__name__}: {e}) — the HTML report is complete.')
+        print(f'XLSX skipped ({type(e).__name__}: {e}) : the HTML report is complete.')
 
     if rows:
         with (out / 'action-plan.csv').open('w', newline='', encoding='utf-8') as f:

@@ -9,13 +9,13 @@ every run and swallowed every network error, so an offline run silently
 degraded to "no verified bots" with no trace in the report. Here the ranges are
 CACHED ON DISK (7-day TTL) and the per-source outcome is RETURNED, so the
 report can state which sources were live, which came from cache, and which
-failed — a verified-bot claim is never made on quietly-missing data.
+failed : a verified-bot claim is never made on quietly-missing data.
 
 Public API:
   load_networks(offline=False, cache_dir=None) -> (networks, sources)
-  verified_bot_from_ip(ip)  -> (class, 'Name (verified IP)') | None
-  source_report()           -> [{source, status, prefixes}]
-  coverage_summary()        -> one-line honesty statement
+  verified_bot_from_ip(ip) -> (class, 'Name (verified IP)') | None
+  source_report() -> [{source, status, prefixes}]
+  coverage_summary() -> one-line honesty statement
 """
 import ipaddress
 import json
@@ -29,21 +29,21 @@ CACHE_FILE = "bot_ip_ranges.json"
 
 # (traffic class, agent label, official range file)
 VERIFIED_BOT_IP_SOURCES = [
-    ("search_bot",  "Googlebot",              "https://developers.google.com/search/apis/ipranges/googlebot.json"),
-    ("search_bot",  "Google Common Crawler",  "https://developers.google.com/static/crawling/ipranges/common-crawlers.json"),
-    ("search_bot",  "Google Special Crawler", "https://developers.google.com/static/crawling/ipranges/special-crawlers.json"),
-    ("search_bot",  "Google User Fetcher",    "https://developers.google.com/static/crawling/ipranges/user-triggered-fetchers.json"),
-    ("search_bot",  "Bingbot",                "https://www.bing.com/toolbox/bingbot.json"),
-    ("search_bot",  "DuckDuckBot",            "https://duckduckgo.com/duckduckbot.json"),
-    ("search_bot",  "Applebot",               "https://search.developer.apple.com/applebot.json"),
-    ("search_bot",  "OAI-SearchBot",          "https://openai.com/searchbot.json"),
-    ("generic_bot", "OpenAI GPTBot",          "https://openai.com/gptbot.json"),
-    ("generic_bot", "ChatGPT-User",           "https://openai.com/chatgpt-user.json"),
-    ("seo_tool",    "Ahrefsbot",              "https://api.ahrefs.com/v3/public/crawler-ip-ranges"),
+    ("search_bot", "Googlebot", "https://developers.google.com/search/apis/ipranges/googlebot.json"),
+    ("search_bot", "Google Common Crawler", "https://developers.google.com/static/crawling/ipranges/common-crawlers.json"),
+    ("search_bot", "Google Special Crawler", "https://developers.google.com/static/crawling/ipranges/special-crawlers.json"),
+    ("search_bot", "Google User Fetcher", "https://developers.google.com/static/crawling/ipranges/user-triggered-fetchers.json"),
+    ("search_bot", "Bingbot", "https://www.bing.com/toolbox/bingbot.json"),
+    ("search_bot", "DuckDuckBot", "https://duckduckgo.com/duckduckbot.json"),
+    ("search_bot", "Applebot", "https://search.developer.apple.com/applebot.json"),
+    ("search_bot", "OAI-SearchBot", "https://openai.com/searchbot.json"),
+    ("generic_bot", "OpenAI GPTBot", "https://openai.com/gptbot.json"),
+    ("generic_bot", "ChatGPT-User", "https://openai.com/chatgpt-user.json"),
+    ("seo_tool", "Ahrefsbot", "https://api.ahrefs.com/v3/public/crawler-ip-ranges"),
 ]
 
 # Yandex publishes no machine-readable range file; these are the documented
-# announced blocks. Static fallback only — labelled as such in the report.
+# announced blocks. Static fallback only : labelled as such in the report.
 YANDEX_FALLBACK_RANGES = [
     "5.45.192.0/18", "5.255.192.0/18", "37.9.64.0/18", "37.140.128.0/18",
     "77.88.0.0/18", "84.201.128.0/18", "87.250.224.0/19", "93.158.128.0/18",
@@ -51,8 +51,8 @@ YANDEX_FALLBACK_RANGES = [
     "178.154.128.0/17", "199.21.96.0/22", "199.36.240.0/22", "213.180.192.0/19",
 ]
 
-_NETWORKS = None          # [(cls, agent, ip_network)]
-_SOURCES = []             # [{source, status, prefixes}]
+_NETWORKS = None # [(cls, agent, ip_network)]
+_SOURCES = [] # [{source, status, prefixes}]
 _IP_CACHE = {}
 
 
@@ -112,7 +112,7 @@ def _write_cache(cache_dir, payload):
         with open(path, "w", encoding="utf-8") as fh:
             json.dump(payload, fh)
     except Exception:
-        pass                            # a cache miss must never fail a run
+        pass # a cache miss must never fail a run
 
 
 def load_networks(offline=False, cache_dir=None, timeout=6):
@@ -227,6 +227,6 @@ def coverage_summary():
     msg = (f"Verified-bot IP table: {total_prefixes:,} prefixes from "
            f"{live} live + {cached} cached source(s).")
     if failed:
-        msg += (f" UNAVAILABLE: {', '.join(failed)} — bots from those engines can "
+        msg += (f" UNAVAILABLE: {', '.join(failed)} : bots from those engines can "
                 f"only be identified by User-Agent in this run.")
     return msg

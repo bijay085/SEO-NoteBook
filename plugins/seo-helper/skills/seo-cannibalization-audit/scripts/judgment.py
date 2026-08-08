@@ -1,4 +1,4 @@
-"""The Claude-judgment bridge — this is what replaces the third-party AI.
+"""The Claude-judgment bridge : this is what replaces the third-party AI.
 
 The original app sent four things to Gemini: query embeddings for topic
 clustering, an LLM pass to split over-merged clusters, per-URL intent
@@ -7,10 +7,10 @@ which is exactly what Claude is already in the room to do. So instead of an
 embedding API plus a threshold that has to be auto-calibrated per corpus, this
 module:
 
-  `prepare` — does the deterministic, mechanical part (brand normalisation,
+  `prepare` : does the deterministic, mechanical part (brand normalisation,
               rare-token blocking, rule-based intent priors, page context
               assembly) and writes small, reviewable judgment packets.
-  `apply`   — validates Claude's answers, merges them with the deterministic
+  `apply` : validates Claude's answers, merges them with the deterministic
               fallbacks, and writes the maps the pipeline consumes.
 
 Everything degrades: if a judgment file is absent, `apply` falls back to
@@ -20,7 +20,7 @@ unset.
 
 Usage:
     python judgment.py prepare --work <dir> [--config config.json]
-    python judgment.py apply   --work <dir> [--config config.json]
+    python judgment.py apply --work <dir> [--config config.json]
 """
 from __future__ import annotations
 
@@ -41,18 +41,18 @@ STOP = {
 }
 
 # ---------------------------------------------------------------------------
-# Rule-based intent — the deterministic prior Claude confirms or overrides
+# Rule-based intent : the deterministic prior Claude confirms or overrides
 # ---------------------------------------------------------------------------
 
 URL_PATTERNS = [
     ('transactional', re.compile(r'/(shop|store|product|products|buy|checkout|cart|pricing|plans|order)(/|$)', re.I)),
-    ('news',          re.compile(r'/(news|press|press-release)/', re.I)),
+    ('news', re.compile(r'/(news|press|press-release)/', re.I)),
     ('informational', re.compile(r'/(blog|guide|guides|tutorial|tutorials|docs?|documentation|learn|resources?|knowledge-base|kb|wiki|glossary|how-to)(/|$)', re.I)),
     ('informational', re.compile(r'/(what-is|how-to)-', re.I)),
-    ('commercial',    re.compile(r'/(best|top|review|reviews|compare|comparison|vs|versus)[-/]', re.I)),
-    ('commercial',    re.compile(r'-(vs|versus|review|comparison)-', re.I)),
-    ('navigational',  re.compile(r'/(about|contact|team|careers?|jobs?|privacy|terms|tos|legal|login|signin|signup|register)(/|$)', re.I)),
-    # A /YYYY/MM/DD/ permalink is WordPress URL structure, not "news" — a blog
+    ('commercial', re.compile(r'/(best|top|review|reviews|compare|comparison|vs|versus)[-/]', re.I)),
+    ('commercial', re.compile(r'-(vs|versus|review|comparison)-', re.I)),
+    ('navigational', re.compile(r'/(about|contact|team|careers?|jobs?|privacy|terms|tos|legal|login|signin|signup|register)(/|$)', re.I)),
+    # A /YYYY/MM/DD/ permalink is WordPress URL structure, not "news" : a blog
     # running date permalinks puts evergreen guides at these URLs too. Last, so
     # an explicit /shop/ or /best-… slug above still wins.
     ('informational', re.compile(r'/20\d{2}/\d{1,2}/\d{1,2}/[a-z0-9]', re.I)),
@@ -103,7 +103,7 @@ def rule_intent(url, queries=()):
 
 def intents_compatible(a, b):
     """Can these two intents cannibalize each other at all?
-    Different non-unknown intents never can. `unknown` pairs with anything —
+    Different non-unknown intents never can. `unknown` pairs with anything : 
     dropping a real pair on a weak signal is the more expensive error."""
     a = a.get('intent') if isinstance(a, dict) else a
     b = b.get('intent') if isinstance(b, dict) else b
@@ -119,7 +119,7 @@ def intents_compatible(a, b):
 
 
 # ---------------------------------------------------------------------------
-# Query blocking — deterministic recall, Claude supplies the precision
+# Query blocking : deterministic recall, Claude supplies the precision
 # ---------------------------------------------------------------------------
 
 
@@ -132,7 +132,7 @@ def block_queries(queries, max_block=60):
     """Union queries that share a *distinctive* token into candidate blocks.
 
     Pure recall: a block says "these might be phrasings of one search". Claude
-    then partitions each block into actual topics — the step that previously
+    then partitions each block into actual topics : the step that previously
     needed an embedding model plus a second LLM pass to undo its over-merging.
     Ubiquitous tokens are skipped so one common word can't fuse the whole
     corpus into a single block.
@@ -156,7 +156,7 @@ def block_queries(queries, max_block=60):
             tok_index.setdefault(t, []).append(q)
 
     # A token on more than 40% of the corpus's queries is a connector word for
-    # this site, not a topic marker — skip it.
+    # this site, not a topic marker : skip it.
     ubiquitous = max(3, int(len(queries) * 0.40))
     for qs in tok_index.values():
         if len(qs) > ubiquitous:
@@ -171,7 +171,7 @@ def block_queries(queries, max_block=60):
     out = []
     for members in blocks.values():
         if len(members) <= 1:
-            continue                      # a lone query needs no adjudication
+            continue # a lone query needs no adjudication
         members = sorted(members)
         for i in range(0, len(members), max_block):
             out.append(members[i:i + max_block])
@@ -202,7 +202,7 @@ def cmd_prepare(args):
             q_impressions[q] = q_impressions.get(q, 0.0) + float(impr)
     ranked = sorted(q_impressions, key=lambda q: -q_impressions[q])
     # Bound the judgment to the head by impressions. The tail keeps its exact
-    # string — the safe fallback — and cannot produce a verdict anyway, since
+    # string : the safe fallback : and cannot produce a verdict anyway, since
     # the ongoing gates need >=15 combined clicks on a qualifying query.
     cap = int(cfg.get('topic_judgment_max_queries') or 0)
     judged = ranked[:cap] if cap else ranked
@@ -217,7 +217,7 @@ def cmd_prepare(args):
                         'different sub-topics ("part 1" vs "part 2", "reading" vs '
                         '"writing") = separate topics, even when the wording is close. '
                         'Under-merging is safe; over-merging causes destructive 301s. '
-                        'Omit any query you are unsure about — it keeps its own string.'),
+                        'Omit any query you are unsure about : it keeps its own string.'),
         'answer_schema': {'blocks': [{'block_id': 0,
                                       'topics': [{'topic': 'canonical label',
                                                   'queries': ['...']}]}]},
@@ -248,7 +248,7 @@ def cmd_prepare(args):
 
     (jdir / '02_entities.task.json').write_text(json.dumps({
         'instruction': (
-            'Assign every page a TWO-AXIS taxonomy inferred from THIS corpus only — never '
+            'Assign every page a TWO-AXIS taxonomy inferred from THIS corpus only : never '
             'category names from prior knowledge. axis_1 = the top-level section the page '
             'belongs to. axis_2 = the content angle within that section. Two pages are '
             'cannibalization-eligible IF AND ONLY IF they share BOTH axes. Set '
@@ -268,7 +268,7 @@ def cmd_prepare(args):
             '"X vs Y", reviews), informational (how-to, guide, explainer, practice '
             'material, templates), navigational (homepage/about/contact/login), news '
             '(time-sensitive), unknown (genuinely cannot tell). `rule_intent` is a '
-            'URL-pattern prior — keep it unless the queries clearly contradict it.'),
+            'URL-pattern prior : keep it unless the queries clearly contradict it.'),
         'answer_schema': {'pages': [{'url': '...', 'intent': 'one of the six',
                                      'confidence': 'high|med|low'}]},
         'batches': batches,
@@ -278,7 +278,7 @@ def cmd_prepare(args):
     print(f'page batches: {len(batches)} x {batch} for entities and intent')
     print(f'wrote {jdir}/01_topics.task.json, 02_entities.task.json, 03_intent.task.json')
     print('Read each .task.json, reason, write the matching *.answer.json beside it, then:')
-    print(f'  python judgment.py apply --work {work}')
+    print(f' python judgment.py apply --work {work}')
 
 
 # ---------------------------------------------------------------------------
@@ -319,7 +319,7 @@ def cmd_apply(args):
                 label = str(topic.get('topic', '')).strip().lower()
                 members = [str(q).strip().lower() for q in topic.get('queries', [])]
                 if not label or len(members) < 2:
-                    continue          # a single-member topic changes nothing
+                    continue # a single-member topic changes nothing
                 for q in members:
                     (q_to_topic.__setitem__(q, label) if q in known else unknown.append(q))
         manifest['topics'] = {'source': 'claude', 'queries_mapped': len(q_to_topic),
@@ -327,11 +327,11 @@ def cmd_apply(args):
                               'unrecognised_queries': len(unknown)}
         if unknown:
             print(f'WARNING: {len(unknown)} judged queries are not in the universe '
-                  f'(paraphrased or re-cased?) — ignored. e.g. {unknown[:3]}')
+                  f'(paraphrased or re-cased?) : ignored. e.g. {unknown[:3]}')
     else:
         manifest['topics'] = {'source': 'fallback: exact-string matching',
                               'queries_mapped': 0, 'topics': 0}
-        print('no 01_topics.answer.json — falling back to exact-string query matching '
+        print('no 01_topics.answer.json : falling back to exact-string query matching '
               '(different phrasings of one search will not be paired)')
     (work / 'topic_map.json').write_text(json.dumps(q_to_topic, indent=1), encoding='utf-8')
 
@@ -367,12 +367,12 @@ def cmd_apply(args):
         manifest['entities'] = {'source': 'claude', 'assigned': len(entities),
                                 'unassigned': len(missing), 'below_confidence': low_conf}
         if missing:
-            print(f'NOTE: {len(missing)} pages have no entity assignment — those pairs fall '
+            print(f'NOTE: {len(missing)} pages have no entity assignment : those pairs fall '
                   f'through to the statistical shortlist tier.')
     else:
-        manifest['entities'] = {'source': 'absent — statistical shortlist tier only',
+        manifest['entities'] = {'source': 'absent : statistical shortlist tier only',
                                 'assigned': 0, 'unassigned': len(all_urls)}
-        print('no 02_entities.answer.json — the peer-group gate is off; the shortlist runs '
+        print('no 02_entities.answer.json : the peer-group gate is off; the shortlist runs '
               'on the statistical tier alone (more candidate pairs, more noise)')
     (work / 'entities.json').write_text(json.dumps(entities, indent=1), encoding='utf-8')
 
@@ -397,7 +397,7 @@ def cmd_apply(args):
     else:
         manifest['intent'] = {'source': 'rule-based only', 'pages': len(intents),
                               'overrode_rule': 0}
-        print('no 03_intent.answer.json — using the rule-based classifier alone')
+        print('no 03_intent.answer.json : using the rule-based classifier alone')
     (work / 'intents.json').write_text(json.dumps(intents, indent=1), encoding='utf-8')
 
     (work / 'judgment_manifest.json').write_text(json.dumps(manifest, indent=1), encoding='utf-8')

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic page measurement (stdlib only — no LLM, no eyeballing).
+"""Deterministic page measurement (stdlib only : no LLM, no eyeballing).
 Usage: python measure.py <url-or-file.html> [out.json]
 Emits: dom_node_count, max_depth, max_children (+ Lighthouse verdict), headings,
 landmarks, semantic5 elements, images(alt/missing), forms(inputs/labels)."""

@@ -1,4 +1,4 @@
-"""Traffic classification — who made the request, and what they asked for.
+"""Traffic classification : who made the request, and what they asked for.
 
 The taxonomy and every gate below carry over unchanged from the Colab analyzer
 `seo_log_file_analyzer.py`, because that conditioning is the value:
@@ -8,7 +8,7 @@ The taxonomy and every gate below carry over unchanged from the Colab analyzer
   * URL PURPOSE GATES "SUSPICIOUS". Admin polling (admin-ajax, wp-cron,
     heartbeat), the WP REST API and service workers look exactly like
     high-volume scraping. An IP whose traffic is >50% admin-like is a
-    logged-in admin or a PWA — never flagged, whatever its volume or UA.
+    logged-in admin or a PWA : never flagged, whatever its volume or UA.
   * CHROME 200+ IS THE SPOOF SIGNAL, not Chrome 130+. Real stable Chrome is
     ~v137 in 2026 and v200 will not ship until ~2032, so 200 is the safe
     lower bound; the older 130+ rule flagged every modern human visitor.
@@ -21,8 +21,8 @@ search-crawl-budget numbers.
 Public API:
   classify_traffic(ua, ip, ip_hits, total_hits, ip_admin_share)
       -> (traffic_class, agent_name, is_automated)
-  classify_content(url)     -> 'HTML'|'CSS'|'Image'|...
-  url_purpose(url)          -> 'content'|'admin_polling'|'scanner_probe'|...
+  classify_content(url) -> 'HTML'|'CSS'|'Image'|...
+  url_purpose(url) -> 'content'|'admin_polling'|'scanner_probe'|...
   evaluate_ua_modernity(ua) -> {is_real_browser, chrome_version, is_future}
 """
 import re
@@ -34,58 +34,58 @@ from bot_verification import verified_bot_from_ip
 # Ordered: the FIRST entry whose keywords all appear in the UA wins, so
 # "Googlebot + Mobile" must precede plain "Googlebot".
 NAMED_CRAWLERS = [
-    ("Googlebot Smartphone",   ["Googlebot", "Mobile"]),
-    ("Googlebot Desktop",      ["Googlebot"]),
-    ("Googlebot Image",        ["Googlebot-Image"]),
-    ("Googlebot Video",        ["Googlebot-Video"]),
-    ("GoogleOther Image",      ["GoogleOther-Image"]),
-    ("GoogleOther Video",      ["GoogleOther-Video"]),
-    ("GoogleOther",            ["GoogleOther"]),
-    ("Google StoreBot",        ["Storebot-Google"]),
-    ("AdsBot Google Mobile",   ["AdsBot-Google-Mobile"]),
-    ("AdsBot Google",          ["AdsBot-Google"]),
-    ("Google Inspectiontool",  ["Google-InspectionTool"]),
-    ("APIs Google",            ["APIs-Google"]),
-    ("Mediapartners Google",   ["Mediapartners-Google"]),
-    ("Google Safety",          ["Google-Safety"]),
-    ("Bingbot",                ["bingbot"]),
-    ("Bingbot",                ["msnbot"]),
-    ("Bingbot",                ["BingPreview"]),
-    ("Yandexbot",              ["YandexBot"]),
-    ("Baiduspider",            ["Baiduspider"]),
-    ("DuckDuckBot",            ["DuckDuckBot"]),
-    ("Applebot",               ["Applebot"]),
-    ("OAI-SearchBot",          ["OAI-SearchBot"]),
-    ("GPTBot",                 ["GPTBot"]),
-    ("ChatGPT-User",           ["ChatGPT-User"]),
-    ("PerplexityBot",          ["PerplexityBot"]),
-    ("ClaudeBot",              ["ClaudeBot"]),
-    ("Claude-User",            ["Claude-User"]),
-    ("Amazonbot",              ["Amazonbot"]),
-    ("Meta AI",                ["meta-externalagent"]),
-    ("Bytespider",             ["Bytespider"]),
-    ("Semrushbot",             ["SemrushBot"]),
-    ("Ahrefsbot",              ["AhrefsBot"]),
-    ("Moz",                    ["rogerbot"]),
-    ("Screaming Frog",         ["Screaming Frog"]),
-    ("Majestic",               ["MJ12bot"]),
-    ("Deepcrawl",              ["DeepCrawl"]),
-    ("Sitebulb",               ["Sitebulb"]),
+    ("Googlebot Smartphone", ["Googlebot", "Mobile"]),
+    ("Googlebot Desktop", ["Googlebot"]),
+    ("Googlebot Image", ["Googlebot-Image"]),
+    ("Googlebot Video", ["Googlebot-Video"]),
+    ("GoogleOther Image", ["GoogleOther-Image"]),
+    ("GoogleOther Video", ["GoogleOther-Video"]),
+    ("GoogleOther", ["GoogleOther"]),
+    ("Google StoreBot", ["Storebot-Google"]),
+    ("AdsBot Google Mobile", ["AdsBot-Google-Mobile"]),
+    ("AdsBot Google", ["AdsBot-Google"]),
+    ("Google Inspectiontool", ["Google-InspectionTool"]),
+    ("APIs Google", ["APIs-Google"]),
+    ("Mediapartners Google", ["Mediapartners-Google"]),
+    ("Google Safety", ["Google-Safety"]),
+    ("Bingbot", ["bingbot"]),
+    ("Bingbot", ["msnbot"]),
+    ("Bingbot", ["BingPreview"]),
+    ("Yandexbot", ["YandexBot"]),
+    ("Baiduspider", ["Baiduspider"]),
+    ("DuckDuckBot", ["DuckDuckBot"]),
+    ("Applebot", ["Applebot"]),
+    ("OAI-SearchBot", ["OAI-SearchBot"]),
+    ("GPTBot", ["GPTBot"]),
+    ("ChatGPT-User", ["ChatGPT-User"]),
+    ("PerplexityBot", ["PerplexityBot"]),
+    ("ClaudeBot", ["ClaudeBot"]),
+    ("Claude-User", ["Claude-User"]),
+    ("Amazonbot", ["Amazonbot"]),
+    ("Meta AI", ["meta-externalagent"]),
+    ("Bytespider", ["Bytespider"]),
+    ("Semrushbot", ["SemrushBot"]),
+    ("Ahrefsbot", ["AhrefsBot"]),
+    ("Moz", ["rogerbot"]),
+    ("Screaming Frog", ["Screaming Frog"]),
+    ("Majestic", ["MJ12bot"]),
+    ("Deepcrawl", ["DeepCrawl"]),
+    ("Sitebulb", ["Sitebulb"]),
 ]
 
 INFRA_PATTERNS = [
-    ("WordPress Self-Ping",   lambda ua: "WordPress/" in ua),
-    ("WP Cache Preloader",    lambda ua: ("seraph-accel" in ua
+    ("WordPress Self-Ping", lambda ua: "WordPress/" in ua),
+    ("WP Cache Preloader", lambda ua: ("seraph-accel" in ua
                                           or "wp-rocket" in ua.lower()
                                           or "wp_rocket" in ua.lower())),
-    ("Hotjar Analytics",      lambda ua: "Hotjar" in ua),
-    ("Cleantalk",             lambda ua: "Cleantalk" in ua),
-    ("StatusCake Monitor",    lambda ua: "StatusCake" in ua),
-    ("Uptime Robot",          lambda ua: "UptimeRobot" in ua),
-    ("Pingdom",               lambda ua: "Pingdom" in ua),
-    ("GTmetrix",              lambda ua: "GTmetrix" in ua),
-    ("Datadog Synthetics",    lambda ua: "Datadog" in ua),
-    ("Generic Monitoring",    lambda ua: any(k in ua.lower() for k in
+    ("Hotjar Analytics", lambda ua: "Hotjar" in ua),
+    ("Cleantalk", lambda ua: "Cleantalk" in ua),
+    ("StatusCake Monitor", lambda ua: "StatusCake" in ua),
+    ("Uptime Robot", lambda ua: "UptimeRobot" in ua),
+    ("Pingdom", lambda ua: "Pingdom" in ua),
+    ("GTmetrix", lambda ua: "GTmetrix" in ua),
+    ("Datadog Synthetics", lambda ua: "Datadog" in ua),
+    ("Generic Monitoring", lambda ua: any(k in ua.lower() for k in
                                              ("monitor", "healthcheck",
                                               "health-check", "pingcheck"))),
 ]
@@ -100,19 +100,19 @@ GENERIC_BOT_SIGNALS = [
 # suspicious; Chrome 200 won't ship until ~2032, so this is the safe bound.
 FUTURE_CHROME_RE = re.compile(r"Chrome/([2-9]\d{2}|\d{4,})\.")
 
-# URL purpose taxonomy — drives the evidence gate. Admin / polling / service
+# URL purpose taxonomy : drives the evidence gate. Admin / polling / service
 # worker URLs look like high-volume scraping but are legitimate logged-in
 # admin or PWA traffic and must never be flagged.
 URL_PURPOSE_RULES = [
-    ("admin_polling",   re.compile(r"/wp-admin/admin-ajax\.php|/wp-cron\.php|seraph_accel|wc-analytics/imports|wc-admin/options|heartbeat", re.I)),
-    ("admin_ui",        re.compile(r"/wp-admin/(load-scripts|load-styles|edit\.php|post(-new|)\.php|admin\.php|options-|themes\.php|plugins\.php|users\.php|tools\.php|profile\.php|upload\.php|index\.php)", re.I)),
-    ("rest_api",        re.compile(r"/wp-json/", re.I)),
-    ("service_worker",  re.compile(r"(service-worker|[-/]sw[-.]|/sw\.js|superpwa-sw|onesignal)", re.I)),
-    ("account_area",    re.compile(r"/(my-account|account|customer|checkout|cart|login|logout|signin|signup|register)/?", re.I)),
-    ("scanner_probe",   re.compile(r"/\.env|/\.git|/wp-config|/phpinfo|/\.DS_Store|/backup|debug\.log|/\.svn|/wp-login\.php|/xmlrpc\.php|/(adminer|phpmyadmin|mysql)", re.I)),
-    ("static_asset",    re.compile(r"\.(css|js|jpg|jpeg|png|gif|webp|svg|ico|woff2?|ttf|eot|map)(\?|$)", re.I)),
+    ("admin_polling", re.compile(r"/wp-admin/admin-ajax\.php|/wp-cron\.php|seraph_accel|wc-analytics/imports|wc-admin/options|heartbeat", re.I)),
+    ("admin_ui", re.compile(r"/wp-admin/(load-scripts|load-styles|edit\.php|post(-new|)\.php|admin\.php|options-|themes\.php|plugins\.php|users\.php|tools\.php|profile\.php|upload\.php|index\.php)", re.I)),
+    ("rest_api", re.compile(r"/wp-json/", re.I)),
+    ("service_worker", re.compile(r"(service-worker|[-/]sw[-.]|/sw\.js|superpwa-sw|onesignal)", re.I)),
+    ("account_area", re.compile(r"/(my-account|account|customer|checkout|cart|login|logout|signin|signup|register)/?", re.I)),
+    ("scanner_probe", re.compile(r"/\.env|/\.git|/wp-config|/phpinfo|/\.DS_Store|/backup|debug\.log|/\.svn|/wp-login\.php|/xmlrpc\.php|/(adminer|phpmyadmin|mysql)", re.I)),
+    ("static_asset", re.compile(r"\.(css|js|jpg|jpeg|png|gif|webp|svg|ico|woff2?|ttf|eot|map)(\?|$)", re.I)),
     ("feed_or_sitemap", re.compile(r"(/feed/?|/rss|sitemap[^/]*\.xml|sitemap_index)", re.I)),
-    ("robots",          re.compile(r"/robots\.txt$", re.I)),
+    ("robots", re.compile(r"/robots\.txt$", re.I)),
 ]
 
 TRACKING_PARAM_RE = re.compile(
@@ -127,12 +127,12 @@ GENERIC_TOOL_NAMES = {"GPTBot", "ChatGPT-User", "PerplexityBot", "ClaudeBot",
                       "Claude-User", "Amazonbot", "Meta AI", "Bytespider"}
 
 CLASS_LABELS = {
-    "search_bot":  "Search Bots",
-    "seo_tool":    "SEO Crawlers",
-    "infra":       "Infrastructure",
+    "search_bot": "Search Bots",
+    "seo_tool": "SEO Crawlers",
+    "infra": "Infrastructure",
     "generic_bot": "Generic / AI Bots",
-    "suspicious":  "Suspicious",
-    "human":       "Human",
+    "suspicious": "Suspicious",
+    "human": "Human",
 }
 
 _EXT_MAP = {
@@ -174,7 +174,7 @@ def classify_traffic(ua, ip, ip_hit_count, total_hits, ip_admin_url_share=0.0):
         return "generic_bot", ua[:60], True
 
     # Verification gate: a dominant admin/polling URL pattern means a real
-    # logged-in user — never suspicious, whatever the UA or the volume.
+    # logged-in user : never suspicious, whatever the UA or the volume.
     if ip_admin_url_share > 0.5:
         return "human", "Logged-in Admin / Session", False
 
@@ -207,7 +207,7 @@ def classify_content(url):
 
 
 def url_purpose(url):
-    """Categorise a URL by functional purpose. Drives evidence-gated detection —
+    """Categorise a URL by functional purpose. Drives evidence-gated detection : 
     admin/cron/service-worker polling looks like scraping but is normal."""
     if not url:
         return "unknown"

@@ -2,7 +2,7 @@
 
 `report_kit.render_xlsx` renders the AUTHORED half (Overview + one tab per
 section, every finding as Issue·Evidence·Solution·Execution). A log audit also
-has to ship the raw measured half — the tabs a client actually filters and
+has to ship the raw measured half : the tabs a client actually filters and
 sorts: which URLs, which bots, which day. That is what this adds.
 
 Separate module on purpose: `report_kit.py` is shared byte-identical across
@@ -22,27 +22,27 @@ GREEN, YELLOW, RED = "FFDCFCE7", "FFFEF9C3", "FFFEE2E2"
 # Interpretation reference, so a reader who is not an SEO can act on the
 # findings tabs without a call.
 STATUS_GUIDE = [
-    ["200", "OK — page served correctly", "No", "OK", "None needed", "Pages render correctly"],
+    ["200", "OK : page served correctly", "No", "OK", "None needed", "Pages render correctly"],
     ["301", "Moved Permanently", "Yes", "P2 - High", "Update internal links + sitemap to the final URL", "301 hits trend to zero"],
     ["302", "Temporary Redirect", "Yes", "P2 - High", "Change to 301 if permanent; update source links", "curl -Iv shows 301"],
     ["304", "Not Modified (cache revalidation)", "No", "OK", "None. Efficient caching.", "Normal, especially on robots.txt"],
-    ["400", "Bad Request — malformed URL", "Yes", "P2 - High", "Fix the malformed link generating it", "URL leaves the bot logs"],
-    ["403", "Forbidden — access blocked", "Depends", "P2 - High", "Confirm no important pages are blocked", "No money pages return 403"],
-    ["404", "Not Found — page missing", "YES", "P1 - Critical", "301 or 410; fix internal links; update sitemap", "Zero 404s on indexed URLs"],
-    ["410", "Gone — intentionally deleted", "No", "OK", "Correct signal for permanent removal", "Crawl hits fall over 2-4 weeks"],
-    ["429", "Too Many Requests — rate limited", "Depends", "P2 - High", "Ensure Googlebot is not being rate-limited", "Googlebot absent from 429s"],
+    ["400", "Bad Request : malformed URL", "Yes", "P2 - High", "Fix the malformed link generating it", "URL leaves the bot logs"],
+    ["403", "Forbidden : access blocked", "Depends", "P2 - High", "Confirm no important pages are blocked", "No money pages return 403"],
+    ["404", "Not Found : page missing", "YES", "P1 - Critical", "301 or 410; fix internal links; update sitemap", "Zero 404s on indexed URLs"],
+    ["410", "Gone : intentionally deleted", "No", "OK", "Correct signal for permanent removal", "Crawl hits fall over 2-4 weeks"],
+    ["429", "Too Many Requests : rate limited", "Depends", "P2 - High", "Ensure Googlebot is not being rate-limited", "Googlebot absent from 429s"],
     ["500", "Internal Server Error", "YES", "P1 - Critical", "Fix now. Check PHP/server error logs.", "URL returns 200; Crawl Stats normal"],
-    ["502", "Bad Gateway — upstream failure", "YES", "P1 - Critical", "Check PHP-FPM / Node process and the proxy", "curl -I returns 200"],
+    ["502", "Bad Gateway : upstream failure", "YES", "P1 - Critical", "Check PHP-FPM / Node process and the proxy", "curl -I returns 200"],
     ["503", "Service Unavailable", "If persistent", "P1 - Critical", "Add Retry-After; fix the capacity issue", "Alert if over 1 hour"],
-    ["504", "Gateway Timeout — upstream slow", "YES", "P1 - Critical", "Fix the slow DB/PHP path or raise the timeout", "Response time <500ms"],
+    ["504", "Gateway Timeout : upstream slow", "YES", "P1 - Critical", "Fix the slow DB/PHP path or raise the timeout", "Response time <500ms"],
 ]
 
 SEGMENT_GUIDE = [
-    ["Search Bots", "Googlebot, Bingbot, Yandex — verified by IP range", "Counts directly toward crawl budget", "Monitor what they crawl and the status codes they see."],
+    ["Search Bots", "Googlebot, Bingbot, Yandex : verified by IP range", "Counts directly toward crawl budget", "Monitor what they crawl and the status codes they see."],
     ["SEO Crawlers", "Ahrefs, Semrush, Screaming Frog, Sitebulb", "Server load + bandwidth cost", "Throttle in robots.txt if they crawl too often."],
     ["Infrastructure", "WP self-pings, cache preloaders, uptime monitors", "Inflates log counts; server load", "Tune the frequency; schedule off-peak."],
     ["Generic / AI Bots", "curl, wget, python-requests, GPTBot, ClaudeBot, PerplexityBot", "Minimal search impact; some load", "Decide deliberately whether to allow AI fetches."],
-    ["Suspicious", "High-volume IPs and impossible-version UAs, after the admin-URL gate", "Bandwidth + CPU cost; scraping risk", "Block at the CDN/WAF — verify the IP is a datacenter first."],
+    ["Suspicious", "High-volume IPs and impossible-version UAs, after the admin-URL gate", "Bandwidth + CPU cost; scraping risk", "Block at the CDN/WAF : verify the IP is a datacenter first."],
     ["Human", "Real browser users, including logged-in admins", "Not crawl budget", "Analyse in GA4/GSC; optimise UX and conversion."],
 ]
 
@@ -89,12 +89,12 @@ def append_data_tabs(xlsx_path, analysis_json_path):
 
     m = data.get("meta", {})
 
-    # ── Issue Analysis — THE deterministic findings sheet ──────────────────
+    # ── Issue Analysis : THE deterministic findings sheet ──────────────────
     # 16 columns, every finding, produced with no authoring step. This is the
     # sheet the operator actually works from: what is wrong, how confident we
     # are and why, what caused it, what it costs, the literal fix, the effort,
     # and how to prove it is fixed. The authored per-dimension tabs are an
-    # interpretation layer ON TOP of this — never a replacement for it.
+    # interpretation layer ON TOP of this : never a replacement for it.
     findings = data.get("findings") or []
     if findings:
         ws = wb.create_sheet("Issue Analysis", 1 if "Overview" in wb.sheetnames else 0)
@@ -106,12 +106,12 @@ def append_data_tabs(xlsx_path, analysis_json_path):
         p1 = sum(1 for f in findings if f["urgency"] == "P1 - Critical")
         p2 = sum(1 for f in findings if f["urgency"] == "P2 - High")
         p3 = sum(1 for f in findings if f["urgency"] == "P3 - Monitor")
-        ws.cell(1, 1, f'{m.get("site", "")} — SEO Issue Analysis').font = Font(
+        ws.cell(1, 1, f'{m.get("site", "")} : SEO Issue Analysis').font = Font(
             name="Arial", bold=True, size=14)
         ws.cell(2, 1, f'{m.get("date_range", {}).get("start", "?")} to '
-                      f'{m.get("date_range", {}).get("end", "?")}  |  '
-                      f'{m.get("total_requests", 0):,} requests  |  '
-                      f'{len(findings)} findings: P1 {p1} · P2 {p2} · P3 {p3}  |  '
+                      f'{m.get("date_range", {}).get("end", "?")} | '
+                      f'{m.get("total_requests", 0):,} requests | '
+                      f'{len(findings)} findings: P1 {p1} · P2 {p2} · P3 {p3} | '
                       f'parse rate {m.get("parse_rate_pct", 0)}%').font = Font(
             name="Arial", size=9, italic=True)
         for j, h in enumerate(hdrs, 1):
@@ -142,18 +142,18 @@ def append_data_tabs(xlsx_path, analysis_json_path):
         ws.auto_filter.ref = f"A4:{get_column_letter(len(hdrs))}{4 + len(findings)}"
         added.append(ws.title)
 
-    # Grouped view — one row per pattern, so a 131-URL 404 problem reads as one
+    # Grouped view : one row per pattern, so a 131-URL 404 problem reads as one
     # line before anyone opens the 131-row detail.
     sheet("Findings Summary",
           ["Worst Urgency", "Category", "Issue", "URLs Affected", "Total Hits",
            "Confidence Mix", "Worst-Offender URLs"],
           [[g["worst_urgency"], g["category"], g["issue"], g["count"], g["total_hits"],
             ", ".join(f'{k}x{v}' for k, v in g["confidence"].items()),
-            "\n".join(f'{t["url"]}  ({t["hits"]} hits)' for t in g["top"])]
+            "\n".join(f'{t["url"]} ({t["hits"]} hits)' for t in g["top"])]
            for g in (data.get("findings_summary") or [])],
           [15, 18, 30, 13, 12, 22, 62])
 
-    # Health Scorecard — colour the verdict column.
+    # Health Scorecard : colour the verdict column.
     health = data.get("health") or []
     ws = sheet("Health Scorecard",
                ["Metric", "Your Value", "Score", "Healthy", "Watch", "Urgent"],
@@ -206,7 +206,7 @@ def append_data_tabs(xlsx_path, analysis_json_path):
             b["content_type"], b["avg_bytes"], b["last_seen"]]
            for b in data.get("bot_crawl", [])],
           [58, 14, 22, 9, 8, 14, 11, 22],
-          note="Search-engine crawler requests only — verified by IP range where the "
+          note="Search-engine crawler requests only : verified by IP range where the "
                "engine publishes one, otherwise identified by User-Agent.")
 
     trend = data.get("crawl_trend") or []

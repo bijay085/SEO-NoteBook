@@ -8,7 +8,7 @@ Usage:
 competitor (grouped automatically by host). Writes ``<out_dir>/cro_signals.json``
 and appends notable gaps to ``<out_dir>/findings.json``.
 
-IMPORTANT — these scores are MECHANICAL DRAFTS, not the final verdict. They are
+IMPORTANT : these scores are MECHANICAL DRAFTS, not the final verdict. They are
 deliberately conservative starting points. The skill's Stage 3 (correction) is
 where a human/Claude pass inspects the raw HTML, fixes false positives, and sets
 the final /10. See references/methodology.md. Detectors here are written to
@@ -47,7 +47,7 @@ _SERVICE_HINT = re.compile(r"/(services?|it-|managed|support|cloud|security|cons
 
 # --------------------------------------------------------------------------- #
 def _has_real_sticky(soup) -> bool:
-    """Real sticky element in the BODY — not a dormant CSS rule in <style>."""
+    """Real sticky element in the BODY : not a dormant CSS rule in <style>."""
     body = soup.body or soup
     for el in body.select('[class*="sticky"], [class*="fixed-"], [id*="sticky"]'):
         cls = " ".join(el.get("class", []))
@@ -136,7 +136,7 @@ def _clamp(x) -> int:
 def _score(p: dict) -> dict:
     """Transparent DRAFT rubric (0-10). Documented in references/methodology.md."""
     cta = 5 + (2 if p["specific_cta"] else 0) + (1 if p["phone_present"] else 0)
-    if len(p["top_ctas"]) > 6:              # CTA sprawl with no clear hierarchy
+    if len(p["top_ctas"]) > 6: # CTA sprawl with no clear hierarchy
         cta -= 2
     trust = 2 + 2 * bool(p["review_counts"]) + 2 * p["testimonials"] + \
         2 * p["guarantee"] + 1 * p["badges"] + min(1, p["trust_total"] // 40)

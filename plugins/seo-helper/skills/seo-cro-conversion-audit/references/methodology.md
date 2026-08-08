@@ -1,4 +1,4 @@
-# CRO Audit — Methodology
+# CRO Audit : Methodology
 
 Why this beats a mechanical scan: the scan is only Stage 3. The confidence comes
 from correcting it, corroborating it with real behavior, verifying it live, and
@@ -6,18 +6,18 @@ binding every claim to evidence.
 
 ## The six-part discipline
 
-1. **Extract** — run the scripts to get per-domain signals, draft 0-10 scores, a
+1. **Extract** : run the scripts to get per-domain signals, draft 0-10 scores, a
    form field/test model, and per-page Clarity behavior. Deterministic.
-2. **Correct** — open the raw HTML and fix mechanical false positives (see the
+2. **Correct** : open the raw HTML and fix mechanical false positives (see the
    catalogue below). This is where most of the credibility is won or lost.
-3. **Corroborate** — cross-check every architecture inference against real
+3. **Corroborate** : cross-check every architecture inference against real
    Microsoft Clarity click/scroll/attention data. An inference confirmed by
    behavior is a finding; one contradicted by behavior is dropped or reframed.
-4. **Verify live** — resolve every ambiguous selector against the live page (what
+4. **Verify live** : resolve every ambiguous selector against the live page (what
    *is* `.vs-btn` / `#customteam-next`?). Never ship a guess about an element.
-5. **Evidence-bind** — every score, gap and recommendation carries a concrete
+5. **Evidence-bind** : every score, gap and recommendation carries a concrete
    evidence line (a selector, a byte count, a decoded popup id, a click %).
-6. **Report** — branded XLSX + HTML; recommendations span every area the data
+6. **Report** : branded XLSX + HTML; recommendations span every area the data
    supports, ranked by priority.
 
 ## Scoring rubric (0-10)
@@ -34,9 +34,9 @@ Five dimensions, scored per domain. `cro_signals.py` emits **drafts**; Stage 4
 | **Trust** | Proof at the decision point | Quantified reviews, testimonials, guarantee, badges | No stat, proof absent from the conversion page |
 
 `Overall` = mean of the five. Draft formulas live in `cro_signals.py::_score` and
-are intentionally conservative — treat a draft as a hypothesis, not a verdict.
+are intentionally conservative : treat a draft as a hypothesis, not a verdict.
 
-## Correction catalogue — false positives to re-check every time
+## Correction catalogue : false positives to re-check every time
 
 The scripts already defend against these, but confirm on the raw HTML:
 
@@ -44,7 +44,7 @@ The scripts already defend against these, but confirm on the raw HTML:
   (`<!-- saved from url=(0014)about:internet -->`). A naive un-escaper can trip on
   it and strip every tag, zeroing competitor signals. `common.load_page` un-escapes
   only genuinely-escaped dumps and ignores the MOTW comment. If a competitor shows
-  `avg_words≈0` or `has_form:false` implausibly, this is why — re-run on the raw file.
+  `avg_words≈0` or `has_form:false` implausibly, this is why : re-run on the raw file.
 - **Review stats a regex misses.** Patterns like `4.9/5, 54+ local reviews` /
   `11 B2B reviews` sit between the number and the word "reviews." Confirm the
   `review_counts` list caught them; if a competitor visibly shows a rating you
@@ -58,7 +58,7 @@ The scripts already defend against these, but confirm on the raw HTML:
   its top rows.
 - **Clarity folder/URL mismatch.** An export folder labeled one page may carry
   another page's data (Clarity's own URL regex is the truth). `integrity_issues`
-  flags these — report the data under the URL Clarity actually recorded.
+  flags these : report the data under the URL Clarity actually recorded.
 
 ## Data models (the JSON contracts the report consumes)
 
@@ -97,9 +97,9 @@ The scripts already defend against these, but confirm on the raw HTML:
    "attention": {"top_attention_band": {"depth_pct": 5, "pct_session": 28.83}}}}}
 ```
 
-**`cro_verdict.json`** — authored in Stage 6 (headline, corrected scores, summary,
-recommendations). Each recommendation is a COMPLETE unit —
-`{priority, area, finding, evidence, impact, solution, steps[]}` — never a
+**`cro_verdict.json`** : authored in Stage 6 (headline, corrected scores, summary,
+recommendations). Each recommendation is a COMPLETE unit : 
+`{priority, area, finding, evidence, impact, solution, steps[]}` : never a
 one-liner; `steps` name the CMS/plugin, selector, and exact setting. Full schema
 in `SKILL.md` Stage 6.
 

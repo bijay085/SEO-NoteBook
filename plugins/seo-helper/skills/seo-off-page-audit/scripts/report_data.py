@@ -10,7 +10,7 @@ REPORT = {
     "client": "‹Client›",
     "period": "‹Period›",
     "subtitle": "Backlink profile, anchor distribution, toxicity/disavow and link "
-                "gap — measured, with an executable action for each.",
+                "gap : measured, with an executable action for each.",
     "output_dir": "./Off-Page-Audit",
     "sections": [
         {"id": "profile", "title": "1 · Inbound Backlink Profile",
@@ -58,7 +58,7 @@ REPORT = {
          "intro": "P0 disavow (iff warranted) · P1 outbound rel · P2 link-gap targets.",
          "findings": [
             {"issue": "‹EXAMPLE› Upload the disavow file",
-             "sev": "high", "evidence": "See §3 — 12-domain high-confidence set.",
+             "sev": "high", "evidence": "See §3 : 12-domain high-confidence set.",
              "solution": "Upload disavow.txt; schedule a 30-day re-check.",
              "execution": "Owner: SEO. Today. Calendar the re-pull.",
              "effort": "S", "priority": "P0"},

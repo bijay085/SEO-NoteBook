@@ -6,20 +6,20 @@ analyze_logs.py. Every finding carries issue + evidence + solution + execution;
 status share, a percentage of traffic), never an impression.
 
 Mapping from the engine to these sections:
-  detect_issues category   ->  section id
+  detect_issues category -> section id
   -----------------------------------------
-  HTTP Errors              ->  errors
-  Redirects                ->  redirects
-  Crawl Budget             ->  budget
-  Indexability             ->  indexability
-  Performance              ->  performance
-  Security, Security/Spam  ->  security
-  (crossref block)         ->  coverage
-  (authored)               ->  actions
+  HTTP Errors -> errors
+  Redirects -> redirects
+  Crawl Budget -> budget
+  Indexability -> indexability
+  Performance -> performance
+  Security, Security/Spam -> security
+  (crossref block) -> coverage
+  (authored) -> actions
 
 Severity maps from urgency: P1 - Critical -> critical, P2 - High -> high,
 P3 - Monitor -> medium. A dimension with nothing wrong gets ONE `good` finding
-stating what was checked and what passed — silence is not a result.
+stating what was checked and what passed : silence is not a result.
 
 Replace every ‹EXAMPLE› row.
 """
@@ -28,7 +28,7 @@ REPORT = {
     "title": "Log-File Analysis",
     "client": "‹Client›",
     "period": "‹Period›",
-    "subtitle": "What crawlers and visitors actually did on the server — measured "
+    "subtitle": "What crawlers and visitors actually did on the server : measured "
                 "from raw access logs, with an executable fix for each finding.",
     "output_dir": "./Log-Analysis",
     "sections": [
@@ -44,7 +44,7 @@ REPORT = {
         {"id": "errors", "title": "1 · HTTP Errors (4xx / 5xx)",
          "intro": "Errors crawlers actually received. A status Googlebot saw is an "
                   "indexing event; the same status seen only by humans is link "
-                  "hygiene — the evidence line says which.",
+                  "hygiene : the evidence line says which.",
          "findings": [
             {"issue": "‹EXAMPLE› Googlebot received 404 on /old-service-page/",
              "sev": "high",
@@ -60,7 +60,7 @@ REPORT = {
 
         {"id": "redirects", "title": "2 · Redirects & Chains",
          "intro": "301s still being crawled (stale internal links), 302s on content "
-                  "URLs, and multi-hop chains. Auth and checkout 302s are excluded — "
+                  "URLs, and multi-hop chains. Auth and checkout 302s are excluded : "
                   "those are correct behaviour.",
          "findings": []},
 
@@ -76,14 +76,14 @@ REPORT = {
          "findings": []},
 
         {"id": "performance", "title": "5 · Performance",
-         "intro": "Response weight as the server actually served it — bytes on the "
+         "intro": "Response weight as the server actually served it : bytes on the "
                   "wire, not a lab estimate.",
          "findings": []},
 
         {"id": "security", "title": "6 · Security & Suspicious Traffic",
          "intro": "Sensitive-file exposure and probing, plus high-volume IPs that "
                   "survived the admin/polling gate. Logged-in admin and PWA traffic is "
-                  "deliberately excluded — it is not scraping.",
+                  "deliberately excluded : it is not scraping.",
          "findings": []},
 
         {"id": "coverage", "title": "7 · Crawl Coverage (Sitemap / GSC)",

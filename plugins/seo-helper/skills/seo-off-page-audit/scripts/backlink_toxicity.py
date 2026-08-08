@@ -5,7 +5,7 @@ backlink_toxicity.py - deterministic merge engine for the seo-off-page-audit ski
 Unions the toxic-link signal across sources and writes a conservative, domain-level
 disavow file:
   - DataForSEO backlinks spam scores (saved JSON from mcp__dataforseo__backlinks_*),
-  - a client Ahrefs export (CSV/XLSX)   -- toxic/spam column if present,
+  - a client Ahrefs export (CSV/XLSX) -- toxic/spam column if present,
   - a client Semrush toxic export (CSV/XLSX),
   - the existing disavow.txt (so nothing is re-disavowed).
 
@@ -65,7 +65,7 @@ def read_table(path):
         return []
     rows = []
     if p.lower().endswith(".xlsx"):
-        from openpyxl import load_workbook  # present; imported only when needed
+        from openpyxl import load_workbook # present; imported only when needed
         wb = load_workbook(p, read_only=True, data_only=True)
         ws = wb.active
         it = ws.iter_rows(values_only=True)
@@ -173,7 +173,7 @@ def main():
     if len(sys.argv) < 2:
         sys.exit("usage: python backlink_toxicity.py config.json")
     cfg = read_config(sys.argv[1])
-    _ = load_env(cfg.get("env_file", "project `.env` / host environment variables"))  # loaded for parity; no net calls here
+    _ = load_env(cfg.get("env_file", "project `.env` / host environment variables")) # loaded for parity; no net calls here
     ins = cfg.get("inputs", {})
     th = cfg.get("taxonomy", {}).get("toxic_thresholds", {})
     min_sources = int(th.get("min_sources_to_disavow", 2))

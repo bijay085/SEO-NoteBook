@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Render Audit Report — SEO</title>
+<title>Render Audit Report : SEO</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 :root {
-  --ink:    #0B0E1A; --ink2: #151929; --ink3: #1E2440;
+  --ink: #0B0E1A; --ink2: #151929; --ink3: #1E2440;
   --accent: #4F6EF7; --accent2: #7C3AED;
-  --pass:   #22C55E; --warn: #F59E0B; --crit: #EF4444;
-  --muted:  #64748B; --border: rgba(255,255,255,0.07);
-  --text:   #E2E8F0; --dim: #94A3B8;
+  --pass: #22C55E; --warn: #F59E0B; --crit: #EF4444;
+  --muted: #64748B; --border: rgba(255,255,255,0.07);
+  --text: #E2E8F0; --dim: #94A3B8;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--ink);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh}
@@ -204,20 +204,20 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 {# ── SIGNAL LABEL MAP ──────────────────────────────────────────────────────── #}
 {% set SIGNAL_LABELS = {
-  'title':            'Title Tag',
+  'title': 'Title Tag',
   'meta_description': 'Meta Description',
-  'meta_robots':      'Meta Robots',
-  'x_robots_header':  'X-Robots-Tag Header',
-  'canonical':        'Canonical Tag',
-  'h1':               'H1 Headings',
-  'h2':               'H2 Headings hidden by JavaScript',
-  'h3':               'H3 Headings hidden by JavaScript',
-  'body_text':        'Body Text JS-gated',
-  'internal_links':   'Internal Links',
-  'json_ld':          'JSON-LD Schema',
-  'og_title':         'OG Title',
-  'images':           'Images',
-  'images_missing_alt': 'Images — Missing Alt Text',
+  'meta_robots': 'Meta Robots',
+  'x_robots_header': 'X-Robots-Tag Header',
+  'canonical': 'Canonical Tag',
+  'h1': 'H1 Headings',
+  'h2': 'H2 Headings hidden by JavaScript',
+  'h3': 'H3 Headings hidden by JavaScript',
+  'body_text': 'Body Text JS-gated',
+  'internal_links': 'Internal Links',
+  'json_ld': 'JSON-LD Schema',
+  'og_title': 'OG Title',
+  'images': 'Images',
+  'images_missing_alt': 'Images : Missing Alt Text',
 } %}
 
 <!-- SIDEBAR -->
@@ -228,22 +228,22 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   </div>
   <div class="nav-section">
     <div class="nav-label">Screens</div>
-    <a href="#summary"      class="nav-item active" onclick="showTab('summary',this)">
+    <a href="#summary" class="nav-item active" onclick="showTab('summary',this)">
       <div class="nav-dot" style="background:#4F6EF7"></div> Summary
     </a>
-    <a href="#criticals"    class="nav-item" onclick="showTab('criticals',this)">
+    <a href="#criticals" class="nav-item" onclick="showTab('criticals',this)">
       <div class="nav-dot" style="background:#EF4444"></div> Critical Issues
     </a>
-    <a href="#warnings"     class="nav-item" onclick="showTab('warnings',this)">
+    <a href="#warnings" class="nav-item" onclick="showTab('warnings',this)">
       <div class="nav-dot" style="background:#F59E0B"></div> Warnings
     </a>
-    <a href="#action-plan"  class="nav-item" onclick="showTab('action-plan',this)">
+    <a href="#action-plan" class="nav-item" onclick="showTab('action-plan',this)">
       <div class="nav-dot" style="background:#22C55E"></div> Action Plan
     </a>
-    <a href="#signals"      class="nav-item" onclick="showTab('signals',this)">
+    <a href="#signals" class="nav-item" onclick="showTab('signals',this)">
       <div class="nav-dot" style="background:#A78BFA"></div> All Signals
     </a>
-    <a href="#bots"         class="nav-item" onclick="showTab('bots',this)">
+    <a href="#bots" class="nav-item" onclick="showTab('bots',this)">
       <div class="nav-dot" style="background:#64748B"></div> Bot Access
     </a>
   </div>
@@ -289,8 +289,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
     <div class="score-grid fu">
       {% set g_cls = 'hi' if avg_google >= 75 else ('md' if avg_google >= 50 else 'lo') %}
-      {% set a_cls = 'hi' if avg_ai    >= 75 else ('md' if avg_ai    >= 50 else 'lo') %}
-      {% set r_cls = 'hi' if avg_gap   >= 75 else ('md' if avg_gap   >= 50 else 'lo') %}
+      {% set a_cls = 'hi' if avg_ai >= 75 else ('md' if avg_ai >= 50 else 'lo') %}
+      {% set r_cls = 'hi' if avg_gap >= 75 else ('md' if avg_gap >= 50 else 'lo') %}
 
       <div class="score-card google">
         <div class="score-lbl">Google Crawl Score</div>
@@ -298,8 +298,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="score-sub">Avg across {{ url_count }} URL{% if url_count != 1 %}s{% endif %}</div>
         <div class="bar-track"><div class="bar-fill" style="width:{{ avg_google }}%;background:linear-gradient(90deg,#4285F4,#34A853)"></div></div>
         <div class="score-breakdown">
-          {% if total_crit > 0 %}<div class="score-breakdown-item deduct">− {{ total_crit * 15 }} pts · {{ total_crit }} critical issue{% if total_crit != 1 %}s{% endif %}</div>{% endif %}
-          {% if total_warn > 0 %}<div class="score-breakdown-item deduct">− {{ total_warn * 5 }} pts · {{ total_warn }} warning{% if total_warn != 1 %}s{% endif %}</div>{% endif %}
+          {% if total_crit > 0 %}<div class="score-breakdown-item deduct"> to {{ total_crit * 15 }} pts · {{ total_crit }} critical issue{% if total_crit != 1 %}s{% endif %}</div>{% endif %}
+          {% if total_warn > 0 %}<div class="score-breakdown-item deduct"> to {{ total_warn * 5 }} pts · {{ total_warn }} warning{% if total_warn != 1 %}s{% endif %}</div>{% endif %}
           {% if total_crit == 0 and total_warn == 0 %}<div class="score-breakdown-item ok">✓ No critical or warning issues</div>{% endif %}
         </div>
       </div>
@@ -312,10 +312,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="score-breakdown">
           {% for res in results %}
             {% set blocked = res.bot_access.values() | select('equalto','block') | list | length %}
-            {% if blocked > 0 %}<div class="score-breakdown-item deduct">− {{ blocked * 20 }} pts · {{ blocked }} bot{% if blocked != 1 %}s{% endif %} blocked</div>{% endif %}
-            {% if res.llms_txt_status != 'present' %}<div class="score-breakdown-item deduct">− 10 pts · llms.txt missing</div>{% endif %}
+            {% if blocked > 0 %}<div class="score-breakdown-item deduct"> to {{ blocked * 20 }} pts · {{ blocked }} bot{% if blocked != 1 %}s{% endif %} blocked</div>{% endif %}
+            {% if res.llms_txt_status != 'present' %}<div class="score-breakdown-item deduct"> to 10 pts · llms.txt missing</div>{% endif %}
             {% set schema_pass = res.signals | selectattr('signal_id','eq','json_ld') | selectattr('severity','eq','pass') | list | length %}
-            {% if schema_pass == 0 %}<div class="score-breakdown-item deduct">− 10 pts · no JSON-LD schema</div>{% endif %}
+            {% if schema_pass == 0 %}<div class="score-breakdown-item deduct"> to 10 pts · no JSON-LD schema</div>{% endif %}
           {% endfor %}
           {% if avg_ai == 100 %}<div class="score-breakdown-item ok">✓ All bots allowed · llms.txt present</div>{% endif %}
         </div>
@@ -329,11 +329,11 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="score-breakdown">
           {% for res in results %}
             {% set mismatches = res.signals | rejectattr('match') | list | length %}
-            {% if mismatches > 0 %}<div class="score-breakdown-item deduct">− {{ mismatches * 5 }} pts · {{ mismatches }} signal mismatch{% if mismatches != 1 %}es{% endif %}</div>{% endif %}
+            {% if mismatches > 0 %}<div class="score-breakdown-item deduct"> to {{ mismatches * 5 }} pts · {{ mismatches }} signal mismatch{% if mismatches != 1 %}es{% endif %}</div>{% endif %}
             {% set bt = res.signals | selectattr('signal_id','eq','body_text') | first | default(none) %}
             {% if bt and bt.rendered_value is mapping %}
               {% set gp = bt.rendered_value.get('gap_pct', 0) | int %}
-              {% if gp > 0 %}<div class="score-breakdown-item deduct">− {{ (gp * 0.5) | int }} pts · {{ gp }}% body text gap</div>{% endif %}
+              {% if gp > 0 %}<div class="score-breakdown-item deduct"> to {{ (gp * 0.5) | int }} pts · {{ gp }}% body text gap</div>{% endif %}
             {% endif %}
           {% endfor %}
           {% if avg_gap == 100 %}<div class="score-breakdown-item ok">✓ Raw and rendered content match</div>{% endif %}
@@ -364,7 +364,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
             <span style="color:{% if r >= 75 %}var(--pass){% elif r >= 50 %}var(--warn){% else %}var(--crit){% endif %}">{{ r }}/100</span>
           </div>
           {% set crit_n = res.signals | selectattr('severity','eq','critical') | list | length %}
-          {% set warn_n = res.signals | selectattr('severity','eq','warning')  | list | length %}
+          {% set warn_n = res.signals | selectattr('severity','eq','warning') | list | length %}
           <div style="margin-top:8px;display:flex;gap:5px;flex-wrap:wrap">
             {% if crit_n %}<span class="badge badge-crit">{{ crit_n }} critical</span>{% endif %}
             {% if warn_n %}<span class="badge badge-warn">{{ warn_n }} warn</span>{% endif %}
@@ -377,7 +377,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
     <!-- Render gap bars -->
     <div class="section fu">
-      <div class="section-hdr">Render Gap — Content Volume</div>
+      <div class="section-hdr">Render Gap : Content Volume</div>
       {% for res in results %}
         {% set bt = res.signals | selectattr('signal_id','eq','body_text') | first | default(none) %}
         {% if bt %}
@@ -388,10 +388,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
           {% endif %}
           {% if bt.rendered_value is mapping %}
             {% set rend_c = bt.rendered_value.get('char_count', 0) | int %}
-            {% set gap_p  = bt.rendered_value.get('gap_pct', 0) | round | int %}
+            {% set gap_p = bt.rendered_value.get('gap_pct', 0) | round | int %}
           {% else %}
             {% set rend_c = bt.rendered_value | default(0) | int %}
-            {% set gap_p  = ((rend_c - raw_c) / rend_c * 100) | round | int if rend_c > 0 else 0 %}
+            {% set gap_p = ((rend_c - raw_c) / rend_c * 100) | round | int if rend_c > 0 else 0 %}
           {% endif %}
           {% set raw_pct = (raw_c / rend_c * 100) | round | int if rend_c > 0 else 100 %}
           {% if gap_p >= 60 %}{% set risk='HIGH RISK' %}{% set rc='var(--crit)' %}{% set badge='badge-crit' %}
@@ -421,7 +421,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <!-- ═══ TAB: CRITICAL ISSUES ══════════════════════════════════════════════ -->
   <div id="tab-criticals" class="tab-panel">
     <div class="section">
-      <div class="section-hdr">Critical Issues — {{ total_crit }} found</div>
+      <div class="section-hdr">Critical Issues : {{ total_crit }} found</div>
       {% if all_criticals %}
         {% for url, sol in all_criticals %}
         <div class="issue-card" id="issue-{{ sol.signal_id }}">
@@ -439,11 +439,11 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
             <div class="observed-row">
               <div class="observed-cell">
                 <div class="observed-lbl">Raw HTML</div>
-                <div class="observed-val raw-val">{{ sol.observed_in_raw or '— not found' }}</div>
+                <div class="observed-val raw-val">{{ sol.observed_in_raw or ': not found' }}</div>
               </div>
               <div class="observed-cell">
                 <div class="observed-lbl">Rendered DOM</div>
-                <div class="observed-val rend-val">{{ sol.observed_in_rendered or '— not found' }}</div>
+                <div class="observed-val rend-val">{{ sol.observed_in_rendered or ': not found' }}</div>
               </div>
             </div>
             {% endif %}
@@ -472,8 +472,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
             {% endif %}
 
             <div style="display:flex;gap:8px;margin-top:10px">
-              <span class="badge badge-info">Effort: {{ sol.effort or '—' }}</span>
-              <span class="badge badge-info">Impact: {{ sol.impact or '—' }}</span>
+              <span class="badge badge-info">Effort: {{ sol.effort or ': ' }}</span>
+              <span class="badge badge-info">Impact: {{ sol.impact or ': ' }}</span>
               <span class="badge badge-crit">Priority #{{ sol.priority_rank }}</span>
             </div>
           </div>
@@ -488,7 +488,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <!-- ═══ TAB: WARNINGS ══════════════════════════════════════════════════════ -->
   <div id="tab-warnings" class="tab-panel">
     <div class="section">
-      <div class="section-hdr">Warnings — {{ total_warn }} found</div>
+      <div class="section-hdr">Warnings : {{ total_warn }} found</div>
       {% if all_warnings %}
         {% for url, sol in all_warnings %}
         <div class="issue-card" id="issue-{{ sol.signal_id }}">
@@ -503,16 +503,16 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
           </div>
           <div class="issue-body">
 
-            {# Observed evidence row — shown for all warnings #}
+            {# Observed evidence row : shown for all warnings #}
             {% if sol.observed_in_raw or sol.observed_in_rendered %}
             <div class="observed-row">
               <div class="observed-cell">
                 <div class="observed-lbl">Raw HTML</div>
-                <div class="observed-val raw-val">{{ sol.observed_in_raw or '— not found' }}</div>
+                <div class="observed-val raw-val">{{ sol.observed_in_raw or ': not found' }}</div>
               </div>
               <div class="observed-cell">
                 <div class="observed-lbl">Rendered DOM</div>
-                <div class="observed-val rend-val">{{ sol.observed_in_rendered or '— not found' }}</div>
+                <div class="observed-val rend-val">{{ sol.observed_in_rendered or ': not found' }}</div>
               </div>
             </div>
             {% endif %}
@@ -521,7 +521,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
             <div style="font-size:12px;color:var(--text);line-height:1.6;margin-bottom:10px">{{ sol.fix }}</div>
 
-            {# ── IMAGES MISSING ALT — special rendering ── #}
+            {# ── IMAGES MISSING ALT : special rendering ── #}
             {% if sol.signal_id == 'images_missing_alt' or sol.signal_id == 'images' %}
               {# Pull missing_alt list from the signal #}
               {% set img_sig = none %}
@@ -534,7 +534,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
                 {% set missing_list = img_sig.rendered_value.get('missing_alt', []) %}
                 {% if missing_list %}
                 <div class="ai-warn-banner">
-                  ⚠ <span><strong>AI-suggested placeholder alt text only</strong> — the values below were NOT copied from the page. Each image currently has an empty alt attribute. Write descriptive alt text yourself after reviewing each image.</span>
+                  ⚠ <span><strong>AI-suggested placeholder alt text only</strong> : the values below were NOT copied from the page. Each image currently has an empty alt attribute. Write descriptive alt text yourself after reviewing each image.</span>
                 </div>
                 <table class="alt-tbl">
                   <thead><tr><th>#</th><th>Image src</th><th>Current alt</th><th>Required action</th></tr></thead>
@@ -554,7 +554,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
               {# Still show any code block but add warning banner above it if present #}
               {% if sol.code_block or sol.code_fix %}
               <div class="ai-warn-banner" style="margin-top:10px">
-                ⚠ <span><strong>Code block contains AI-suggested alt text</strong> — review and replace every <code>alt="..."</code> value with your own description before deploying.</span>
+                ⚠ <span><strong>Code block contains AI-suggested alt text</strong> : review and replace every <code>alt="..."</code> value with your own description before deploying.</span>
               </div>
               <div class="code-wrap">
                 <button class="copy-btn" onclick="copyCode(this)">COPY</button>
@@ -562,7 +562,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
               </div>
               {% endif %}
             {% else %}
-              {# All other warnings — show code block normally #}
+              {# All other warnings : show code block normally #}
               {% if sol.code_block or sol.code_fix %}
               <div class="code-wrap">
                 <button class="copy-btn" onclick="copyCode(this)">COPY</button>
@@ -580,8 +580,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
             {% endif %}
 
             <div style="display:flex;gap:8px;margin-top:10px">
-              <span class="badge badge-info">Effort: {{ sol.effort or '—' }}</span>
-              <span class="badge badge-info">Impact: {{ sol.impact or '—' }}</span>
+              <span class="badge badge-info">Effort: {{ sol.effort or ': ' }}</span>
+              <span class="badge badge-info">Impact: {{ sol.impact or ': ' }}</span>
               {% if sol.priority_rank < 999 %}<span class="badge badge-warn">Priority #{{ sol.priority_rank }}</span>{% endif %}
             </div>
           </div>
@@ -596,7 +596,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <!-- ═══ TAB: ACTION PLAN ═══════════════════════════════════════════════════ -->
   <div id="tab-action-plan" class="tab-panel">
     <div class="section">
-      <div class="section-hdr">Action Plan — Priority-Sorted Fix List</div>
+      <div class="section-hdr">Action Plan : Priority-Sorted Fix List</div>
       <table class="sig-tbl">
         <thead>
           <tr>
@@ -615,8 +615,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
               {% elif sol.severity == 'warning' %}<span class="badge badge-warn">WARNING</span>
               {% else %}<span class="badge badge-pass">PASS</span>{% endif %}
             </td>
-            <td class="mono" style="font-size:11px;color:var(--dim)">{{ sol.effort or '—' }}</td>
-            <td class="mono" style="font-size:11px;color:var(--dim)">{{ sol.impact or '—' }}</td>
+            <td class="mono" style="font-size:11px;color:var(--dim)">{{ sol.effort or ': ' }}</td>
+            <td class="mono" style="font-size:11px;color:var(--dim)">{{ sol.impact or ': ' }}</td>
             <td style="font-size:11px;line-height:1.5">
               {{ sol.fix | truncate(120) }}
               <br>
@@ -657,9 +657,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
             </td>
             <td style="color:var(--dim);font-size:11px">{{ sig.category }}</td>
 
-            {# ── RAW VALUE — branch on signal_id first, not dict keys ── #}
+            {# ── RAW VALUE : branch on signal_id first, not dict keys ── #}
             <td><span class="raw-val">
-              {%- if sig.raw_value is none -%}—
+              {%- if sig.raw_value is none -%}: 
               {%- elif sig.signal_id == 'body_text' -%}
                 {%- if sig.raw_value is mapping -%}{{ sig.raw_value.get('char_count',0) | format_number }} chars
                 {%- else -%}{{ sig.raw_value | int | format_number }} chars{%- endif -%}
@@ -681,7 +681,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
             {# ── RENDERED VALUE ── #}
             <td><span class="rend-val">
-              {%- if sig.rendered_value is none -%}—
+              {%- if sig.rendered_value is none -%}: 
               {%- elif sig.signal_id == 'body_text' -%}
                 {%- if sig.rendered_value is mapping -%}
                   {{ sig.rendered_value.get('char_count',0) | format_number }} chars · gap {{ sig.rendered_value.get('gap_pct',0) }}%
@@ -715,7 +715,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
               {% if sig.gap_significance == 'high' %}<span class="gap-sig gap-high">high</span>
               {% elif sig.gap_significance == 'medium' %}<span class="gap-sig gap-medium">med</span>
               {% elif sig.gap_significance == 'low' %}<span class="gap-sig gap-low">low</span>
-              {% else %}<span class="gap-sig gap-none">—</span>{% endif %}
+              {% else %}<span class="gap-sig gap-none">: </span>{% endif %}
             </td>
 
             <td>{% if sig.match %}<span class="match-y">✓</span>{% else %}<span class="match-n">✗</span>{% endif %}</td>
@@ -754,7 +754,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
                   {% endfor %}
                   {% endif %}
                   {% if miss_alt %}
-                  <div style="color:var(--dim);font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin:8px 0 5px">Missing alt ({{ n_miss_alt }}) — empty alt="" found on these images</div>
+                  <div style="color:var(--dim);font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin:8px 0 5px">Missing alt ({{ n_miss_alt }}) : empty alt="" found on these images</div>
                   {% for img in miss_alt %}
                   <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--crit);padding:2px 0">{{ img.src | truncate(100) }}</div>
                   {% endfor %}
@@ -798,7 +798,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <!-- ═══ TAB: BOT ACCESS ════════════════════════════════════════════════════ -->
   <div id="tab-bots" class="tab-panel">
     <div class="section">
-      <div class="section-hdr">Bot Access Matrix — robots.txt & llms.txt</div>
+      <div class="section-hdr">Bot Access Matrix : robots.txt & llms.txt</div>
       <table class="bot-tbl">
         <thead>
           <tr>
@@ -866,9 +866,9 @@ function goToIssue(tab, issueId) {
 
 // Issue card toggle
 function toggle(hdr) {
-  const body  = hdr.nextElementSibling;
+  const body = hdr.nextElementSibling;
   const arrow = hdr.querySelector('span:last-child');
-  const open  = body.classList.toggle('open');
+  const open = body.classList.toggle('open');
   arrow.textContent = open ? '▲' : '▼';
 }
 
@@ -878,7 +878,7 @@ function toggleSigDetail(btn) {
   const detailRow = row.nextElementSibling;
   if (detailRow && detailRow.classList.contains('sig-detail-row')) {
     const open = detailRow.classList.toggle('open');
-    btn.textContent = open ? '[ − ]' : '[ + ]';
+    btn.textContent = open ? '[ to ]' : '[ + ]';
   }
 }
 

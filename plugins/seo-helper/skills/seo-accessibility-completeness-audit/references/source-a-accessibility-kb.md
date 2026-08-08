@@ -1,22 +1,22 @@
-# Semantic HTML5 Knowledge Base — SEO & Accessibility Reference
+# Semantic HTML5 Knowledge Base : SEO & Accessibility Reference
 
-This document is generated from `semantic_html_audit.sqlite`, the database of record. Do not hand-edit facts here — update the database and re-run `generate_knowledge_base.py`.
+This document is generated from `semantic_html_audit.sqlite`, the database of record. Do not hand-edit facts here : update the database and re-run `generate_knowledge_base.py`.
 
 ## 1. What "Semantic HTML" Means
 
-> "Semantics refers to the meaning of a piece of code — what purpose or role an element has, rather than what it looks like." — MDN
+> "Semantics refers to the meaning of a piece of code : what purpose or role an element has, rather than what it looks like." : MDN
 >
-> "Writing semantic HTML means using HTML elements to structure your content based on each element's meaning, not its appearance." — web.dev
+> "Writing semantic HTML means using HTML elements to structure your content based on each element's meaning, not its appearance." : web.dev
 
-A **non-semantic** element (`<div>`, `<span>`) tells the browser, assistive technology, and other developers nothing about the content it wraps — only how it might be styled. A **semantic** element (`<nav>`, `<button>`, `<article>`, `<time>`) declares what the content *is*, so three different consumers can each do their job correctly without extra hints:
+A **non-semantic** element (`<div>`, `<span>`) tells the browser, assistive technology, and other developers nothing about the content it wraps : only how it might be styled. A **semantic** element (`<nav>`, `<button>`, `<article>`, `<time>`) declares what the content *is*, so three different consumers can each do their job correctly without extra hints:
 
 - **Browsers** apply correct default behaviour and expose an accessibility tree (e.g. `<button>` gets keyboard focus, `Enter`/`Space` activation, and tab order for free; a `<div onclick>` gets none of it).
 - **Assistive technology** (screen readers, switch devices) builds a landmark/heading outline straight from the markup, letting users jump by region instead of reading linearly.
-- **Search engines and other machine readers** parse structure to identify the primary content, navigation, and metadata blocks — see Section 2 for exactly what is and isn't confirmed about this.
+- **Search engines and other machine readers** parse structure to identify the primary content, navigation, and metadata blocks : see Section 2 for exactly what is and isn't confirmed about this.
 
 Semantic HTML is presentation-independent by design: **appearance is CSS's job, meaning is HTML's job.** Choosing an element for how the browser's default stylesheet renders it (e.g. a `<span>` styled to look like a heading) inverts this and produces markup with the right *look* but no real meaning.
 
-## 2. The SEO Relationship — What's Actually Confirmed
+## 2. The SEO Relationship : What's Actually Confirmed
 
 SEO blog content routinely asserts that semantic HTML "boosts rankings." The table below grades every such claim collected from the six reference sources against normative (WHATWG) and first-party (Google Search Central) sources, so recommendations can be built on what's actually established rather than repeated folklore.
 
@@ -27,7 +27,7 @@ SEO blog content routinely asserts that semantic HTML "boosts rankings." The tab
 | `unverified` | Asserted by secondary (usually marketing/blog) sources; no primary source confirms it. |
 | `contradicted` | A primary source directly conflicts with the claim. |
 
-### CLM-001 — `confirmed` (meaning)
+### CLM-001 : `confirmed` (meaning)
 
 **Claim:** Semantic elements communicate purpose to browsers, developers, and assistive technologies.
 
@@ -35,7 +35,7 @@ SEO blog content routinely asserts that semantic HTML "boosts rankings." The tab
 
 **Evidence:** MDN Web Docs (supports); web.dev (supports)
 
-### CLM-002 — `confirmed` (accessibility)
+### CLM-002 : `confirmed` (accessibility)
 
 **Claim:** Native semantic landmarks improve page-region navigation for assistive-technology users.
 
@@ -43,7 +43,7 @@ SEO blog content routinely asserts that semantic HTML "boosts rankings." The tab
 
 **Evidence:** W3C WAI (supports)
 
-### CLM-003 — `unverified` (seo)
+### CLM-003 : `unverified` (seo)
 
 **Claim:** Semantic HTML directly improves rankings.
 
@@ -51,7 +51,7 @@ SEO blog content routinely asserts that semantic HTML "boosts rankings." The tab
 
 **Evidence:** Holistic SEO (asserts); Semrush (asserts); Google Search Central (does-not-confirm)
 
-### CLM-004 — `unverified` (seo)
+### CLM-004 : `unverified` (seo)
 
 **Claim:** Search engines give keywords inside semantic elements more weight than keywords inside div elements.
 
@@ -59,7 +59,7 @@ SEO blog content routinely asserts that semantic HTML "boosts rankings." The tab
 
 **Evidence:** Webflow (asserts); Google Search Central (does-not-confirm)
 
-### CLM-005 — `partly-supported` (performance)
+### CLM-005 : `partly-supported` (performance)
 
 **Claim:** Semantic HTML automatically makes pages lighter and faster.
 
@@ -67,7 +67,7 @@ SEO blog content routinely asserts that semantic HTML "boosts rankings." The tab
 
 **Evidence:** Webflow (asserts); WHATWG (qualifies)
 
-### CLM-006 — `partly-supported` (seo)
+### CLM-006 : `partly-supported` (seo)
 
 **Claim:** Semantic HTML increases rich-result eligibility.
 
@@ -75,7 +75,7 @@ SEO blog content routinely asserts that semantic HTML "boosts rankings." The tab
 
 **Evidence:** Holistic SEO (asserts); Semrush (asserts); Google Search Central (qualifies)
 
-### CLM-007 — `partly-supported` (seo)
+### CLM-007 : `partly-supported` (seo)
 
 **Claim:** Collapsed details content is indexable and therefore benefits SEO.
 
@@ -83,7 +83,7 @@ SEO blog content routinely asserts that semantic HTML "boosts rankings." The tab
 
 **Evidence:** Holistic SEO (asserts); Google Search Central (does-not-confirm)
 
-### CLM-008 — `confirmed` (machine-interpretation)
+### CLM-008 : `confirmed` (machine-interpretation)
 
 **Claim:** Using article, section, nav, and main helps systems distinguish document roles.
 
@@ -91,7 +91,7 @@ SEO blog content routinely asserts that semantic HTML "boosts rankings." The tab
 
 **Evidence:** web.dev (supports); WHATWG (supports)
 
-### CLM-009 — `contradicted` (seo)
+### CLM-009 : `contradicted` (seo)
 
 **Claim:** Semantic HTML replaces Schema.org structured data.
 
@@ -99,7 +99,7 @@ SEO blog content routinely asserts that semantic HTML "boosts rankings." The tab
 
 **Evidence:** Google Search Central (contradicts)
 
-### CLM-010 — `confirmed` (engineering)
+### CLM-010 : `confirmed` (engineering)
 
 **Claim:** Correct semantic HTML improves maintainability.
 
@@ -107,7 +107,7 @@ SEO blog content routinely asserts that semantic HTML "boosts rankings." The tab
 
 **Evidence:** Semrush (supports); Webflow (supports)
 
-### CLM-011 — `unverified` (seo)
+### CLM-011 : `unverified` (seo)
 
 **Claim:** Wrapping navigation links in a nav element causes search engines to weight or value those links differently than links in a generic container.
 
@@ -115,7 +115,7 @@ SEO blog content routinely asserts that semantic HTML "boosts rankings." The tab
 
 **Evidence:** Holistic SEO (asserts); Google Search Central (does-not-confirm)
 
-### CLM-012 — `partly-supported` (seo)
+### CLM-012 : `partly-supported` (seo)
 
 **Claim:** The figcaption element helps search engines index and understand the image or figure it describes.
 
@@ -266,7 +266,7 @@ _Elements that define the major navigable regions of a page. Assistive tech expo
 - **Why it's better:** Creates a native main landmark without role="main".
 - **Accessibility effect:** Provides a direct destination for landmark navigation and skip links.
 - **SEO effect:** Separates unique page content from repeated chrome; direct rank improvement is not documented.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Normally one visible main per document; do not nest in article, aside, footer, header, or nav.
 
 ```html
@@ -281,7 +281,7 @@ _Elements that define the major navigable regions of a page. Assistive tech expo
 - **Why it's better:** Provides native search landmark semantics without an ARIA role.
 - **Accessibility effect:** Exposes a search landmark where supported.
 - **SEO effect:** No direct SEO effect established; improves native meaning and accessibility.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Use for search/filter functionality, not a section merely discussing search.
 
 ```html
@@ -300,7 +300,7 @@ _Elements that carve a document into structural regions with their own outline c
 - **Why it's better:** Exposes independence as native document meaning instead of a private class convention.
 - **Accessibility effect:** May create an article structure; headings help users identify the unit.
 - **SEO effect:** Helps systems distinguish a standalone content unit; an isolated ranking boost is not documented.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Use only when the content makes sense independently; nested articles should relate to the containing article.
 
 ```html
@@ -315,7 +315,7 @@ _Elements that carve a document into structural regions with their own outline c
 - **Why it's better:** Associates closing metadata with the correct page or section.
 - **Accessibility effect:** A body-level footer may map to contentinfo; nested footers generally do not.
 - **SEO effect:** Helps classify supporting metadata; no isolated ranking benefit is confirmed.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** May appear more than once; its meaning is scoped to the nearest sectioning ancestor.
 
 ```html
@@ -330,7 +330,7 @@ _Elements that carve a document into structural regions with their own outline c
 - **Why it's better:** Meaning depends on its nearest sectioning context and is not limited to the page top.
 - **Accessibility effect:** A body-level header may map to banner; nested headers generally do not.
 - **SEO effect:** Clarifies introductions and heading context; no isolated ranking benefit is confirmed.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** May appear several times; do not nest within header or footer, and observe content-model restrictions.
 
 ```html
@@ -345,7 +345,7 @@ _Elements that carve a document into structural regions with their own outline c
 - **Why it's better:** Makes thematic grouping explicit in the HTML vocabulary.
 - **Accessibility effect:** A named section may expose a region; excessive unnamed sections create noise.
 - **SEO effect:** Supports coherent content structure, but is not a keyword-weighting switch or confirmed ranking factor.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Use article, nav, aside, or address when their narrower meaning applies; normally include a heading.
 
 ```html
@@ -364,7 +364,7 @@ _Sectioning elements that also register as ARIA landmarks, giving them a dual st
 - **Why it's better:** Expresses complementary rather than primary relevance.
 - **Accessibility effect:** Usually maps to a complementary landmark when context permits; repeated landmarks need names.
 - **SEO effect:** May help separate supplementary material from main content; ranking effects are not documented.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Content must remain related yet non-essential to the surrounding flow.
 
 ```html
@@ -379,14 +379,14 @@ _Sectioning elements that also register as ARIA landmarks, giving them a dual st
 - **Why it's better:** Creates native navigation meaning and normally an accessibility landmark.
 - **Accessibility effect:** Screen-reader users may jump to it; multiple nav landmarks need distinct names.
 - **SEO effect:** Clarifies navigational blocks and link context; no confirmed special PageRank weighting follows merely from the tag.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Not every link group belongs in nav. Label repeated navigation landmarks.
 
 ```html
 <nav aria-label="Primary"><ul><li><a href="/">Home</a></li></ul></nav>
 ```
 
-### Sectioning — Contact / Text Blocks
+### Sectioning : Contact / Text Blocks
 
 _Narrow-purpose sectioning elements for a specific kind of content block._
 
@@ -398,7 +398,7 @@ _Narrow-purpose sectioning elements for a specific kind of content block._
 - **Why it's better:** Associates contact data with its responsible author or organization.
 - **Accessibility effect:** Supplies semantic contact context but does not replace accessible labels or structured data.
 - **SEO effect:** May clarify authorship/contact context; does not replace Organization/Person structured data.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Do not use for arbitrary postal addresses unrelated to the author/owner.
 
 ```html
@@ -417,7 +417,7 @@ _Elements that define the document/section outline and its hierarchy._
 - **Why it's better:** Creates a programmatic heading hierarchy independent of visual styling.
 - **Accessibility effect:** Screen-reader users navigate and scan by headings.
 - **SEO effect:** Google documents headings as useful signals for understanding page structure and title-link context, but mechanical level rules do not guarantee rank.
-  **Confirmed** — directly supported by the HTML/ARIA specification or first-party engine documentation.
+  **Confirmed** : directly supported by the HTML/ARIA specification or first-party engine documentation.
 - **Constraints:** Choose levels by hierarchy, not font size; do not leave headings empty.
 
 ```html
@@ -436,7 +436,7 @@ _Elements that group related flow content without necessarily creating a new lan
 - **Why it's better:** Creates a native relationship to the entire figure.
 - **Accessibility effect:** Adds visible context but is not a substitute for image alternative text.
 - **SEO effect:** Provides nearby descriptive context that search systems may process; no ranking guarantee.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Must be inside figure and should be first or last child.
 
 ```html
@@ -451,7 +451,7 @@ _Elements that group related flow content without necessarily creating a new lan
 - **Why it's better:** Groups the asset and its caption as one semantic unit.
 - **Accessibility effect:** Provides structural association; image alt text remains independently required when applicable.
 - **SEO effect:** Improves media-context organization; figure alone does not guarantee image-search gains.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Figcaption, when present, must be the first or last child.
 
 ```html
@@ -466,7 +466,7 @@ _Elements that group related flow content without necessarily creating a new lan
 - **Why it's better:** Exposes paragraph boundaries rather than visual spacing only.
 - **Accessibility effect:** Supports coherent reading units.
 - **SEO effect:** No independent ranking effect; correct text structure improves parsing and maintenance.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Do not place flow-content blocks inside p.
 
 ```html
@@ -481,14 +481,14 @@ _Elements that group related flow content without necessarily creating a new lan
 - **Why it's better:** Whitespace preservation is a guaranteed content-level behavior, not a styling choice that silently breaks if CSS fails to load.
 - **Accessibility effect:** Screen readers can read preserved line breaks and spacing; pairing pre with code clarifies that the content is source code rather than prose.
 - **SEO effect:** No independent ranking effect; correctly marked-up code samples stay crawlable as real text instead of being rendered only through CSS or canvas tricks.
-  **Unverified** — commonly claimed by secondary sources but not established by any primary source reviewed.
+  **Unverified** : commonly claimed by secondary sources but not established by any primary source reviewed.
 - **Constraints:** Pair with code for source code; content inside is whitespace-significant.
 
 ```html
 <pre><code>function greet() { return "hi"; }</code></pre>
 ```
 
-### Lists — Containers
+### Lists : Containers
 
 _Elements that hold a set of related items as a single structure._
 
@@ -500,7 +500,7 @@ _Elements that hold a set of related items as a single structure._
 - **Why it's better:** Creates explicit term-description relationships.
 - **Accessibility effect:** Assistive support varies in announcement detail but relationships remain native HTML.
 - **SEO effect:** No direct ranking effect; improves machine-readable association.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Use dt and dd groups; not merely for visual indentation.
 
 ```html
@@ -515,7 +515,7 @@ _Elements that hold a set of related items as a single structure._
 - **Why it's better:** Exposes order and list-item relationships.
 - **Accessibility effect:** Screen readers announce ordered-list structure and count.
 - **SEO effect:** No direct ranking boost; clarifies procedural or ranked relationships.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Use reversed, start, and value only when their numeric meaning is intended.
 
 ```html
@@ -530,14 +530,14 @@ _Elements that hold a set of related items as a single structure._
 - **Why it's better:** Exposes list membership and item count.
 - **Accessibility effect:** Screen readers announce list structure.
 - **SEO effect:** No direct ranking boost; makes enumerated content explicit.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Children are li elements, apart from script-supporting elements.
 
 ```html
 <ul><li>Repair</li><li>Installation</li></ul>
 ```
 
-### Lists — Items
+### Lists : Items
 
 _The individual entries inside a list container._
 
@@ -549,7 +549,7 @@ _The individual entries inside a list container._
 - **Why it's better:** Only valid as a child of ul, ol, or menu, so the browser exposes real list semantics (item count and position) that a div-per-row structure cannot.
 - **Accessibility effect:** Announced by screen readers with position and set size (for example "item 2 of 5") only when correctly nested inside ul or ol.
 - **SEO effect:** No independent ranking effect; correctly marked-up list items make enumerable content (steps, features) easier for automated systems to extract for rich results.
-  **Unverified** — commonly claimed by secondary sources but not established by any primary source reviewed.
+  **Unverified** : commonly claimed by secondary sources but not established by any primary source reviewed.
 - **Constraints:** Must be a direct child of ul, ol, or menu; not valid on its own.
 
 ```html
@@ -568,7 +568,7 @@ _Elements that mark quoted material as quoted, rather than visually italicised t
 - **Why it's better:** Marks quotation semantics without relying on indentation.
 - **Accessibility effect:** Conveys quoted-block meaning.
 - **SEO effect:** No direct rank effect; cite attribute is not normally displayed and does not replace a visible source link.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Use cite attribute only for a source URL; add visible attribution separately.
 
 ```html
@@ -583,7 +583,7 @@ _Elements that mark quoted material as quoted, rather than visually italicised t
 - **Why it's better:** Marks the phrase as quoted while user agents handle punctuation.
 - **Accessibility effect:** Conveys inline quotation semantics.
 - **SEO effect:** No direct SEO effect.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Do not add quotation marks solely through text when q supplies them; cite may hold a source URL.
 
 ```html
@@ -602,7 +602,7 @@ _Elements that attach meaning to a run of text inside a block, rather than styli
 - **Why it's better:** Marks abbreviated text and may provide its expansion.
 - **Accessibility effect:** Title-only expansions are not reliably accessible; provide visible expansion when important.
 - **SEO effect:** May clarify language processing, but no direct ranking boost is documented.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Do not rely solely on title for essential information.
 
 ```html
@@ -617,7 +617,7 @@ _Elements that attach meaning to a run of text inside a block, rather than styli
 - **Why it's better:** Identifies a work title rather than merely styling text.
 - **Accessibility effect:** Conveys work-title meaning; default italics are presentation only.
 - **SEO effect:** No direct SEO effect.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Not intended for a person name under the HTML standard.
 
 ```html
@@ -632,7 +632,7 @@ _Elements that attach meaning to a run of text inside a block, rather than styli
 - **Why it's better:** Identifies code independent of font choice.
 - **Accessibility effect:** Screen readers may not announce punctuation adequately; explanatory prose may still be needed.
 - **SEO effect:** No direct SEO effect.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Use pre with code for preformatted blocks.
 
 ```html
@@ -647,7 +647,7 @@ _Elements that attach meaning to a run of text inside a block, rather than styli
 - **Why it's better:** Uses a standard value attribute for machine-readable equivalence.
 - **Accessibility effect:** Limited direct accessibility effect; visible label remains necessary.
 - **SEO effect:** No direct SEO effect; does not replace structured data vocabulary.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Use time instead when the value is a date or time.
 
 ```html
@@ -662,7 +662,7 @@ _Elements that attach meaning to a run of text inside a block, rather than styli
 - **Why it's better:** Identifies where a term is being defined.
 - **Accessibility effect:** Provides semantic definition context.
 - **SEO effect:** No direct SEO effect established.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** The nearest paragraph, dt/dd group, or section should contain the definition.
 
 ```html
@@ -677,7 +677,7 @@ _Elements that attach meaning to a run of text inside a block, rather than styli
 - **Why it's better:** Encodes stress rather than appearance.
 - **Accessibility effect:** May alter spoken emphasis depending on assistive technology.
 - **SEO effect:** No proven keyword-weighting benefit.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Use CSS for italics without stress; nesting increases emphasis level.
 
 ```html
@@ -692,7 +692,7 @@ _Elements that attach meaning to a run of text inside a block, rather than styli
 - **Why it's better:** Encodes contextual relevance rather than yellow background.
 - **Accessibility effect:** Color alone must not be the sole cue; announcement support varies.
 - **SEO effect:** No direct ranking effect; it is not an SEO keyword-highlighting mechanism.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Do not use merely for decorative highlighting or general importance.
 
 ```html
@@ -707,7 +707,7 @@ _Elements that attach meaning to a run of text inside a block, rather than styli
 - **Why it's better:** Encodes importance rather than appearance.
 - **Accessibility effect:** May expose importance, though screen-reader voicing varies.
 - **SEO effect:** No proven keyword-weighting benefit.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Use b or CSS when only visual offset is intended.
 
 ```html
@@ -722,7 +722,7 @@ _Elements that attach meaning to a run of text inside a block, rather than styli
 - **Why it's better:** The datetime attribute disambiguates human date formats.
 - **Accessibility effect:** Supports unambiguous programmatic interpretation.
 - **SEO effect:** May help systems parse dates, but does not replace structured data required for search features.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** datetime must use a valid HTML date/time or duration syntax.
 
 ```html
@@ -741,14 +741,14 @@ _The core interactive element for navigating between resources._
 - **Why it's better:** Creates native link semantics, focus behavior, URL handling, and crawlable relationships when href is present.
 - **Accessibility effect:** Keyboard and screen-reader link navigation work natively.
 - **SEO effect:** Google explicitly uses crawlable links and anchor text to discover pages and understand linked content.
-  **Confirmed** — directly supported by the HTML/ARIA specification or first-party engine documentation.
+  **Confirmed** : directly supported by the HTML/ARIA specification or first-party engine documentation.
 - **Constraints:** Use href for hyperlinks; buttons are for actions that do not navigate.
 
 ```html
 <a href="/semantic-html">Semantic HTML guide</a>
 ```
 
-### Forms — Structure
+### Forms : Structure
 
 _Elements that structure a submittable group of controls._
 
@@ -760,7 +760,7 @@ _Elements that structure a submittable group of controls._
 - **Why it's better:** Provides native submission, keyboard Enter-to-submit, and built-in validation; only exposes a form or search landmark role when it has an accessible name.
 - **Accessibility effect:** Exposed as a form (or search) landmark to assistive tech only when labelled with aria-label or aria-labelledby; unlabelled forms are not distinguishable from each other in landmark navigation.
 - **SEO effect:** No direct ranking effect; a labelled form clarifies page purpose (e.g. distinguishing a search form from a contact form) for automated interpretation.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Needs an accessible name to register as a landmark (SEM-006); avoid nesting one form inside another.
 
 ```html
@@ -775,14 +775,14 @@ _Elements that structure a submittable group of controls._
 - **Why it's better:** Creates a programmatic name relationship and a larger activation target.
 - **Accessibility effect:** Essential for control identification and speech/assistive input.
 - **SEO effect:** No direct SEO effect.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Associate with for/id or by nesting; placeholder is not a label replacement.
 
 ```html
 <label for="email">Email</label><input id="email" type="email">
 ```
 
-### Forms — Interactive Controls
+### Forms : Interactive Controls
 
 _Native interactive controls with built-in keyboard, focus, and activation behaviour._
 
@@ -794,7 +794,7 @@ _Native interactive controls with built-in keyboard, focus, and activation behav
 - **Why it's better:** Provides keyboard activation, focusability, role, disabled state, and form behavior natively.
 - **Accessibility effect:** Major accessibility gain over scripted generic containers.
 - **SEO effect:** No direct ranking effect; improves usable interaction and crawl-independent page quality.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Set type explicitly in forms; give an accessible name.
 
 ```html
@@ -813,7 +813,7 @@ _Elements that provide native show/hide interactivity without custom JavaScript.
 - **Why it's better:** Supplies built-in state, activation, and keyboard behavior with less custom scripting.
 - **Accessibility effect:** Native disclosure semantics and focus behavior reduce custom-widget failure risk.
 - **SEO effect:** Collapsed content remains in the DOM; indexing or ranking treatment is not guaranteed by the element.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Use summary as the label; test browser and assistive-technology behavior.
 
 ```html
@@ -828,7 +828,7 @@ _Elements that provide native show/hide interactivity without custom JavaScript.
 - **Why it's better:** Native dialog API supports modal display and focus-management primitives.
 - **Accessibility effect:** Correct use improves focus containment and dialog announcement; accessible naming remains required.
 - **SEO effect:** No direct SEO benefit; hidden modal content should not carry essential primary-page information.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Supply an accessible name; use showModal() for modal behavior; do not misuse for ordinary layout.
 
 ```html
@@ -843,7 +843,7 @@ _Elements that provide native show/hide interactivity without custom JavaScript.
 - **Why it's better:** Creates the native interactive label for details.
 - **Accessibility effect:** Keyboard-operable control semantics are supplied by the browser.
 - **SEO effect:** No direct SEO effect established.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Must be the first summary child of details to act as its summary.
 
 ```html
@@ -862,7 +862,7 @@ _Elements for representing genuinely tabular (row/column) data._
 - **Why it's better:** Creates native row, column, header, caption, and cell relationships.
 - **Accessibility effect:** Correct th/scope/caption markup supports table navigation and comprehension.
 - **SEO effect:** May clarify data relationships; no rich-result eligibility follows from table markup alone.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Do not use for page layout. Use caption and header cells where needed.
 
 ```html
@@ -881,7 +881,7 @@ _Elements that embed an external resource into the document._
 - **Why it's better:** alt text is exposed to screen readers and image-search crawlers; a CSS background-image carries no accessible name or indexable text alternative.
 - **Accessibility effect:** alt is the image's accessible name; an empty alt="" correctly hides purely decorative images from assistive technology instead of announcing a meaningless filename.
 - **SEO effect:** alt text is a confirmed input to Google Image Search relevance and a documented accessibility requirement; it is not established as a general web-ranking factor on its own.
-  **Supported (indirect)** — plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
+  **Supported (indirect)** : plausible and consistent with how engines/assistive tech are documented to work, but not a named, isolated ranking factor.
 - **Constraints:** Always set alt (empty string for decorative images); do not keyword-stuff alt text.
 
 ```html
@@ -890,7 +890,7 @@ _Elements that embed an external resource into the document._
 
 ## 5. Audit Rulebook
 
-22 rules for auditing semantic HTML, rendered DOM structure, browser-computed accessibility output, and critical interaction behavior. Each rule maps to rows in `audit_rules`; running an audit means inserting a row into `audit_runs`, one row per URL into `audited_pages`, then one `findings` row per (page, rule) pair — see Section 6.
+22 rules for auditing semantic HTML, rendered DOM structure, browser-computed accessibility output, and critical interaction behavior. Each rule maps to rows in `audit_rules`; running an audit means inserting a row into `audit_runs`, one row per URL into `audited_pages`, then one `findings` row per (page, rule) pair : see Section 6.
 
 | Rule | Name | Severity | Applies to |
 |---|---|---|---|
@@ -917,154 +917,154 @@ _Elements that embed an external resource into the document._
 | SEM-021 | DOM, visual, focus, and accessibility order remain logical | warning | grids, split layouts, responsive sections, and reordered components |
 | SEM-022 | Critical paths receive manual accessibility verification | warning | page-level validation and key user journeys |
 
-#### SEM-001 — Exactly one visible main landmark (`error`)
+#### SEM-001 : Exactly one visible main landmark (`error`)
 - **Applies to:** main
 - **Test method:** DOM query plus visibility check
 - **Pass condition:** One non-hidden main contains the page-specific primary content.
 - **Failure reason:** Missing or duplicate main landmarks obscure the dominant content region.
 - **Remediation:** Add one main around unique content; remove, hide correctly, or refactor duplicates.
 
-#### SEM-002 — Main has valid ancestry (`error`)
+#### SEM-002 : Main has valid ancestry (`error`)
 - **Applies to:** main
 - **Test method:** Check ancestors
 - **Pass condition:** Main is not descended from article, aside, footer, header, or nav.
 - **Failure reason:** The structure violates main content-model constraints.
 - **Remediation:** Move main to the document body level outside those elements.
 
-#### SEM-003 — Sections are named (`warning`)
+#### SEM-003 : Sections are named (`warning`)
 - **Applies to:** section
 - **Test method:** Find heading or accessible name
 - **Pass condition:** Each meaningful section has a heading, or a justified accessible label.
 - **Failure reason:** An unnamed section may add no useful structure and may produce an unnamed region.
 - **Remediation:** Add a descriptive heading or use div when no thematic section exists.
 
-#### SEM-004 — Articles stand independently (`warning`)
+#### SEM-004 : Articles stand independently (`warning`)
 - **Applies to:** article
 - **Test method:** Editorial review
 - **Pass condition:** Each article is intelligible and reusable outside the immediate page.
 - **Failure reason:** A layout wrapper has been mislabeled as independent content.
 - **Remediation:** Use section or div unless the block is a standalone composition.
 
-#### SEM-005 — Nav is reserved for major navigation (`warning`)
+#### SEM-005 : Nav is reserved for major navigation (`warning`)
 - **Applies to:** nav
 - **Test method:** Editorial and link-block review
 - **Pass condition:** Each nav represents a major navigation block.
 - **Failure reason:** Too many nav landmarks reduce navigational value.
 - **Remediation:** Use ordinary containers for minor link groups.
 
-#### SEM-006 — Repeated landmarks have distinct names (`error`)
+#### SEM-006 : Repeated landmarks have distinct names (`error`)
 - **Applies to:** nav, aside, form/search, region
 - **Test method:** Full accessibility-tree and computed-name inspection
 - **Pass condition:** Landmarks of the same type have unique browser-computed accessible names when distinction is required.
 - **Failure reason:** Users cannot distinguish repeated landmarks in landmark navigation.
 - **Remediation:** Use aria-labelledby with a visible heading or a concise aria-label; verify the computed name rather than the attribute alone.
 
-#### SEM-007 — Headings encode hierarchy (`warning`)
+#### SEM-007 : Headings encode hierarchy (`warning`)
 - **Applies to:** h1-h6
 - **Test method:** Heading-tree review
 - **Pass condition:** Headings identify content sections and levels follow nesting intent.
 - **Failure reason:** Styling-driven headings distort programmatic structure.
 - **Remediation:** Select levels for hierarchy and use CSS for size.
 
-#### SEM-008 — Figure captions are structurally associated (`warning`)
+#### SEM-008 : Figure captions are structurally associated (`warning`)
 - **Applies to:** figure, figcaption
 - **Test method:** DOM child-order check
 - **Pass condition:** Figcaption is the first or last child of figure.
 - **Failure reason:** Caption meaning may not be associated as intended.
 - **Remediation:** Move figcaption inside figure at the first or last position.
 
-#### SEM-009 — Dates use valid datetime values (`warning`)
+#### SEM-009 : Dates use valid datetime values (`warning`)
 - **Applies to:** time
 - **Test method:** Attribute syntax validation
 - **Pass condition:** Datetime is absent only when text is machine-readable, or contains a valid HTML date/time/duration.
 - **Failure reason:** Ambiguous or invalid values defeat machine readability.
 - **Remediation:** Add a valid datetime value while keeping human-readable text.
 
-#### SEM-010 — Disclosure widgets use details and summary correctly (`warning`)
+#### SEM-010 : Disclosure widgets use details and summary correctly (`warning`)
 - **Applies to:** details, summary
 - **Test method:** DOM and keyboard test
 - **Pass condition:** Each details begins with a usable summary and works with keyboard input.
 - **Failure reason:** The disclosure lacks a native name or interaction behavior.
 - **Remediation:** Add summary as the first child or implement an accessible custom pattern only when necessary.
 
-#### SEM-011 — Native interactive elements are used (`error`)
+#### SEM-011 : Native interactive elements are used (`error`)
 - **Applies to:** interactive controls
 - **Test method:** DOM, computed accessibility tree, focus, keyboard, and activation test
 - **Pass condition:** Links navigate; buttons perform actions; native controls expose the expected role, name, focus behavior, keyboard behavior, and state.
 - **Failure reason:** Generic containers or mismatched controls lack dependable role, keyboard, focus, state, or action behavior.
 - **Remediation:** Replace the control with the matching native element; preserve a useful computed name and verify interaction behavior.
 
-#### SEM-012 — Tables represent data, not layout (`error`)
+#### SEM-012 : Tables represent data, not layout (`error`)
 - **Applies to:** table
 - **Test method:** Content and header association review
 - **Pass condition:** Every table represents row-column data and uses caption/th associations as needed.
 - **Failure reason:** Layout tables create misleading navigation and relationships.
 - **Remediation:** Use CSS layout for presentation; repair data-table headers and caption.
 
-#### SEM-013 — Semantic choice follows meaning (`warning`)
+#### SEM-013 : Semantic choice follows meaning (`warning`)
 - **Applies to:** all
 - **Test method:** DOM and CSS review
 - **Pass condition:** Elements are chosen for purpose; CSS supplies presentation.
 - **Failure reason:** Appearance-driven element choice corrupts document meaning.
 - **Remediation:** Replace misused elements and preserve visuals through CSS.
 
-#### SEM-014 — ARIA does not conflict with native semantics (`error`)
+#### SEM-014 : ARIA does not conflict with native semantics (`error`)
 - **Applies to:** all semantic elements
 - **Test method:** Compare native semantics, ARIA attributes, and browser-computed role/state
 - **Pass condition:** ARIA supplements native semantics without changing the computed role or state to an inaccurate value.
 - **Failure reason:** Redundant or conflicting ARIA produces an inaccurate accessibility object.
 - **Remediation:** Remove redundant or conflicting ARIA, prefer native HTML, and recheck the computed accessibility node.
 
-#### SEM-015 — Rendered DOM preserves semantic structure (`warning`)
+#### SEM-015 : Rendered DOM preserves semantic structure (`warning`)
 - **Applies to:** client-rendered pages
 - **Test method:** Compare initial HTML, rendered DOM, full accessibility tree, and responsive source order
 - **Pass condition:** Rendering does not remove, duplicate, hide, or reorder essential headings, landmarks, controls, names, states, and content relationships.
 - **Failure reason:** Users, assistive technologies, and crawlers may receive inconsistent structures or interaction states.
 - **Remediation:** Correct templates, hydration, CSS ordering, or component state; retest the rendered DOM and full accessibility tree.
 
-#### SEM-016 — Computed role matches intended purpose (`error`)
+#### SEM-016 : Computed role matches intended purpose (`error`)
 - **Applies to:** landmarks, controls, images, widgets, and structural elements
 - **Test method:** Full accessibility-tree and computed-role inspection
 - **Pass condition:** The browser-computed role matches the element purpose and expected interaction.
 - **Failure reason:** Native or ARIA semantics expose the wrong object type.
 - **Remediation:** Use the correct native element or remove the conflicting role; recheck the computed node.
 
-#### SEM-017 — Accessible name and description resolve correctly (`error`)
+#### SEM-017 : Accessible name and description resolve correctly (`error`)
 - **Applies to:** controls, landmarks, images, dialogs, frames, and form fields
 - **Test method:** Computed name and description inspection plus visible-label comparison
 - **Pass condition:** Required objects have accurate, non-empty, non-conflicting names; the computed name contains the visible control wording where a visible label exists.
 - **Failure reason:** A name or description is absent, duplicated, misleading, or disconnected from the visible label or purpose.
 - **Remediation:** Repair label, alt, aria-labelledby, aria-label, aria-describedby, or host-language naming relationships; verify computed output.
 
-#### SEM-018 — Hidden and ignored-node exposure is intentional (`error`)
+#### SEM-018 : Hidden and ignored-node exposure is intentional (`error`)
 - **Applies to:** hidden, collapsed, off-canvas, inactive, and decorative content
 - **Test method:** Compare rendered visibility, focusability, DOM state, and accessibility-tree exposure
 - **Pass condition:** Hidden or inactive content is excluded as intended; visible meaningful content remains exposed; excluded subtrees contain no focusable descendants.
 - **Failure reason:** Meaningful content is ignored, or a focusable object remains inside an excluded subtree.
 - **Remediation:** Repair hidden, inert, aria-hidden, CSS visibility, or focus handling and inspect the ignored-node reason.
 
-#### SEM-019 — Dynamic states remain synchronized (`error`)
+#### SEM-019 : Dynamic states remain synchronized (`error`)
 - **Applies to:** accordions, tabs, menus, dialogs, carousels, forms, and custom widgets
 - **Test method:** Interact with the component and compare visual state with computed accessibility state
 - **Pass condition:** Expanded, selected, checked, pressed, current, invalid, busy, disabled, and modal states match the visible interface before and after interaction.
 - **Failure reason:** The visual state changes without the corresponding native or ARIA state update.
 - **Remediation:** Update the native state or correct ARIA property during the same interaction; retest every state transition.
 
-#### SEM-020 — Focus, keyboard behavior, and exposed action agree (`error`)
+#### SEM-020 : Focus, keyboard behavior, and exposed action agree (`error`)
 - **Applies to:** interactive controls
 - **Test method:** Computed role inspection plus Tab, Enter, Space, arrow-key, and Escape testing where relevant
 - **Pass condition:** Role, focusability, keyboard command, state, and resulting action follow the native element or documented widget pattern.
 - **Failure reason:** An element claims an interactive role without matching focus or keyboard behavior, or navigation and action semantics are confused.
 - **Remediation:** Use a native link for navigation and a native button for actions; implement the complete keyboard pattern only when a custom widget is unavoidable.
 
-#### SEM-021 — DOM, visual, focus, and accessibility order remain logical (`warning`)
+#### SEM-021 : DOM, visual, focus, and accessibility order remain logical (`warning`)
 - **Applies to:** grids, split layouts, responsive sections, and reordered components
 - **Test method:** Compare DOM order, visual order, keyboard focus order, and full accessibility-tree order at each relevant breakpoint
 - **Pass condition:** Reading and focus sequences remain meaningful and equivalent enough to preserve relationships at each tested viewport.
 - **Failure reason:** CSS or JavaScript reordering creates conflicting visual, reading, or focus sequences.
 - **Remediation:** Correct source order first and use layout CSS without changing the meaningful sequence.
 
-#### SEM-022 — Critical paths receive manual accessibility verification (`warning`)
+#### SEM-022 : Critical paths receive manual accessibility verification (`warning`)
 - **Applies to:** page-level validation and key user journeys
 - **Test method:** DevTools tree review, keyboard test, and selected assistive-technology spot check
 - **Pass condition:** Critical navigation, forms, disclosures, dialogs, and conversion actions work beyond static markup and automated checks.
@@ -1095,7 +1095,7 @@ _Elements that embed an external resource into the document._
 | SRC-MDN-ARIA-HIDDEN | MDN Web Docs | authoritative-guidance | 2026-07-27 | https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-hidden |
 | SRC-MDN-INERT | MDN Web Docs | authoritative-guidance | 2026-07-27 | https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inert |
 
-`normative` = a stable standards-track specification. `normative-draft` = a current standards-track draft that may change. `authoritative-guidance` = official docs from the platform owner (MDN, web.dev, W3C WAI, Google Search Central). `secondary` = third-party tutorials/blogs — useful for common use-cases and phrasing, but their SEO claims are treated as assertions to verify, not as facts, per Section 2.
+`normative` = a stable standards-track specification. `normative-draft` = a current standards-track draft that may change. `authoritative-guidance` = official docs from the platform owner (MDN, web.dev, W3C WAI, Google Search Central). `secondary` = third-party tutorials/blogs : useful for common use-cases and phrasing, but their SEO claims are treated as assertions to verify, not as facts, per Section 2.
 
 ## 7. Using the Database
 
@@ -1133,4 +1133,4 @@ WHERE tag_or_pattern IN ('a[href]', 'button', 'Read More / Learn More control');
 
 ```
 
-CSV exports of every table live in `exports/` for spreadsheet use — re-run this script after any database change to regenerate both.
+CSV exports of every table live in `exports/` for spreadsheet use : re-run this script after any database change to regenerate both.

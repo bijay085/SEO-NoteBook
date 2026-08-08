@@ -44,7 +44,7 @@ def header_band(ws, client, title, ncols=6, row=1):
     """Black band with client · title; a thin yellow accent row beneath. Returns
     the next free row."""
     ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=ncols)
-    c = ws.cell(row=row, column=1, value=f"{client}  ·  {title}")
+    c = ws.cell(row=row, column=1, value=f"{client} · {title}")
     c.fill = _fill(BLACK); c.font = Font(name=FONT, bold=True, size=14, color=YELLOW)
     c.alignment = Alignment(vertical="center", horizontal="left", indent=1)
     ws.row_dimensions[row].height = 30

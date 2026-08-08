@@ -9,7 +9,7 @@ REPORT = {
     "title": "Affiliate & Review Audit",
     "client": "‹Client›",
     "period": "‹Period›",
-    "subtitle": "Affiliate-link integrity, disclosure, review voice and schema — "
+    "subtitle": "Affiliate-link integrity, disclosure, review voice and schema : "
                 "each finding measured, with an executable fix.",
     "output_dir": "./Affiliate-Audit",
     "sections": [
@@ -24,7 +24,7 @@ REPORT = {
             {"issue": "‹EXAMPLE› 445 affiliate links still lack rel=\"sponsored\" after the tag task",
              "sev": "critical",
              "evidence": "445 outbound affiliate <a> carry rel=\"\" (task log marked "
-                         "\"tagging done\" — this is a regression).",
+                         "\"tagging done\" : this is a regression).",
              "solution": "Add rel=\"sponsored nofollow\" to every monetised outbound link.",
              "execution": "1. Filter inventory tab -> Verdict = Add-rel\n"
                           "2. Bulk-update via the link plugin / template partial\n"

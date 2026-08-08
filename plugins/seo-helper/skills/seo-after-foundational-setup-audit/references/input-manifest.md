@@ -2,13 +2,13 @@
 
 What the audit needs, what to request when it's missing, and the exact
 tool/MCP routing (with the gotchas that cost real time). The audit **degrades
-gracefully** — a missing source drops its section and is noted on the cover; it
+gracefully** : a missing source drops its section and is noted on the cover; it
 never blocks the run.
 
 ## Required (need at least the page fetch)
 | Input | Feeds | Notes |
 |---|---|---|
-| **Domain + page inventory** | everything | The exact money/service URLs + location URLs, OR permission to crawl the sitemap to discover them. This is the one hard requirement — the live fetch is the spine. |
+| **Domain + page inventory** | everything | The exact money/service URLs + location URLs, OR permission to crawl the sitemap to discover them. This is the one hard requirement : the live fetch is the spine. |
 
 ## Strongly recommended (each adds a whole section)
 | Input | Feeds | Notes |
@@ -20,13 +20,13 @@ never blocks the run.
 
 ## The intake question to ask
 When inputs are missing, ask ONE structured question (AskUserQuestion) covering:
-1. **Page inventory** — "Paste the money/service + location URLs, or shall I crawl
+1. **Page inventory** : "Paste the money/service + location URLs, or shall I crawl
    `<domain>/sitemap_index.xml`?"
-2. **GSC** — "Which connected GSC account, and confirm the property is
+2. **GSC** : "Which connected GSC account, and confirm the property is
    `sc-domain:<domain>`?"
-3. **Clarity** — "Is there a Microsoft Clarity project for `<domain>`? (I will
+3. **Clarity** : "Is there a Microsoft Clarity project for `<domain>`? (I will
    verify it returns `<domain>` data before using it.)"
-4. **Scope** — "Full 10-dimension audit, or a subset (e.g. technical + Lighthouse
+4. **Scope** : "Full 10-dimension audit, or a subset (e.g. technical + Lighthouse
    only)?"
 Then proceed with whatever is available; list which dimensions will build vs be
 dropped.
@@ -52,18 +52,18 @@ dropped.
 
 ### Microsoft Clarity (`mcp__clarity__*`)
 - **VERIFY the project first.** Run a small query and check the returned URLs are
-  `<domain>`. Connected Clarity projects are frequently a DIFFERENT client — if the
+  `<domain>`. Connected Clarity projects are frequently a DIFFERENT client : if the
   data is another domain (or `about:blank`), record a data gap and do NOT use it.
 
-### Live page fetch (the forensic engine — no external API)
+### Live page fetch (the forensic engine : no external API)
 - `scripts/fetch_pages.py` uses Python stdlib + `requests` to fetch each URL and
   compute the metrics. It is niche-agnostic; configure tracker patterns and the
   money/location URL patterns in `config.json` `taxonomy`.
 
-### Auth-gated (interactive OAuth — often unavailable headless)
+### Auth-gated (interactive OAuth : often unavailable headless)
 - Ahrefs, SimilarWeb, GBP/local-pack, a client-owned Clarity, GA4. If one is
   needed and not connected, tell the user to connect it (host MCP connectors or
-  `claude mcp`) and mark that dimension pending — don't fake it.
+  `claude mcp`) and mark that dimension pending : don't fake it.
 
 ## Config mapping
 Copy `config.template.json` and fill:

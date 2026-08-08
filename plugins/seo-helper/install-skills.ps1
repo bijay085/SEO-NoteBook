@@ -43,8 +43,8 @@ foreach ($t in $Targets) {
     }
 }
 if (Test-Path $CommandsSrc) {
-    $commandFile = Join-Path $CommandsSrc "seo-decision.md"
-    if (Test-Path $commandFile) {
+    $commandFiles = Get-ChildItem -Path $CommandsSrc -Filter "seo-*.md"
+    if ($commandFiles) {
         $commandTargets = @(
             (Join-Path $env:USERPROFILE ".claude\commands")
             (Join-Path $env:USERPROFILE ".cursor\commands")
@@ -54,11 +54,14 @@ if (Test-Path $CommandsSrc) {
 
         foreach ($cmdRoot in $commandTargets) {
             New-Item -ItemType Directory -Force -Path $cmdRoot | Out-Null
+            # Remove old seo-helper.md alias if present
             $oldCommand = Join-Path $cmdRoot "seo-helper.md"
             if (Test-Path $oldCommand) { Remove-Item -Force $oldCommand }
-            $destCommand = Join-Path $cmdRoot "seo-decision.md"
-            Copy-Item -Force $commandFile $destCommand
-            Write-Host "Installed /seo-decision command -> $destCommand"
+            foreach ($cmdFile in $commandFiles) {
+                $destCommand = Join-Path $cmdRoot $cmdFile.Name
+                Copy-Item -Force $cmdFile.FullName $destCommand
+                Write-Host "Installed /$($cmdFile.BaseName) command -> $destCommand"
+            }
         }
     }
 }

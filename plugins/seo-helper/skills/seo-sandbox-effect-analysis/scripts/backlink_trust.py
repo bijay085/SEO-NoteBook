@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""backlink_trust.py — turn a backlinks export into the off-page TRUST picture that explains
+"""backlink_trust.py : turn a backlinks export into the off-page TRUST picture that explains
 suppression: over-optimized exact-match anchors, spam-directory clusters, and a conservative
 DOMAIN-level disavow candidate list.
 
 Input is a CSV export from Ahrefs, Semrush, OR the DataForSEO backlinks MCP (column names are
 matched case-insensitively). The direct AHREFS_API_KEY / SEMRUSH_API_KEY in .env are EMPTY, so
-this reads a CSV the user provides OR one saved from the DataForSEO MCP — it does NOT call
+this reads a CSV the user provides OR one saved from the DataForSEO MCP : it does NOT call
 Ahrefs/Semrush directly (see references/data-sources-and-tools.md).
 
 Heuristics only (a starting point for human review, NEVER an auto-disavow):
-  - exact-match anchor share (brand term supplied via --brand)  -> over-optimization signal
+  - exact-match anchor share (brand term supplied via --brand) -> over-optimization signal
   - referring-domain toxicity from spam patterns + (optional) a spam-score/DR column
-  - disavow candidates emitted at DOMAIN level (domain:) — the safe granularity
+  - disavow candidates emitted at DOMAIN level (domain:) : the safe granularity
 
 Usage: python3 backlink_trust.py --csv backlinks.csv --brand "brand name" \
           --money "aluminium windows,sliding doors" [--out backlinks_analysis.json] [--disavow disavow.txt]
@@ -77,7 +77,7 @@ def main():
         else: classes['other']+=1
         src=(r[cm['source_url']] if 'source_url' in cm and cm['source_url']<len(r) else dom)
         if dom and (SPAM_PAT.search(src or '') or SPAM_PAT.search(dom)): toxic.add(dom)
-        if dom and sc is not None and sc <= 5: toxic.add(dom)   # very low authority
+        if dom and sc is not None and sc <= 5: toxic.add(dom) # very low authority
     exact_share=round(100*classes.get('exact_money',0)/total,1) if total else 0
     brand_share=round(100*classes.get('brand',0)/total,1) if total else 0
     res={'total_backlinks_rows':total,'referring_domains':len(dom_links),
@@ -88,14 +88,14 @@ def main():
          'toxic_domain_share_pct':round(100*len(toxic)/len(dom_links),1) if dom_links else 0,
          'disavow_candidates_sample':sorted(toxic)[:50],
          'flags':[]}
-    if exact_share>=15: res['flags'].append(f"Exact-match money anchors {exact_share}% — over-optimized (natural profiles are brand/URL/generic heavy). Manipulation signal that suppresses trust.")
-    if brand_share<30 and total>20: res['flags'].append(f"Brand anchors only {brand_share}% — a trusted entity's profile is brand-dominant; this looks built, not earned.")
-    if res['toxic_domain_share_pct']>=20: res['flags'].append(f"{res['toxic_domain_share_pct']}% of referring domains match spam/low-authority patterns — an active suppression risk; review for disavow.")
+    if exact_share>=15: res['flags'].append(f"Exact-match money anchors {exact_share}% : over-optimized (natural profiles are brand/URL/generic heavy). Manipulation signal that suppresses trust.")
+    if brand_share<30 and total>20: res['flags'].append(f"Brand anchors only {brand_share}% : a trusted entity's profile is brand-dominant; this looks built, not earned.")
+    if res['toxic_domain_share_pct']>=20: res['flags'].append(f"{res['toxic_domain_share_pct']}% of referring domains match spam/low-authority patterns : an active suppression risk; review for disavow.")
     print(json.dumps({k:v for k,v in res.items() if k!='disavow_candidates_sample'}, indent=2))
     print(f"\n[disavow] {len(toxic)} domain-level candidates (review before use).")
     if a.disavow and toxic:
         with open(a.disavow,'w') as f:
-            f.write("# Conservative DOMAIN-level disavow candidates — REVIEW MANUALLY before submitting.\n")
+            f.write("# Conservative DOMAIN-level disavow candidates : REVIEW MANUALLY before submitting.\n")
             for d in sorted(toxic): f.write(f"domain:{d}\n")
         print(f"WROTE {a.disavow}")
     if a.out: json.dump(res, open(a.out,'w'), indent=2); print(f"WROTE {a.out}")

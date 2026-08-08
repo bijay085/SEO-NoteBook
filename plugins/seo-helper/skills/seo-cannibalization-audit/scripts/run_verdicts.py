@@ -1,4 +1,4 @@
-"""The decision cascade — one verdict per shortlisted pair.
+"""The decision cascade : one verdict per shortlisted pair.
 
 Precedence (first tier that fires wins), exactly as the app ordered it:
 
@@ -12,9 +12,9 @@ auto-merging it, because a blanket 301 there destroys real traffic. The guard
 runs on raw GSC demand, so it is independent of the topic judgment.
 
 Run it twice:
-  1st run — writes weekly/_fetch_list.json (which URLs need a date x query pull)
+  1st run : writes weekly/_fetch_list.json (which URLs need a date x query pull)
             and judgment/04_duplicates.task.json (boundary pairs for Claude).
-  2nd run — with the weekly dumps (and optionally Claude's duplicate answers)
+  2nd run : with the weekly dumps (and optionally Claude's duplicate answers)
             in place, produces pair_verdicts.json.
 
 Usage:
@@ -37,7 +37,7 @@ from judgment import intents_compatible
 
 
 def weekly_filename(url):
-    """Stable per-URL filename — URLs are too long and slash-heavy to use raw."""
+    """Stable per-URL filename : URLs are too long and slash-heavy to use raw."""
     return hashlib.sha1(url.encode('utf-8')).hexdigest()[:16] + '.json'
 
 
@@ -72,20 +72,20 @@ def assess_duplicate(content_sim, twin, tsim, cfg):
 
     The twin path needs that loose content corroboration because without it
     `/reading-practice-test/` and `/reading-practice-tests-3/` both scored
-    duplicate-High — a Part 3 page with different content should never be
+    duplicate-High : a Part 3 page with different content should never be
     auto-merged into Part 1 just because the slug differs by "-3".
     """
     c = content_sim if content_sim is not None else -1.0
     t = tsim if tsim is not None else -1.0
     content_hit = c >= cfg['dup_content_min']
     twin_hit = (bool(twin) and t >= cfg['dup_twin_topic_min']
-                and (c < 0 or c >= cfg['dup_twin_content_min']))   # c < 0 = no signal, allowed
+                and (c < 0 or c >= cfg['dup_twin_content_min'])) # c < 0 = no signal, allowed
     if not (content_hit or twin_hit):
         return None
-    reason = ((f'near-identical page context (similarity {c:.2f}) — the same page duplicated')
+    reason = ((f'near-identical page context (similarity {c:.2f}) : the same page duplicated')
               if content_hit else
               (f'near-twin URLs on the same topic (topic-profile similarity {t:.2f}, '
-               f'context similarity {c:.2f}) — a duplicate page'))
+               f'context similarity {c:.2f}) : a duplicate page'))
     return {'verdict': 'duplicate', 'reason': reason, 'confidence': 'High'}
 
 
@@ -147,11 +147,11 @@ def classify_pair(a, b, weekly_a, weekly_b, shared, appearance, intents, cfg, en
                 'distinct_page': side,
                 'reason': (f'would have been "{tier}", but {side} earns {share * 100:.0f}% of its '
                            f'clicks on searches the other page does not rank for (floor '
-                           f'{floor * 100:.0f}%) — a distinct page, not a duplicate. A blanket '
+                           f'{floor * 100:.0f}%) : a distinct page, not a duplicate. A blanket '
                            f'301 would destroy that traffic.')}
 
     if handoff['verdict']:
-        # A completed handoff is history, not a merge decision — the guard does
+        # A completed handoff is history, not a merge decision : the guard does
         # not apply, because the loser has already lost the queries.
         return {**base, 'verdict': 'affected_handoff', 'confidence': 'High', 'leakage': leakage,
                 'reason': f'handoff detected on {len(handoff["qualifying_queries"])} shared '
@@ -180,7 +180,7 @@ def classify_pair(a, b, weekly_a, weekly_b, shared, appearance, intents, cfg, en
         return {**base, 'verdict': 'overlap_watch', 'confidence': 'Low', 'leakage': None,
                 'reason': (f'pages cover the same topic (topic similarity {ts:.2f}, context '
                            f'{cs:.2f}, {len(shared)} shared topics) but no live click split or '
-                           f'handoff yet — monitor')}
+                           f'handoff yet : monitor')}
 
     return {**base, 'verdict': 'not_cannibal', 'confidence': '', 'leakage': None,
             'reason': 'no parity now and no handoff in history'}
@@ -231,11 +231,11 @@ def main():
     (jdir / '04_duplicates.task.json').write_text(json.dumps({
         'instruction': (
             'For each pair, judge how much the two pages are THE SAME PAGE, from slug and top '
-            'queries (fetch the live pages for title/H1/meta if you can — state whether you '
+            'queries (fetch the live pages for title/H1/meta if you can : state whether you '
             'did). Return content_sim 0.0-1.0: 0.95+ = the same page duplicated; 0.80-0.93 = '
             'same topic, genuinely different page; below 0.60 = clearly differentiated. '
             f'>= {cfg["dup_content_min"]} triggers an immediate 301 recommendation, so be '
-            'strict — a wrong duplicate call destroys a real page.'),
+            'strict : a wrong duplicate call destroys a real page.'),
         'answer_schema': {'pairs': [{'pair_id': 'a||b', 'content_sim': 0.0, 'why': '...'}]},
         'pairs': boundary,
     }, indent=1), encoding='utf-8')
@@ -291,8 +291,8 @@ def main():
         'end_date': meta['end_date'],
         'distribution': dist,
         'pairs_judged': len(verdicts),
-        # How many URLs actually had a weekly (date x query) series. This — not
-        # the matrix's date column — is what decides whether the ongoing and
+        # How many URLs actually had a weekly (date x query) series. This : not
+        # the matrix's date column : is what decides whether the ongoing and
         # handoff detectors could run.
         'weekly_urls_loaded': len(have),
         'weekly_urls_expected': len(fetch_list),
@@ -305,7 +305,7 @@ def main():
     if skipped:
         print(f'WARNING: {len(skipped)} pairs skipped for missing weekly data.')
     if not dup_sim and boundary:
-        print(f'NOTE: no 04_duplicates.answer.json — {len(boundary)} boundary pairs were judged '
+        print(f'NOTE: no 04_duplicates.answer.json : {len(boundary)} boundary pairs were judged '
               f'without a page-context signal (URL-twin path only).')
 
 

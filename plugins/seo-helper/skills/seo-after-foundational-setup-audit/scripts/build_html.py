@@ -5,8 +5,8 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import report_data as RD          # noqa: E402
-from report_kit import render_html  # noqa: E402
+import report_data as RD # noqa: E402
+from report_kit import render_html # noqa: E402
 
 
 def _fname(rep):
@@ -24,7 +24,7 @@ def main():
     html = render_html(rep)
     with open(path, "w", encoding="utf-8") as fh:
         fh.write(html)
-    print(f"[build_html] wrote {path}  ({len(html):,} bytes, "
+    print(f"[build_html] wrote {path} ({len(html):,} bytes, "
           f"{len(rep.get('sections') or [])} sections)")
 
 

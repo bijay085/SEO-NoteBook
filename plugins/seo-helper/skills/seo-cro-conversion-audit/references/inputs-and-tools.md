@@ -1,10 +1,10 @@
 # Inputs & Tools
 
 Everything the skill can consume, and the exact tools/credentials it may call.
-**Nothing here is hypothetical** — each tool is a connector or skill that exists
+**Nothing here is hypothetical** : each tool is a connector or skill that exists
 in this environment; each credential is a key present in `project `.env` / host environment variables`
 (names only, never values). If something is not present at run time, the skill
-**asks for it or fetches it** — it never invents a source.
+**asks for it or fetches it** : it never invents a source.
 
 ## Input catalogue
 
@@ -28,7 +28,7 @@ Rule: a missing recommended input is a **request**, not a silent zero.
 
 Inside the Claude interface the data comes from **MCP connectors** (they manage
 their own OAuth) and the bundled **offline scripts** (no keys). Claude does all
-reasoning — there is no OpenAI/Gemini/Anthropic API call in this skill.
+reasoning : there is no OpenAI/Gemini/Anthropic API call in this skill.
 
 ### Page acquisition (Stage 2)
 - browser/`navigate` (Playwright or agent browse) + browser/`get_page_text` (Playwright or agent browse) /
@@ -40,17 +40,17 @@ Save each fetched page to `pages/` as `view-source_<url>.html` with a first line
 `<!-- crawled: <URL> -->` so `common.load_page` records the URL.
 
 ### Behavioral (Stage 3/5)
-- Client Clarity CSV exports → `scripts/clarity_behavior.py` (richest — per-element
+- Client Clarity CSV exports → `scripts/clarity_behavior.py` (richest : per-element
   clicks; **preferred**)
 - `mcp__clarity__query-analytics-dashboard`, `mcp__clarity__list-session-recordings`
   (live dashboard behavior when no export is available)
 
 ### Competitor discovery, market sizing, Core Web Vitals, backlinks
-- `mcp__dataforseo__serp_organic_live_advanced` — who ranks for the money query
-- `mcp__dataforseo__dataforseo_labs_google_competitors_domain` — domain rivals
-- `mcp__dataforseo__on_page_lighthouse` — Core Web Vitals (mobile conversion headwind)
-- `mcp__dataforseo__backlinks_summary` — authority context
-- `mcp__dataforseo__dataforseo_labs_google_ranked_keywords` — demand/opportunity
+- `mcp__dataforseo__serp_organic_live_advanced` : who ranks for the money query
+- `mcp__dataforseo__dataforseo_labs_google_competitors_domain` : domain rivals
+- `mcp__dataforseo__on_page_lighthouse` : Core Web Vitals (mobile conversion headwind)
+- `mcp__dataforseo__backlinks_summary` : authority context
+- `mcp__dataforseo__dataforseo_labs_google_ranked_keywords` : demand/opportunity
 
 ### Search Console context
 - `mcp__google-search-console__query_search_analytics`, `…get_top_pages`,

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-live_page_audit.py — severity-ranked technical/schema audit of a single saved HTML page.
+live_page_audit.py : severity-ranked technical/schema audit of a single saved HTML page.
 
 Generalizes the live-page checks used in the source investigation (a hoodie collection page
 that had a hardcoded/duplicated review-rating schema, JS-only uncrawlable pagination, and a
@@ -8,14 +8,14 @@ nested <main> landmark). Read-only: parses a saved HTML file, never modifies it.
 
 Usage:
   <venv>/bin/python live_page_audit.py page.html [page2.html ...]
-  <venv>/bin/python live_page_audit.py --diff templateA.html templateB.html   # duplication %
+  <venv>/bin/python live_page_audit.py --diff templateA.html templateB.html # duplication %
 
-Fetching the live page first (not this script's job — use WebFetch or `curl` in the workflow,
+Fetching the live page first (not this script's job : use WebFetch or `curl` in the workflow,
 then run this against the saved file so the audit is reproducible):
   curl -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15" \\
        -s "https://example.com/collection/" -o page.html
 
-No external AI/LLM API is called — this is deterministic parsing (BeautifulSoup + stdlib re/json).
+No external AI/LLM API is called : this is deterministic parsing (BeautifulSoup + stdlib re/json).
 """
 import sys
 import re
@@ -33,7 +33,7 @@ def finding(severity, title, detail):
 
 
 def check_schema_ratings(soup):
-    """Flag identical aggregateRating values repeated verbatim across multiple JSON-LD entities —
+    """Flag identical aggregateRating values repeated verbatim across multiple JSON-LD entities : 
     the exact pattern found live in the source investigation (4.8 / 1247 hardcoded on every
     Product + SoftwareApplication entity). A real per-product distribution should vary."""
     out = []
@@ -60,18 +60,18 @@ def check_schema_ratings(soup):
             out.append(finding(
                 "CRITICAL", "Identical aggregateRating hardcoded across multiple entities",
                 f"{len(ratings)} entities all carry ratingValue={rv}, reviewCount={rc}. "
-                "Google's structured-data policy prohibits fabricated/copy-pasted ratings — this is "
+                "Google's structured-data policy prohibits fabricated/copy-pasted ratings : this is "
                 "a real spam-signal pattern, not a cosmetic issue. Verify against actual review data "
                 "per product/page, or remove the aggregateRating block entirely if none exists."
             ))
         elif len(ratings) >= 3:
             out.append(finding("OK", "aggregateRating values vary across entities",
-                                f"{len(ratings)} entities, {len(signatures)} distinct rating signatures — looks like real per-product data."))
+                                f"{len(ratings)} entities, {len(signatures)} distinct rating signatures : looks like real per-product data."))
     return out
 
 
 def check_pagination(soup):
-    """Flag JS-only pager controls (<button> with no matching <a href>) — Googlebot cannot follow
+    """Flag JS-only pager controls (<button> with no matching <a href>) : Googlebot cannot follow
     a button click, so paginated content beyond page 1 is invisible to the crawler."""
     out = []
     pager_candidates = soup.select("[class*=pager], [class*=pagination], [id*=pager], [id*=pagination]")
@@ -83,7 +83,7 @@ def check_pagination(soup):
             out.append(finding(
                 "CRITICAL", "Pagination is JS-only, not crawlable",
                 f"Found {len(page_buttons)} page-control <button> elements with no matching <a href> "
-                "in the same pager container. Googlebot cannot click buttons — pages beyond the first "
+                "in the same pager container. Googlebot cannot click buttons : pages beyond the first "
                 "are invisible to the crawler. Fix: add real <a href> links (can still be intercepted "
                 "by JS for a smooth AJAX experience via history.pushState), or ensure server-rendered "
                 "paginated URLs exist and are linked."
@@ -93,13 +93,13 @@ def check_pagination(soup):
                                 f"Found {len(links)} <a href> pagination links."))
     if not pager_candidates:
         out.append(finding("LOW", "No pagination container detected",
-                            "No element matched common pager/pagination class or id patterns — "
+                            "No element matched common pager/pagination class or id patterns : "
                             "confirm manually if this page is expected to paginate."))
     return out
 
 
 def check_landmarks(soup):
-    """Flag nested <main> elements — HTML5 permits only one per document."""
+    """Flag nested <main> elements : HTML5 permits only one per document."""
     out = []
     mains = soup.find_all("main")
     if len(mains) > 1:
@@ -108,7 +108,7 @@ def check_landmarks(soup):
             out.append(finding(
                 "HIGH", "Nested <main> element(s)",
                 f"Found {len(mains)} <main> elements on the page, at least one nested inside "
-                "another. HTML5 permits only one <main> landmark per document — this is invalid "
+                "another. HTML5 permits only one <main> landmark per document : this is invalid "
                 "markup and an accessibility/parsing risk. Rename the inner element(s) to <div> or "
                 "<section>."
             ))
@@ -122,7 +122,7 @@ def check_landmarks(soup):
         out.append(finding("OK", "Single <main> landmark", "Exactly one <main> element found."))
     else:
         out.append(finding("MEDIUM", "No <main> landmark found",
-                            "No <main> element — a missing primary-content landmark hurts accessibility."))
+                            "No <main> element : a missing primary-content landmark hurts accessibility."))
     return out
 
 
@@ -146,7 +146,7 @@ def check_title_h1_alignment(soup):
             out.append(finding(
                 "MEDIUM", "H1 is thinner than the title tag",
                 f"Title: \"{title}\" (differentiating words not in H1: {sorted(title_only)[:6]}). "
-                f"H1: \"{h1_text}\". Consider aligning the H1 with the title tag's intent — it is "
+                f"H1: \"{h1_text}\". Consider aligning the H1 with the title tag's intent : it is "
                 "read first by both users and Google."
             ))
         else:
@@ -155,18 +155,18 @@ def check_title_h1_alignment(soup):
 
 
 def check_filter_url_state(soup):
-    """Informational only — flag whether filter controls appear to write URL parameters. This is
-    NOT automatically a defect (see references/pitfalls.md #5) — confirm intent with the owner."""
+    """Informational only : flag whether filter controls appear to write URL parameters. This is
+    NOT automatically a defect (see references/pitfalls.md #5) : confirm intent with the owner."""
     out = []
     filter_inputs = soup.select("input[type=checkbox][data-tax], input[type=checkbox][data-group], "
                                  "[class*=filter] input[type=checkbox]")
     if filter_inputs:
         out.append(finding(
-            "LOW", "Filter UI detected — confirm URL-state intent",
+            "LOW", "Filter UI detected : confirm URL-state intent",
             f"Found {len(filter_inputs)} filter checkbox inputs. This audit cannot determine from "
             "static HTML alone whether filtering writes URL parameters (JS-driven). If it doesn't, "
             "confirm with the site owner whether that is a deliberate crawl-budget/index-bloat "
-            "decision (common and often correct) before recommending a change — see pitfalls.md #5."
+            "decision (common and often correct) before recommending a change : see pitfalls.md #5."
         ))
     return out
 
@@ -184,35 +184,35 @@ def audit_page(path):
     findings += check_filter_url_state(soup)
     findings.sort(key=lambda f: SEVERITY_ORDER.get(f["severity"], 9))
 
-    print(f"\n{'=' * 78}\nLIVE PAGE AUDIT — {path}\n{'=' * 78}")
-    print(f"  {len(html):,} bytes  ·  {len(html.splitlines()):,} lines")
+    print(f"\n{'=' * 78}\nLIVE PAGE AUDIT : {path}\n{'=' * 78}")
+    print(f" {len(html):,} bytes · {len(html.splitlines()):,} lines")
     for f in findings:
-        print(f"\n  [{f['severity']}] {f['title']}")
-        print(f"    {f['detail']}")
+        print(f"\n [{f['severity']}] {f['title']}")
+        print(f" {f['detail']}")
     if not findings:
-        print("\n  No findings from the automated checks (does not replace a manual review).")
+        print("\n No findings from the automated checks (does not replace a manual review).")
     return findings
 
 
 def diff_templates(path_a, path_b):
     """Duplication-percentage check for two candidate near-duplicate templates (pitfalls.md #7).
-    Measures line-level diff, not byte-identity — near-identical pages often differ only by a
+    Measures line-level diff, not byte-identity : near-identical pages often differ only by a
     varying token (a city, a product name), which this correctly still counts as "identical shell"."""
     a = open(path_a, encoding="utf-8", errors="replace").read().splitlines()
     b = open(path_b, encoding="utf-8", errors="replace").read().splitlines()
     sm = difflib.SequenceMatcher(None, a, b)
     ratio = sm.ratio()
     print(f"\n{'=' * 78}\nTEMPLATE DUPLICATION CHECK\n{'=' * 78}")
-    print(f"  {path_a}: {len(a)} lines")
-    print(f"  {path_b}: {len(b)} lines")
-    print(f"  SequenceMatcher line-level similarity ratio: {ratio:.1%}")
+    print(f" {path_a}: {len(a)} lines")
+    print(f" {path_b}: {len(b)} lines")
+    print(f" SequenceMatcher line-level similarity ratio: {ratio:.1%}")
     if ratio > 0.85:
-        print("  -> Very high duplication. Strong candidate for consolidation into one dynamic "
+        print(" -> Very high duplication. Strong candidate for consolidation into one dynamic "
               "template with per-instance content fields, rather than N copy-pasted files.")
     elif ratio > 0.5:
-        print("  -> Substantial shared structure. Worth reviewing for consolidation opportunities.")
+        print(" -> Substantial shared structure. Worth reviewing for consolidation opportunities.")
     else:
-        print("  -> Limited overlap — likely genuinely distinct templates, not copy-paste duplicates.")
+        print(" -> Limited overlap : likely genuinely distinct templates, not copy-paste duplicates.")
     return ratio
 
 

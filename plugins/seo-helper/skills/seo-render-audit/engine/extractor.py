@@ -49,8 +49,8 @@ def _images(soup: BeautifulSoup) -> List[dict]:
     imgs = []
     for img in soup.find_all("img"):
         imgs.append({
-            "src":     img.get("src", ""),
-            "alt":     img.get("alt", None),
+            "src": img.get("src", ""),
+            "alt": img.get("alt", None),
             "loading": img.get("loading", ""),
         })
     return imgs
@@ -80,7 +80,7 @@ def extract_signals(
     Pure Python extraction. No AI.
     Returns a list of SignalResult for every tracked signal.
     """
-    raw  = _soup(raw_html)
+    raw = _soup(raw_html)
     rend = _soup(rendered_html)
     domain = urlparse(base_url).netloc
     signals: List[SignalResult] = []
@@ -115,7 +115,7 @@ def extract_signals(
     signals.append(sig(
         "x_robots_header", "Indexability", "X-Robots-Tag Header",
         response_headers.get("X-Robots-Tag"), None,
-        match_override=True,  # header-only, no render comparison
+        match_override=True, # header-only, no render comparison
     ))
 
     # ── CANONICAL ─────────────────────────────────────────────────────────────
@@ -126,18 +126,18 @@ def extract_signals(
 
     # ── HEADINGS ──────────────────────────────────────────────────────────────
     for lvl in ["h1", "h2", "h3"]:
-        raw_h  = _headings(raw,  lvl)
+        raw_h = _headings(raw, lvl)
         rend_h = _headings(rend, lvl)
         signals.append(sig(
             lvl, "Headings", f"{lvl.upper()} Tags",
             raw_h, rend_h,
         ))
 
-    # ── BODY TEXT — with actual JS-gated text blocks ─────────────────────────
-    raw_chars  = _text_volume(raw)
+    # ── BODY TEXT : with actual JS-gated text blocks ─────────────────────────
+    raw_chars = _text_volume(raw)
     rend_chars = _text_volume(rend)
-    gap_chars  = rend_chars - raw_chars
-    gap_pct    = round((gap_chars / rend_chars * 100), 1) if rend_chars else 0
+    gap_chars = rend_chars - raw_chars
+    gap_pct = round((gap_chars / rend_chars * 100), 1) if rend_chars else 0
 
     # Collect actual text blocks present in rendered but absent from raw
     # Use broader capture: include non-leaf nodes up to 3 levels deep, min 30 chars
@@ -151,7 +151,7 @@ def extract_signals(
                 blocks.add(txt)
         return blocks
 
-    raw_blocks  = _text_blocks(raw)
+    raw_blocks = _text_blocks(raw)
     rend_blocks = _text_blocks(rend)
     js_gated = sorted(rend_blocks - raw_blocks, key=len, reverse=True)[:15]
 
@@ -170,17 +170,17 @@ def extract_signals(
         },
         match=(gap_pct < 10),
         gap_significance=(
-            "high"   if gap_pct >= 60 else
+            "high" if gap_pct >= 60 else
             "medium" if gap_pct >= 30 else
-            "low"    if gap_pct >= 10 else
+            "low" if gap_pct >= 10 else
             "none"
         ),
     ))
 
-    # ── LINKS — with actual JS-only hrefs ─────────────────────────────────────
-    raw_links  = _links(raw,  domain)
+    # ── LINKS : with actual JS-only hrefs ─────────────────────────────────────
+    raw_links = _links(raw, domain)
     rend_links = _links(rend, domain)
-    gap_links  = [l for l in rend_links if l not in raw_links]
+    gap_links = [l for l in rend_links if l not in raw_links]
     signals.append(SignalResult(
         signal_id="internal_links",
         category="Links",
@@ -193,17 +193,17 @@ def extract_signals(
         },
         match=(len(gap_links) == 0),
         gap_significance=(
-            "high"   if len(gap_links) > 10 else
-            "medium" if len(gap_links) > 3  else
-            "low"    if len(gap_links) > 0  else
+            "high" if len(gap_links) > 10 else
+            "medium" if len(gap_links) > 3 else
+            "low" if len(gap_links) > 0 else
             "none"
         ),
     ))
 
-    # ── JSON-LD SCHEMA — with full blocks ─────────────────────────────────────
-    raw_ld  = _jsonld(raw)
+    # ── JSON-LD SCHEMA : with full blocks ─────────────────────────────────────
+    raw_ld = _jsonld(raw)
     rend_ld = _jsonld(rend)
-    raw_types  = [b.get("@type", "") for b in raw_ld]
+    raw_types = [b.get("@type", "") for b in raw_ld]
     rend_types = [b.get("@type", "") for b in rend_ld]
     signals.append(SignalResult(
         signal_id="json_ld",
@@ -220,21 +220,21 @@ def extract_signals(
         _og(raw, "og:title"), _og(rend, "og:title"),
     ))
 
-    # ── IMAGES — with specific differing src/alt values ───────────────────────
-    raw_imgs  = _images(raw)
+    # ── IMAGES : with specific differing src/alt values ───────────────────────
+    raw_imgs = _images(raw)
     rend_imgs = _images(rend)
-    raw_srcs  = {i["src"] for i in raw_imgs  if i["src"]}
+    raw_srcs = {i["src"] for i in raw_imgs if i["src"]}
     rend_srcs = {i["src"] for i in rend_imgs if i["src"]}
 
     js_only_imgs_all = [i for i in rend_imgs
                         if i["src"] and i["src"] not in raw_srcs]
-    missing_alt_all  = [i for i in rend_imgs
+    missing_alt_all = [i for i in rend_imgs
                         if i.get("alt") is None or i.get("alt") == ""]
-    js_only_imgs  = js_only_imgs_all[:10]
+    js_only_imgs = js_only_imgs_all[:10]
     # NOT sample-capped: outputs/xlsx_builder.py's "Missing Alt Images" sheet
     # promises a full list, so this field must stay complete.
-    missing_alt   = missing_alt_all
-    lazy_imgs     = [i for i in raw_imgs
+    missing_alt = missing_alt_all
+    lazy_imgs = [i for i in raw_imgs
                      if "data-lazy" in str(i.get("src","")).lower()
                      or "data-src" in str(i).lower()][:5]
 
@@ -259,9 +259,9 @@ def extract_signals(
         },
         match=(len(raw_imgs) == len(rend_imgs) and n_missing_alt == 0),
         gap_significance=(
-            "high"   if (n_missing_alt > 10 or n_js_only > 10) else
-            "medium" if (n_missing_alt > 3  or n_js_only > 3)  else
-            "low"    if (n_missing_alt > 0  or n_js_only > 0)  else
+            "high" if (n_missing_alt > 10 or n_js_only > 10) else
+            "medium" if (n_missing_alt > 3 or n_js_only > 3) else
+            "low" if (n_missing_alt > 0 or n_js_only > 0) else
             "none"
         ),
     ))

@@ -2,7 +2,7 @@
 
 Claude fills REPORT at run time from the measured data (fetch_pages.py, GSC,
 Lighthouse). Every finding MUST carry issue+evidence+solution+execution.
-The examples below (issue starts with "‹EXAMPLE›") show the schema — replace them.
+The examples below (issue starts with "‹EXAMPLE›") show the schema : replace them.
 build_html.py and build_xlsx.py import this module and render at parity.
 """
 
@@ -11,7 +11,7 @@ REPORT = {
     "client": "‹Client›",
     "period": "‹Period›",
     "subtitle": "Page-by-page forensic SEO, technical, content and performance "
-                "audit — every finding measured, with an executable fix.",
+                "audit : every finding measured, with an executable fix.",
     "output_dir": "./Deep-Audit",
     "sections": [
         {"id": "gsc", "title": "1 · Live Search Performance (GSC)",
@@ -30,7 +30,7 @@ REPORT = {
          ]},
         {"id": "perf", "title": "2 · Measured Performance (Lighthouse + CWV)",
          "intro": "Lab scores + Core Web Vitals. State the profile (DataForSEO = desktop).",
-         "chart": {"type": "bars", "title": "‹EXAMPLE› Lighthouse (desktop) — homepage",
+         "chart": {"type": "bars", "title": "‹EXAMPLE› Lighthouse (desktop) : homepage",
                    "data": [["Performance", 94], ["Accessibility", 88],
                             ["SEO", 92], ["Best Practices", 83]]},
          "findings": []},
@@ -64,7 +64,7 @@ REPORT = {
          "intro": "Every finding, prioritised by impression volume × severity.",
          "findings": [
             {"issue": "‹EXAMPLE› Ship the cannibalization 301s",
-             "sev": "high", "evidence": "See §1 — one duplicate intent confirmed live in GSC.",
+             "sev": "high", "evidence": "See §1 : one duplicate intent confirmed live in GSC.",
              "solution": "Apply the consolidation 301 and re-point internal links.",
              "execution": "Owner: dev. Ship in the next release; validate in GSC.",
              "effort": "S", "priority": "P0"},

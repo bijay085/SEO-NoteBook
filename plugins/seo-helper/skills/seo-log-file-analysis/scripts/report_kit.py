@@ -1,6 +1,6 @@
-"""seo report kit — shared SEO deliverable renderer (pure stdlib for HTML).
+"""seo report kit : shared SEO deliverable renderer (pure stdlib for HTML).
 
-render_html(report) -> str        standalone branded HTML (jump-nav, <details>
+render_html(report) -> str standalone branded HTML (jump-nav, <details>
                                   accordions, Issue·Evidence·Solution·Execution
                                   cards, inline SVG charts).
 render_xlsx(report, path) -> None branded workbook at parity (needs openpyxl).
@@ -19,7 +19,7 @@ report schema:
            "evidence": "...", "solution": "...", "execution": "...",
            "effort": "M", "priority": "P0"} ] } ]
   }
-Every finding MUST carry issue+evidence+solution+execution — that is the quality bar.
+Every finding MUST carry issue+evidence+solution+execution : that is the quality bar.
 """
 import html as _h
 
@@ -30,11 +30,11 @@ BRAND = {
 }
 SEV = {
     "critical": ("Critical", BRAND["red"]),
-    "high":     ("High",     BRAND["orange"]),
-    "medium":   ("Medium",   BRAND["blue"]),
-    "low":      ("Low",      BRAND["muted"]),
-    "good":     ("Good",     BRAND["green"]),
-    "info":     ("Info",     BRAND["muted"]),
+    "high": ("High", BRAND["orange"]),
+    "medium": ("Medium", BRAND["blue"]),
+    "low": ("Low", BRAND["muted"]),
+    "good": ("Good", BRAND["green"]),
+    "info": ("Info", BRAND["muted"]),
 }
 SEV_ORDER = ["critical", "high", "medium", "low", "good", "info"]
 
@@ -138,7 +138,7 @@ def _finding(f):
 def _section(s):
     fnd = s.get("findings") or []
     inner = "".join(_finding(f) for f in fnd) or \
-        '<p class="empty">No findings recorded yet — populate this section in <code>report_data.py</code>.</p>'
+        '<p class="empty">No findings recorded yet : populate this section in <code>report_data.py</code>.</p>'
     intro = f'<p class="s-intro">{esc(s["intro"])}</p>' if s.get("intro") else ""
     chart = svg_bars(s["chart"]) if s.get("chart") else ""
     table = _table(s["table"]) if s.get("table") else ""
@@ -162,7 +162,7 @@ def render_html(report):
     client = report.get("client", "Client")
     title = report.get("title", "Audit")
     period = report.get("period", "")
-    header = f'{esc(client)} · {esc(title)}' + (f' — {esc(period)}' if period else "")
+    header = f'{esc(client)} · {esc(title)}' + (f' : {esc(period)}' if period else "")
     counts = _sev_counts(sections)
     total = sum(counts.values())
 
@@ -194,7 +194,7 @@ def render_html(report):
 
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{esc(client)} — {esc(title)}</title>
+<title>{esc(client)} : {esc(title)}</title>
 <style>
 :root{{--yl:{BRAND['yellow']};--bk:{BRAND['black']};--dk:{BRAND['dark']};
 --ink:{BRAND['ink']};--mut:{BRAND['muted']};--ln:{BRAND['line']};}}
@@ -300,7 +300,7 @@ def render_xlsx(report, path):
         from openpyxl.styles import Font, PatternFill, Alignment
         from openpyxl.utils import get_column_letter
     except ImportError as e:
-        raise ImportError("openpyxl is required for the XLSX deliverable — "
+        raise ImportError("openpyxl is required for the XLSX deliverable : "
                           "`pip install openpyxl`, then re-run build_xlsx.py") from e
 
     sections = report.get("sections") or []

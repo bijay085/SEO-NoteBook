@@ -7,17 +7,17 @@ This profile applies to every indexable HTML page. It covers the document shell 
 ```text
 html[lang]
 ├── head
-│   ├── title and metadata
-│   ├── canonical/indexing directives
-│   └── required resources
+│ ├── title and metadata
+│ ├── canonical/indexing directives
+│ └── required resources
 └── body
     ├── skip link
     ├── header
-    │   ├── brand/home link
-    │   └── primary navigation
+    │ ├── brand/home link
+    │ └── primary navigation
     ├── breadcrumb navigation (when useful)
     ├── main
-    │   └── page-type body
+    │ └── page-type body
     ├── complementary/related regions (when useful)
     └── footer
 ```

@@ -1,4 +1,4 @@
-"""Issue detection — the evidence-gated rule engine.
+"""Issue detection : the evidence-gated rule engine.
 
 Ported from `seo_log_file_analyzer.py` (detect_issues); thresholds and gate
 logic unchanged. It runs over the aggregate built by analyze_logs.py rather
@@ -12,10 +12,10 @@ survived. The load-bearing gates:
   * A single VERIFIED-GOOGLEBOT 404 or 5xx is an SEO event at any volume; the
     same status with zero Googlebot hits is only link hygiene.
   * Scanner probes are excluded from the 404 rule (Security covers them).
-  * 302s are reported only on CONTENT URLs — auth/checkout/account 302s are
+  * 302s are reported only on CONTENT URLs : auth/checkout/account 302s are
     correct behaviour.
   * A 301 needs >=5 hits AND >=50% of that URL's requests before it counts as
-    "still being crawled" — 2 hits is noise.
+    "still being crawled" : 2 hits is noise.
   * Trailing-slash duplicates are skipped when either variant already 301s in
     >80% of cases; that IS the canonical fix working.
   * Redirect-chain detection runs only when referrer data covers >=20% of rows.
@@ -28,12 +28,12 @@ THREE DEFECTS in the source script are fixed here (deliberate behaviour change):
      once from the last iteration's variables and raised NameError when every
      iteration hit `continue`. Now inside the loop: one finding per base URL.
   2. The 404 rule computed `urg_404` from the Googlebot gate then discarded it,
-     passing a hit-count expression instead — a Googlebot-hit 404 could be
+     passing a hit-count expression instead : a Googlebot-hit 404 could be
      filed P2 while its own gate said P1. The gated value is now used.
   3. The 5xx rule had the same dead-variable bug (`urg_5xx` computed, then
      'P1 - Critical' hardcoded). The gated value is now used.
 
-Public API:  detect_issues(agg) -> [finding dict]
+Public API: detect_issues(agg) -> [finding dict]
 """
 from traffic_classify import (CACHEBUST_PARAM_RE, TRACKING_PARAM_RE,
                               classify_content, evaluate_ua_modernity, url_purpose)
@@ -47,45 +47,45 @@ SEG_LABELS = {
 }
 
 WP_BACKEND = [
-    ("/wp-admin",       "WordPress admin panel"),
-    ("/wp-login",       "WordPress login page"),
-    ("admin-ajax.php",  "WordPress AJAX handler"),
-    ("/wp-cron.php",    "WordPress pseudo-cron (replace with real server cron)"),
-    ("/xmlrpc.php",     "WordPress XML-RPC — legacy remote API, usually safe to block"),
+    ("/wp-admin", "WordPress admin panel"),
+    ("/wp-login", "WordPress login page"),
+    ("admin-ajax.php", "WordPress AJAX handler"),
+    ("/wp-cron.php", "WordPress pseudo-cron (replace with real server cron)"),
+    ("/xmlrpc.php", "WordPress XML-RPC : legacy remote API, usually safe to block"),
     ("/wp-json/oembed", "WordPress oEmbed endpoint"),
     ("/wp-json/wp/v2/", "WordPress REST API"),
-    ("/administrator",  "Joomla admin panel"),
-    ("?seraph_accel",   "Seraph Accel cache preloader parameter"),
+    ("/administrator", "Joomla admin panel"),
+    ("?seraph_accel", "Seraph Accel cache preloader parameter"),
 ]
 
 LOW_VALUE_PATTERNS = ["/tag/", "/author/", "/page/", "/feed/", "/category/page/"]
 
 SENSITIVE_FILES = [
-    (".env",      "Environment config — may contain DB credentials, API keys, secret tokens"),
-    (".bak",      "Backup file — may contain full codebase or database dump"),
-    (".sql",      "SQL dump — may contain full database with user records"),
-    ("wp-config", "WordPress config — contains DB username, password, secret keys"),
-    ("/.git",     "Git repository directory — exposes full source code history"),
-    ("phpinfo",   "PHP info page — exposes server config, modules, file paths"),
-    (".config",   "Application config file — may contain service credentials"),
-    ("/.svn",     "SVN repository directory — exposes source history"),
-    ("/backup",   "Backup directory — may contain database or file archives"),
-    ("debug.log", "Debug log — may contain internal paths, SQL queries, user data"),
+    (".env", "Environment config : may contain DB credentials, API keys, secret tokens"),
+    (".bak", "Backup file : may contain full codebase or database dump"),
+    (".sql", "SQL dump : may contain full database with user records"),
+    ("wp-config", "WordPress config : contains DB username, password, secret keys"),
+    ("/.git", "Git repository directory : exposes full source code history"),
+    ("phpinfo", "PHP info page : exposes server config, modules, file paths"),
+    (".config", "Application config file : may contain service credentials"),
+    ("/.svn", "SVN repository directory : exposes source history"),
+    ("/backup", "Backup directory : may contain database or file archives"),
+    ("debug.log", "Debug log : may contain internal paths, SQL queries, user data"),
 ]
 
 
 def _sensitive_regexes():
     import re
     return {
-        ".env":      re.compile(r"(/|^)\.env(\.|/|$)", re.I),
-        ".bak":      re.compile(r"\.bak(\?|/|$)", re.I),
-        ".sql":      re.compile(r"\.sql(\?|/|$|\.gz)", re.I),
+        ".env": re.compile(r"(/|^)\.env(\.|/|$)", re.I),
+        ".bak": re.compile(r"\.bak(\?|/|$)", re.I),
+        ".sql": re.compile(r"\.sql(\?|/|$|\.gz)", re.I),
         "wp-config": re.compile(r"/wp-config(\.php|-sample|\.bak|\.backup)", re.I),
-        "/.git":     re.compile(r"/\.git(/|$)", re.I),
-        "phpinfo":   re.compile(r"/phpinfo\.php|phpinfo\(\)", re.I),
-        ".config":   re.compile(r"\.config(\?|/|$)", re.I),
-        "/.svn":     re.compile(r"/\.svn(/|$)", re.I),
-        "/backup":   re.compile(r"/backup(/|s/|\.|$)", re.I),
+        "/.git": re.compile(r"/\.git(/|$)", re.I),
+        "phpinfo": re.compile(r"/phpinfo\.php|phpinfo\(\)", re.I),
+        ".config": re.compile(r"\.config(\?|/|$)", re.I),
+        "/.svn": re.compile(r"/\.svn(/|$)", re.I),
+        "/backup": re.compile(r"/backup(/|s/|\.|$)", re.I),
         "debug.log": re.compile(r"/debug\.log(\?|$)", re.I),
     }
 
@@ -149,7 +149,7 @@ def detect_issues(agg):
             else:
                 conf_404 = "High" if n >= 10 else "Medium"
                 urg_404 = "P2 - High" if n >= 10 else "P3 - Monitor"
-                ev_404 = (f"Verified: {n} 404 responses but zero Googlebot hits — "
+                ev_404 = (f"Verified: {n} 404 responses but zero Googlebot hits : "
                           f"link-hygiene issue, not yet an indexing issue. URL purpose "
                           f"= {purpose_404}.")
             add("HTTP Errors", "404 Not Found",
@@ -158,7 +158,7 @@ def detect_issues(agg):
                 u, seg, 404, n, urg_404,
                 "Page does not exist. Likely causes: deleted page with no redirect, "
                 "renamed URL without updating internal links, or a stale sitemap entry.",
-                "Wastes crawl budget — each 404 is a spent crawl slot. Persistent 404s on "
+                "Wastes crawl budget : each 404 is a spent crawl slot. Persistent 404s on "
                 "previously-indexed URLs trigger de-indexing. Users clicking internal "
                 "links see error pages.",
                 "1. Find all source links: Screaming Frog > Spider > filter Status Code = "
@@ -168,7 +168,7 @@ def detect_issues(agg):
                 "4. If intentionally deleted: return 410 Gone (preferred over a 404).\n"
                 "5. Remove the URL from the XML sitemap.\n"
                 "6. Fix or remove every internal link pointing at it.",
-                "30 min – 2 hrs depending on number of source links",
+                "30 min to 2 hrs depending on number of source links",
                 "curl -I [URL] > must show 301 (to destination) or 410.\n"
                 "GSC > Coverage > Not Found: URL disappears within 1-2 weeks.\n"
                 "Screaming Frog re-crawl: 0 internal links pointing to this URL.",
@@ -180,7 +180,7 @@ def detect_issues(agg):
                 continue
             err_share = n / url_total
             gb_5xx = gb_hits(u, code)
-            # Gate: a one-off 5xx rarely matters UNLESS Googlebot saw it — even a
+            # Gate: a one-off 5xx rarely matters UNLESS Googlebot saw it : even a
             # single Googlebot 5xx can drop a URL from the index temporarily.
             if not (n >= 10 or err_share >= 0.05 or gb_5xx >= 1):
                 continue
@@ -204,9 +204,9 @@ def detect_issues(agg):
             }
             log_paths = {
                 500: "tail -100 /var/log/php/error.log OR hosting panel > Logs > error.log",
-                502: "systemctl status php8.x-fpm  |  tail -100 /var/log/nginx/error.log",
+                502: "systemctl status php8.x-fpm | tail -100 /var/log/nginx/error.log",
                 503: "check server CPU/memory in the hosting panel > review active processes",
-                504: "tail -100 /var/log/nginx/error.log  |  check the DB slow query log",
+                504: "tail -100 /var/log/nginx/error.log | check the DB slow query log",
             }
             extra = {
                 500: "Increase PHP memory_limit (try 256M) and max_execution_time (try 120).",
@@ -242,7 +242,7 @@ def detect_issues(agg):
             urg_301 = ("P1 - Critical" if n301 >= 50
                        else ("P2 - High" if n301 >= 20 else "P3 - Monitor"))
             ev_301 = (f"Verified: {n301} of {url_total} ({redirect_share*100:.0f}%) "
-                      f"requests to this URL got 301 — persistent, not one-off.")
+                      f"requests to this URL got 301 : persistent, not one-off.")
             add("Redirects", "301 Redirect Still Being Crawled",
                 f"{n301} requests hit this URL which sends a 301. Internal links or the "
                 f"sitemap still point here instead of the final destination.",
@@ -257,7 +257,7 @@ def detect_issues(agg):
                 "3. Bulk-update WP: Better Search Replace > old URL > final URL (include "
                 "https:// variants).\n"
                 "4. Regenerate the XML sitemap; confirm the old URL is excluded.\n"
-                "5. Do NOT remove the 301 itself — external sites still link to it.",
+                "5. Do NOT remove the 301 itself : external sites still link to it.",
                 "1-3 hrs",
                 "Screaming Frog re-crawl > 0 internal links to the old URL.\n"
                 "GSC > Coverage > Redirect error count drops to 0 within 2 weeks.\n"
@@ -275,16 +275,16 @@ def detect_issues(agg):
                 f"{n302} requests received a 302 (temporary) redirect. Google does not "
                 f"pass PageRank through 302s.",
                 u, seg, 302, n302, "P2 - High",
-                "302 is a temporary signal — Google keeps the source URL indexed and "
+                "302 is a temporary signal : Google keeps the source URL indexed and "
                 "withholds link equity from the destination.",
                 "Link equity not transferred. The source URL stays indexed instead of the "
                 "destination. In place more than a week, this should almost certainly be "
                 "a 301.",
                 "1. Confirm the redirect is permanent (not an A/B test or geo-redirect).\n"
                 "2. Change 302 to 301:\n"
-                "   .htaccess: change R=302 to R=301 in the RewriteRule.\n"
-                "   nginx: change `redirect` 302 to `return 301`.\n"
-                "   WP Redirection plugin: Edit > Type = \"301 Moved Permanently\".\n"
+                " .htaccess: change R=302 to R=301 in the RewriteRule.\n"
+                " nginx: change `redirect` 302 to `return 301`.\n"
+                " WP Redirection plugin: Edit > Type = \"301 Moved Permanently\".\n"
                 "3. Clear CDN and server cache after the change.\n"
                 "4. Update internal links to point straight at the destination.",
                 "15-30 min",
@@ -293,7 +293,7 @@ def detect_issues(agg):
                 confidence=conf_302, evidence=ev_302)
 
     # ── B: REDIRECT CHAINS ──────────────────────────────────────────────────
-    # Gate: referrer data must cover >=20% of rows — many log formats omit it
+    # Gate: referrer data must cover >=20% of rows : many log formats omit it
     # for bot traffic, and a sparse referrer column produces phantom chains.
     ref_coverage = agg["ref_nonempty"] / max(total, 1)
     if ref_coverage >= 0.20 and agg["chain_candidates"]:
@@ -310,12 +310,12 @@ def detect_issues(agg):
                 f"{cnt} requests observed. Each extra hop loses ~15% of PageRank and "
                 f"wastes an additional crawl slot.",
                 u, seg_label(u), "301 > 301", cnt, "P2 - High",
-                "Multiple 301s chained together — commonly an HTTP>HTTPS migration "
+                "Multiple 301s chained together : commonly an HTTP>HTTPS migration "
                 "followed by URL restructures without cleaning up prior redirects.",
                 "Each hop loses ~15% of PageRank. Googlebot may stop following after 5 "
                 "hops. Double the crawl budget wasted vs a single redirect.",
                 "1. Map the chain: curl -Iv [start URL] and follow each Location header.\n"
-                "   OR Screaming Frog > Always Follow Redirects > Reports > Redirect Chains.\n"
+                " OR Screaming Frog > Always Follow Redirects > Reports > Redirect Chains.\n"
                 "2. Flatten to one hop: make A redirect directly to C.\n"
                 "3. Update internal links pointing at A or B to point at C.\n"
                 "4. Keep the A > C redirect for external links you cannot control.",
@@ -344,15 +344,15 @@ def detect_issues(agg):
                     u, "Bots", url_last_status.get(u, 0), hits, "P1 - Critical",
                     f"robots.txt is missing a Disallow rule for {kw}. Crawlers are freely "
                     f"reaching backend admin/API endpoints.",
-                    "Direct crawl budget waste on non-indexable pages. Security exposure — "
+                    "Direct crawl budget waste on non-indexable pages. Security exposure : "
                     "admin and API endpoints should not be publicly crawlable. Risk of "
                     "automated login attempts on /wp-login.",
                     f"1. Add to robots.txt:\n"
-                    f"   User-agent: *\n"
-                    f"   Disallow: {kw}\n"
+                    f" User-agent: *\n"
+                    f" Disallow: {kw}\n"
                     f"2. For /wp-cron.php: define(\"DISABLE_WP_CRON\", true); in "
                     f"wp-config.php, then a real cron:\n"
-                    f"   */5 * * * * curl -s https://DOMAIN/wp-cron.php > /dev/null\n"
+                    f" */5 * * * * curl -s https://DOMAIN/wp-cron.php > /dev/null\n"
                     f"3. For /xmlrpc.php (if unused), deny it in .htaccess or nginx.\n"
                     f"4. For /wp-json/: if unused by the theme/plugins, require auth via "
                     f"the rest_authentication_errors filter.\n"
@@ -381,11 +381,11 @@ def detect_issues(agg):
             f"The {agent} is making high-volume automated requests. For WordPress "
             f"Self-Ping that is wp-cron firing on every page load instead of on a real "
             f"schedule. For cache preloaders it is the plugin re-warming every sitemap URL.",
-            "Server resources consumed unnecessarily. Log data polluted — harder to see "
+            "Server resources consumed unnecessarily. Log data polluted : harder to see "
             "real search-bot patterns. Peak-hour preloading degrades Core Web Vitals.",
             ("1. Disable WP pseudo-cron: define(\"DISABLE_WP_CRON\", true); in wp-config.php.\n"
              "2. Add a real server cron:\n"
-             "   */5 * * * * curl -s https://DOMAIN/wp-cron.php > /dev/null\n"
+             " */5 * * * * curl -s https://DOMAIN/wp-cron.php > /dev/null\n"
              "3. Self-ping traffic drops to a predictable 5-minute interval."
              if is_wp_ping else
              "1. Open the cache plugin settings (WP Rocket / seraph-accel / LiteSpeed).\n"
@@ -436,11 +436,11 @@ def detect_issues(agg):
             "Pollutes analytics. Can trigger rate limiting that catches real users or "
             "Googlebot.",
             f"1. Block in Cloudflare: Security > IP Rules > IP = {ip} > Block.\n"
-            f"   OR nginx: deny {ip};   OR .htaccess: Require not ip {ip}\n"
+            f" OR nginx: deny {ip}; OR .htaccess: Require not ip {ip}\n"
             f"2. Add rate limiting: same IP > 100 req/min > block for 1 hour.\n"
-            f"3. Identify the owner at ipinfo.io/{ip} — if a cloud provider, consider "
+            f"3. Identify the owner at ipinfo.io/{ip} : if a cloud provider, consider "
             f"blocking the ASN should scraping persist.\n"
-            f"4. Review the targeted URLs (URL Detail tab) — if product/pricing pages, "
+            f"4. Review the targeted URLs (URL Detail tab) : if product/pricing pages, "
             f"add JS-based access controls.\n"
             f"5. Enable Cloudflare Bot Fight Mode for ongoing protection.",
             "30-60 min",
@@ -449,10 +449,10 @@ def detect_issues(agg):
             f"Confirm ipinfo.io/{ip} is a datacenter, not residential, before blocking.",
             confidence=conf_susp, evidence=ev_susp)
 
-    # URL parameter explosion — FIXED: emitted inside the loop (see docstring).
+    # URL parameter explosion : FIXED: emitted inside the loop (see docstring).
     # Gate: only INDEXABLE URLs count. `/wp-cron.php?doing_wp_cron=<timestamp>`
     # mints a unique query string on every invocation, so on a real site it
-    # produced "1,787 parameter variants" as a P2 crawl-budget finding — but
+    # produced "1,787 parameter variants" as a P2 crawl-budget finding : but
     # cron is internal, never indexed, and costs no crawl budget. Admin polling,
     # scanner probes and static assets are excluded for the same reason; the
     # infra-traffic rule is the one that legitimately covers wp-cron volume.
@@ -502,12 +502,12 @@ def detect_issues(agg):
                 "budget wasted on low-value parameterised versions. Canonical signals "
                 "fragmented; thin filtered pages may enter the index.",
                 f"1. Add a canonical on every parameterised page pointing at the clean base:\n"
-                f"   <link rel=\"canonical\" href=\"{base}\">\n"
+                f" <link rel=\"canonical\" href=\"{base}\">\n"
                 f"2. Use noindex,follow on tracking-parameter URLs rather than a robots.txt "
                 f"Disallow. WHY: Disallow blocks crawling entirely, so you lose the log and "
                 f"GSC visibility into those URLs; noindex,follow keeps them crawlable but "
                 f"un-indexed, and link equity still flows through the follow directive.\n"
-                f"   nginx: if ($args ~* \"utm_|sessionid=\") {{ add_header X-Robots-Tag "
+                f" nginx: if ($args ~* \"utm_|sessionid=\") {{ add_header X-Robots-Tag "
                 f"\"noindex, follow\"; }}\n"
                 f"3. For pagination: rel=next/prev, OR canonical to the base page.\n"
                 f"4. Confirm which parameters actually change content before excluding them.\n"
@@ -539,13 +539,13 @@ def detect_issues(agg):
                 "Crawl budget wasted on non-indexable files. Bandwidth cost inflated. "
                 "Fewer crawl slots left for actual HTML content.",
                 "1. Set long-lived caching headers on static assets:\n"
-                "   nginx: location ~* \\.(css|js|jpg|png|webp|svg|woff2)$ { expires 1y; "
+                " nginx: location ~* \\.(css|js|jpg|png|webp|svg|woff2)$ { expires 1y; "
                 "add_header Cache-Control \"public, max-age=31536000, immutable\"; }\n"
-                "   Apache: ExpiresActive On; ExpiresByType text/css \"access plus 1 year\";\n"
-                "2. \"immutable\" tells the client the file will not change — zero "
+                " Apache: ExpiresActive On; ExpiresByType text/css \"access plus 1 year\";\n"
+                "2. \"immutable\" tells the client the file will not change : zero "
                 "re-validation requests.\n"
                 "3. Version filenames (style.css?v=2.1) to bust cache on change.\n"
-                "4. Do NOT disallow assets in robots.txt — Google needs CSS/JS to render.",
+                "4. Do NOT disallow assets in robots.txt : Google needs CSS/JS to render.",
                 "1-2 hrs (server config + cache invalidation)",
                 "curl -I [CSS URL] > must include Cache-Control: public, max-age=31536000.\n"
                 "DevTools > Network > reload > assets show \"(from disk cache)\".\n"
@@ -578,7 +578,7 @@ def detect_issues(agg):
                 "2. Yoast > Search Appearance > Archives > Author archives > No, unless "
                 "authors have unique bios.\n"
                 "3. For paginated archives beyond page 2, add noindex,follow.\n"
-                "4. Check GSC > Performance > Pages filtered to /tag/ and /author/ — if "
+                "4. Check GSC > Performance > Pages filtered to /tag/ and /author/ : if "
                 "zero impressions, safe to noindex.\n"
                 "5. Regenerate the sitemap after adding noindex.",
                 "1-2 hrs",
@@ -610,12 +610,12 @@ def detect_issues(agg):
             f"the ENTIRE site as blocked and stop crawling immediately.",
             u, seg_label(u), str(bad_codes), url_hits[u], urg_rob,
             "The robots.txt at the domain root is missing or erroring. This is the most "
-            "severe crawlability failure — it gates ALL search access to the site.",
+            "severe crawlability failure : it gates ALL search access to the site.",
             "If robots.txt returns 5xx, Googlebot assumes the whole site is disallowed and "
             "stops crawling. Pages drop from the index within days.",
             "1. Open https://DOMAIN/robots.txt right now and confirm whether it loads.\n"
             "2. If 404: create it at the web root with at minimum:\n"
-            "   User-agent: *\n   Allow: /\n   Sitemap: https://DOMAIN/sitemap.xml\n"
+            " User-agent: *\n Allow: /\n Sitemap: https://DOMAIN/sitemap.xml\n"
             "3. If 500: check file permissions (644) and, if it is generated dynamically, "
             "the generating plugin.\n"
             "4. Validate in GSC > Settings > robots.txt > no errors.\n"
@@ -674,7 +674,7 @@ def detect_issues(agg):
         redir_u = sc_u.get(301, 0) / max(h1, 1)
         redir_ns = sc_ns.get(301, 0) / max(h2, 1)
         # Gate: if either variant already 301s in >80% of cases, canonicalisation
-        # is working — reporting it would be a false positive.
+        # is working : reporting it would be a false positive.
         if redir_u > 0.8 or redir_ns > 0.8:
             continue
         ev_dup = (f"Verified: both URLs serve non-redirect responses "
@@ -683,15 +683,15 @@ def detect_issues(agg):
         add("Indexability", "Trailing Slash Duplicate URLs",
             f"Both \"{u}\" and \"{u[:-1]}\" are receiving traffic. The server returns "
             f"content on both without a canonical or redirect.",
-            f"{u}  AND  {u[:-1]}", "All", "Mixed", h1 + h2, "P2 - High",
+            f"{u} AND {u[:-1]}", "All", "Mixed", h1 + h2, "P2 - High",
             "The server responds on both the trailing-slash and non-slash version without "
             "redirecting or canonicalising.",
             "Duplicate content in the index. PageRank split across two URL versions. GSC "
             "shows both with divided click and impression data.",
             "1. Choose one canonical form and apply it site-wide.\n"
             "2. 301 the non-canonical to the canonical:\n"
-            "   nginx (strip slash): rewrite ^/(.*)/$ /$1 permanent;\n"
-            "   .htaccess (add slash): RewriteRule ^(.*[^/])$ /$1/ [R=301,L]\n"
+            " nginx (strip slash): rewrite ^/(.*)/$ /$1 permanent;\n"
+            " .htaccess (add slash): RewriteRule ^(.*[^/])$ /$1/ [R=301,L]\n"
             "3. Add a canonical tag on both variants as a safety net.\n"
             "4. Update all internal links to the canonical form.",
             "30-90 min",
@@ -721,13 +721,13 @@ def detect_issues(agg):
             "unminified HTML, thousands of DOM nodes, inline SVG, embedded data URIs.",
             "Googlebot may not parse content below the fold, leaving indexed content "
             "incomplete. Slower TTFB and LCP hurt Core Web Vitals. Higher bandwidth per crawl.",
-            "1. Enable Brotli (preferred) or gzip — cuts transfer 70-80%:\n"
-            "   nginx: brotli on; brotli_comp_level 6; brotli_types text/html;\n"
+            "1. Enable Brotli (preferred) or gzip : cuts transfer 70-80%:\n"
+            " nginx: brotli on; brotli_comp_level 6; brotli_types text/html;\n"
             "2. Measure real transfer: curl -H \"Accept-Encoding: br\" -o /dev/null -s "
             "-w \"%{size_download}\" [URL]\n"
             "3. Minify HTML output.\n"
             "4. Move large JSON-LD blocks to an external file.\n"
-            "5. Audit DOM size in Lighthouse — target <1,500 nodes.\n"
+            "5. Audit DOM size in Lighthouse : target <1,500 nodes.\n"
             "6. Add loading=\"lazy\" to below-fold images and iframes.",
             "2-4 hrs",
             "curl -H \"Accept-Encoding: br\" ... > should be <100,000 bytes.\n"
@@ -754,13 +754,13 @@ def detect_issues(agg):
             add("Security",
                 f"Sensitive File {'EXPOSED (200)' if is_exposed else 'Probed'}: {kw}",
                 (f"CRITICAL: the file is publicly accessible (HTTP 200). " if is_exposed
-                 else f"File probing detected — currently returning "
+                 else f"File probing detected : currently returning "
                       f"{url_last_status.get(u, 0)}. ") + f"File type: {kw_desc}.",
                 u, seg_label(u), url_last_status.get(u, 0), hits,
                 "P1 - Critical" if is_exposed else "P2 - High",
                 (f"A sensitive file is publicly accessible over HTTP. {kw_desc}."
                  if is_exposed else
-                 f"Automated bots are probing for sensitive files — standard "
+                 f"Automated bots are probing for sensitive files : standard "
                  f"reconnaissance before a targeted attack. {kw_desc}."),
                 ("ACTIVE DATA BREACH RISK. Credentials, source code or user data may "
                  "already be stolen. Immediate rotation of every secret in this file is "
@@ -773,7 +773,7 @@ def detect_issues(agg):
                  f"3. Audit access: grep \"{kw}\" /var/log/nginx/access.log | sort | "
                  f"uniq -c | sort -rn\n"
                  "4. Block the path at server level (nginx AND .htaccess):\n"
-                 "   nginx: location ~ /\\.env { deny all; return 403; }\n"
+                 " nginx: location ~ /\\.env { deny all; return 403; }\n"
                  "5. Enable the WAF's sensitive-file-access managed rules.\n"
                  "6. A robots.txt Disallow is an obscurity layer only, never the fix."
                  if is_exposed else
@@ -809,7 +809,7 @@ def detect_issues(agg):
                 "design is missing or broken on mobile.",
                 "Desktop-only crawl signals miss the mobile rendering Google actually "
                 "ranks. Pages may rank on desktop content while mobile content is ignored.",
-                "1. GSC > Settings > About > Indexing crawler — confirm \"Googlebot "
+                "1. GSC > Settings > About > Indexing crawler : confirm \"Googlebot "
                 "smartphone\".\n"
                 "2. GSC > robots.txt test with the smartphone UA on critical URLs.\n"
                 "3. Fetch with the mobile Googlebot UA via curl -A and confirm 200 with "
@@ -834,11 +834,11 @@ def detect_issues(agg):
     if gb is not None and denom and (gb / denom * 100) < 10:
         gb_pct = gb / denom * 100
         # Gate: a short sample can show an artificially low Googlebot share
-        # because crawl is bursty — downgrade confidence, don't cry wolf.
+        # because crawl is bursty : downgrade confidence, don't cry wolf.
         span_h = agg.get("span_hours")
         sample_caveat, conf_gb, urg_gb = "", "High", "P2 - High"
         if span_h is not None and span_h < 48:
-            sample_caveat = (f" Sample period is only {span_h:.0f}h — Googlebot crawl is "
+            sample_caveat = (f" Sample period is only {span_h:.0f}h : Googlebot crawl is "
                              f"bursty so this may not reflect the steady-state rate.")
             conf_gb, urg_gb = "Low", "P3 - Monitor"
         ev_gb = (f"Verified: Googlebot = {gb} of {denom:,} {ctx} ({gb_pct:.1f}%); sample "
@@ -853,9 +853,9 @@ def detect_issues(agg):
             "Googlebot; persistent server errors during crawl windows; slow response times "
             "causing Googlebot to back off; low authority/freshness signals; a manual action.",
             "Fewer pages indexed. New and updated content takes days or weeks longer to "
-            "appear. Ranking ability throttled — Google cannot re-evaluate improved pages "
+            "appear. Ranking ability throttled : Google cannot re-evaluate improved pages "
             "promptly.",
-            "1. Check robots.txt now: curl https://DOMAIN/robots.txt | grep -i disallow — "
+            "1. Check robots.txt now: curl https://DOMAIN/robots.txt | grep -i disallow : "
             "look for Disallow: / which would block everything.\n"
             "2. GSC > Settings > Crawl Stats: average response time (<500ms), requests/day "
             "trend, crawl errors.\n"
@@ -863,7 +863,7 @@ def detect_issues(agg):
             "4. GSC > URL Inspection > homepage > Test Live URL.\n"
             "5. Re-submit the sitemap.\n"
             "6. Request indexing on key pages.\n"
-            "7. Fix every P1 in this report first — a faster, cleaner site earns more crawl.",
+            "7. Fix every P1 in this report first : a faster, cleaner site earns more crawl.",
             "2-4 hrs investigation + ongoing improvements",
             "GSC > Crawl Stats > requests/day trending up over 4 weeks.\n"
             "Re-run log analysis in 2 weeks > Googlebot share increases.\n"

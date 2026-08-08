@@ -1,4 +1,4 @@
-# Deterministic engine — the LLM router + solution_builder are gone; Claude does
+# Deterministic engine : the LLM router + solution_builder are gone; Claude does
 # the reasoning passes in-context (see SKILL.md).
 from .extractor import extract_signals
 from .scorer import (

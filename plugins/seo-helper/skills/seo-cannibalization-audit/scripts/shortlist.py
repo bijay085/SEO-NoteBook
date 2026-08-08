@@ -1,22 +1,22 @@
-"""The shortlister — the cheap filter that decides which pairs are even worth
+"""The shortlister : the cheap filter that decides which pairs are even worth
 pulling weekly GSC data for. A pair that fails the shortlist is never
 cannibalization.
 
 Two tiers, exactly as the app had them:
 
-  Tier 1 — ENTITY PEER-GROUP GATE (primary, when both pages carry a Claude
+  Tier 1 : ENTITY PEER-GROUP GATE (primary, when both pages carry a Claude
     entity assignment). Eligible iff they share a peer_group_id, or one is a hub
-    covering the other's section. A cross-section pair is STRUCTURALLY blocked —
+    covering the other's section. A cross-section pair is STRUCTURALLY blocked : 
     it cannot be a cannibal however much ambiguous-query overlap it shows. This
     is what stops a writing page being "cannibalized" by a speaking page just
     because both surface on one ambiguous term.
 
-  Tier 2 — STATISTICAL OR-GATE (when an entity assignment is missing). Any of:
+  Tier 2 : STATISTICAL OR-GATE (when an entity assignment is missing). Any of:
     IDF click cosine, IDF impression cosine, or topic-profile cosine clearing
     its threshold. The shared-topic-query gate applies only when the cosine path
     alone rescued the pair.
 
-The intent gate runs in BOTH tiers — same intent is always required.
+The intent gate runs in BOTH tiers : same intent is always required.
 
 The app used a scipy sparse matrix multiply for the cosines. This uses an
 inverted-index accumulation instead: identical arithmetic, no scipy, and it only
@@ -114,7 +114,7 @@ def main():
     # Topic-profile similarity: once Claude has collapsed phrasings onto topic
     # keys, a page's profile IS its distribution over topics. An unweighted
     # cosine of the impression profile answers "do these two pages cover the
-    # same topic mix?" — the recall path the app bought with page embeddings.
+    # same topic mix?" : the recall path the app bought with page embeddings.
     topic_sim = cosine_pairs(urls, universe['impr_map'], None, max_df)
 
     tsim_min = float(cfg['shortlist_min_topic_profile_sim'])
@@ -142,7 +142,7 @@ def main():
             both_have_entities = bool(a_ent and b_ent)
             if both_have_entities and not peers_eligible(a_ent, b_ent):
                 # Structurally blocked: different sections, no hub coverage.
-                # Not logged individually — it would flood the diagnostics.
+                # Not logged individually : it would flood the diagnostics.
                 n_entity_blocked += 1
                 continue
 
@@ -182,7 +182,7 @@ def main():
                                   'tsim': round(tsim, 4), 'shared': len(shared),
                                   'peer_group': ''}
 
-    # Cap pairs per URL to bound the weekly-pull cost — but ALWAYS keep a pair
+    # Cap pairs per URL to bound the weekly-pull cost : but ALWAYS keep a pair
     # whose signal cleared the strong threshold. The app learned this the hard
     # way: a plain top-N cap silently dropped low-cosine-but-high-tsim pairs
     # because they ranked below high-cosine peers on a niche site.

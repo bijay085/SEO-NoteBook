@@ -23,7 +23,7 @@ from urllib.parse import urlparse
 
 try:
     from bs4 import BeautifulSoup
-except ImportError:  # pragma: no cover - dependency is documented in SKILL.md
+except ImportError: # pragma: no cover - dependency is documented in SKILL.md
     BeautifulSoup = None
 
 __all__ = [
@@ -52,7 +52,7 @@ def load_page(path) -> tuple[str, str]:
     else:
         url = _url_from_filename(path)
         body = raw
-    probe = _MOTW.sub("", body)            # MOTW comment must not skew the test
+    probe = _MOTW.sub("", body) # MOTW comment must not skew the test
     if _looks_escaped(probe):
         body = _html.unescape(body)
     return url, body
@@ -129,13 +129,13 @@ def write_json(path, obj):
 
 
 # --------------------------------------------------------------------------- #
-# Finding model  (mirrors the findings.json rows the report consumes)
+# Finding model (mirrors the findings.json rows the report consumes)
 # --------------------------------------------------------------------------- #
 @dataclass
 class Finding:
     id: str
-    severity: str = "INFO"      # CRITICAL | HIGH | MEDIUM | LOW | INFO
-    area: str = ""              # CTA | Trust | Form | UI/UX | Coverage | Page | Behavioral
+    severity: str = "INFO" # CRITICAL | HIGH | MEDIUM | LOW | INFO
+    area: str = "" # CTA | Trust | Form | UI/UX | Coverage | Page | Behavioral
     title: str = ""
     detail: str = ""
     evidence: str = ""

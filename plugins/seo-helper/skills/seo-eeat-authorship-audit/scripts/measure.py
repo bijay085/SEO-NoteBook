@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Deterministic E-E-A-T / Authorship signal measurement (stdlib only — no LLM).
+"""Deterministic E-E-A-T / Authorship signal measurement (stdlib only : no LLM).
 Usage: python measure.py <url-or-file.html> [out.json] [--no-link-check]
 
 Checks only what's objectively verifiable from markup, JSON-LD, and one optional
 HTTP HEAD probe on the author link. This is NOT a judgment on quality or
-genuineness (e.g. "is this review real") — that's the LLM's job for every rule in
+genuineness (e.g. "is this review real") : that's the LLM's job for every rule in
 data/rules.csv marked check_type=llm-judgment. This script only ever answers the
 narrower, machine-checkable question: is the structural signal present at all.
 
 Emits: article schema (author type), byline text + a crude suspicious-string flag,
 Person schema + sameAs count, Review/AggregateRating schema presence (presence
-only — not a fabrication check), published/modified dates, policy-page links,
+only : not a fabrication check), published/modified dates, policy-page links,
 HTTPS, and whether a discovered author link resolves.
 """
 import sys, json, re, urllib.request
@@ -86,7 +86,7 @@ def type_of(node):
 
 def check_url(url, timeout=10):
     """Best-effort resolution check. Returns True/False, or None if we genuinely
-    couldn't tell (network blocked, timeout) — None must never be reported as
+    couldn't tell (network blocked, timeout) : None must never be reported as
     'broken', only as 'not checked'."""
     for method in ("HEAD", "GET"):
         try:
@@ -118,7 +118,7 @@ def measure(src, check_links=True):
         author_node = persons[0]
 
     # A Person nested inside article.author never appears in the flattened
-    # top-level node list — fold it in (dedup by identity) so person_schema
+    # top-level node list : fold it in (dedup by identity) so person_schema
     # counts stay consistent with the sameAs figure pulled from the same node.
     if author_node and "Person" in type_of(author_node) and not any(n is author_node for n in persons):
         persons = persons + [author_node]
@@ -175,7 +175,7 @@ def measure(src, check_links=True):
         },
         "review_schema": {
             "aggregate_rating_present": bool(agg), "review_present": bool(reviews),
-            "note": "Presence only. This is NOT a fabrication check — verify these numbers against the VISIBLE page by hand (rule EEAT-001).",
+            "note": "Presence only. This is NOT a fabrication check : verify these numbers against the VISIBLE page by hand (rule EEAT-001).",
         },
         "dates": dates,
         "policy_links": policy,

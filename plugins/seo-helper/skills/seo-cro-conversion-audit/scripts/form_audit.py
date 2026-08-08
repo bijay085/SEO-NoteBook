@@ -87,9 +87,9 @@ def build(page_path, form_url=None):
         required = f.has_attr("required") or f.get("aria-required") == "true"
         maxlength = f.get("maxlength", "")
         if not maxlength and ftype in ("text", "email", "tel", "textarea"):
-            static += 1                      # unbounded input length
+            static += 1 # unbounded input length
         if role in ("name", "email", "phone", "message") and not required:
-            static += 1                      # expected-required field not marked
+            static += 1 # expected-required field not marked
         fields.append({
             "tag": f.name, "name": f.get("name", ""), "type": ftype,
             "label": label, "required": bool(required),

@@ -1,11 +1,11 @@
-"""The detectors — every substantive numeric test in the cascade.
+"""The detectors : every substantive numeric test in the cascade.
 
 Ported from the Cannibalization Analysis app's `app/detectors.py`, with the one
 dependency change the skill environment requires: `scipy.stats.spearmanr` is
 replaced by a local rank-transform + Pearson, which is what Spearman *is*
 (average ranks for ties). No scipy, no third-party AI.
 
-Nothing here makes a judgment call — it measures. Every function returns the
+Nothing here makes a judgment call : it measures. Every function returns the
 measured values alongside the pass/fail, so the report quotes evidence rather
 than asserting a conclusion.
 """
@@ -62,7 +62,7 @@ def align_weekly(series_a, series_b, fill_value=0):
 
 
 def _rankdata(x):
-    """Ranks with ties averaged — the transform that turns Pearson into
+    """Ranks with ties averaged : the transform that turns Pearson into
     Spearman. Matches scipy.stats.rankdata(method='average')."""
     x = np.asarray(x, dtype=float)
     order = np.argsort(x, kind='mergesort')
@@ -82,7 +82,7 @@ def _rankdata(x):
 
 def spearman(a, b):
     """Spearman rank correlation. Returns 0.0 when undefined (constant series or
-    fewer than 3 points) — the neutral value the app used."""
+    fewer than 3 points) : the neutral value the app used."""
     a = np.asarray(a, dtype=float)
     b = np.asarray(b, dtype=float)
     if len(a) < 3 or len(a) != len(b):
@@ -95,7 +95,7 @@ def spearman(a, b):
 
 
 # ---------------------------------------------------------------------------
-# ONGOING detector — is traffic being split on this query right now?
+# ONGOING detector : is traffic being split on this query right now?
 # ---------------------------------------------------------------------------
 
 
@@ -148,13 +148,13 @@ def parity_test(merged, cfg, end_date, recent_days):
     }
 
     gates = []
-    # Materiality first — without it a query with 1 click each side scores
+    # Materiality first : without it a query with 1 click each side scores
     # click_parity 1.0 and "qualifies" as an ongoing cannibal despite being pure
     # noise. That noise is what produces nonsensical clusters.
     min_total = cfg.get('ongoing_min_query_total_clicks', 15)
     min_each = cfg.get('ongoing_min_query_clicks_each_side', 3)
     if (ca + cb) < min_total:
-        gates.append(f'clicks_total={int(ca + cb)}<{min_total} (noise — not material)')
+        gates.append(f'clicks_total={int(ca + cb)}<{min_total} (noise : not material)')
     if min(ca, cb) < min_each:
         gates.append(f'clicks_min_side={int(min(ca, cb))}<{min_each} (one side has no real traffic)')
     if click_parity < cfg['ongoing_min_click_parity']:
@@ -195,7 +195,7 @@ def detect_ongoing(weekly_a, weekly_b, shared_queries, cfg, end_date):
 
 
 # ---------------------------------------------------------------------------
-# AFFECTED detector — did one URL already replace the other?
+# AFFECTED detector : did one URL already replace the other?
 # ---------------------------------------------------------------------------
 
 
@@ -204,7 +204,7 @@ def _rolling(series, window):
 
 
 def detect_handoff_for_query(merged, cfg):
-    """One shared query — find the crossover where A went silent and B took over.
+    """One shared query : find the crossover where A went silent and B took over.
 
     1. Smooth both click series (handoff_smoothing_weeks rolling mean).
     2. A's peak must clear handoff_min_pre_clicks.
@@ -256,7 +256,7 @@ def detect_handoff_for_query(merged, cfg):
         return {'qualifies': False, 'reason': 'not enough post-crossover weeks', 'evidence': {}}
     a_post_avg = float(_rolling(post['clicks_a'], sw).mean())
     if a_post_avg > peak_a_val * 0.20:
-        # A is still alive — that is an ongoing split, not a completed handoff.
+        # A is still alive : that is an ongoing split, not a completed handoff.
         return {'qualifies': False,
                 'reason': f'A post-crossover avg {a_post_avg:.1f} > 20% of A peak {peak_a_val:.1f}',
                 'evidence': {}}
@@ -268,7 +268,7 @@ def detect_handoff_for_query(merged, cfg):
                 'reason': f'coexistence_weeks={coexist_weeks}<{cfg["handoff_min_coexistence_weeks"]}',
                 'evidence': {}}
 
-    # Rank correlation, not Pearson — weekly click series are spiky and a single
+    # Rank correlation, not Pearson : weekly click series are spiky and a single
     # spike swings Pearson. Spearman asks the real question: as A falls, does B rise?
     full_a = merged.iloc[peak_a_idx:peak_b_idx + 1]['clicks_a'].values
     full_b = merged.iloc[peak_a_idx:peak_b_idx + 1]['clicks_b'].values
@@ -330,7 +330,7 @@ def detect_handoff(weekly_a, weekly_b, shared_queries, cfg):
     if qualifying:
         dates = sorted(e['handoff_date'] for e in qualifying if e.get('handoff_date') is not None)
         if dates:
-            handoff_date = dates[len(dates) // 2]        # median
+            handoff_date = dates[len(dates) // 2] # median
 
     return {
         'verdict': direction is not None,
@@ -342,13 +342,13 @@ def detect_handoff(weekly_a, weekly_b, shared_queries, cfg):
 
 
 # ---------------------------------------------------------------------------
-# REDUNDANT DUPLICATE — no live split, but one page is dead weight
+# REDUNDANT DUPLICATE : no live split, but one page is dead weight
 # ---------------------------------------------------------------------------
 
 
 def assess_redundant(ongoing, cfg):
     """When a pair fails the ongoing parity test, is it instead a redundant
-    duplicate — several shared queries where one page is consistently dominated?
+    duplicate : several shared queries where one page is consistently dominated?
 
     Dominated means consistently weaker AND either *buried* (median position
     worse than redundant_buried_position) or *out-clicked* (under
@@ -422,7 +422,7 @@ def assess_redundant(ongoing, cfg):
         why.append(f"only {weak_share * 100:.0f}% of the pair's clicks")
     return {'verdict': True, 'weak_side': dom_weak, 'shared_count': n,
             'median_pos': median_pos, 'weak_click_share': weak_share,
-            'reason': (f'redundant duplicate — across {n} shared queries the weaker page '
+            'reason': (f'redundant duplicate : across {n} shared queries the weaker page '
                        f'is decisively dominated (' + ' and '.join(why) + ') while the '
                        f'other owns them; not an even click split, but the weaker page '
                        f'is a redundant duplicate.')}
@@ -460,13 +460,13 @@ def serp_attribution_filter(url_a, url_b, appearance_share, cfg):
         dom_share = a_nw if a_dom else b_nw
         return {**base, 'same_surface': False,
                 'reason': (f'{dom_url} dominated by {dom_top} ({dom_share * 100:.0f}%) '
-                           f'while the other is organic — different surface')}
+                           f'while the other is organic : different surface')}
     return {**base, 'same_surface': True,
             'reason': 'same organic surface (or both share non-WEB appearance)'}
 
 
 # ---------------------------------------------------------------------------
-# Leakage — what the loser held that the winner never picked up
+# Leakage : what the loser held that the winner never picked up
 # ---------------------------------------------------------------------------
 
 

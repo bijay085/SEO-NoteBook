@@ -4,16 +4,16 @@
   "output_dir": "./Decline-Investigation/",
 
   "periods": [
-    { "name": "baseline",  "start": "2025-03-01", "end": "2025-08-30" },
+    { "name": "baseline", "start": "2025-03-01", "end": "2025-08-30" },
     { "name": "post-event", "start": "2025-08-30", "end": "2026-01-30" },
-    { "name": "current",   "start": "2026-01-30", "end": "2026-07-03" }
+    { "name": "current", "start": "2026-01-30", "end": "2026-07-03" }
   ],
 
   "gsc": {
     "property": "sc-domain:example.com",
     "account": "<account alias shown by list_sites, if multiple accounts exist>",
     "export_dir": "",
-    "note": "export_dir is optional — if set, the skill reads CSV/XLSX exports from there first and only calls the live API to fill gaps. If empty, everything is pulled live via mcp__google-search-console__query_search_analytics."
+    "note": "export_dir is optional : if set, the skill reads CSV/XLSX exports from there first and only calls the live API to fill gaps. If empty, everything is pulled live via mcp__google-search-console__query_search_analytics."
   },
 
   "pages_under_investigation": [
@@ -43,7 +43,7 @@
   },
 
   "custom_inputs": {
-    "note": "Free-form bag for anything client-specific that doesn't fit the standard shape above — e.g. a CallRail/leads export, a competitor SERP tracker file, a migration changelog, a CMS-specific quirk. Add keys as needed; reference them explicitly in the relevant workflow phase rather than assuming the skill will discover them on its own."
+    "note": "Free-form bag for anything client-specific that doesn't fit the standard shape above : e.g. a CallRail/leads export, a competitor SERP tracker file, a migration changelog, a CMS-specific quirk. Add keys as needed; reference them explicitly in the relevant workflow phase rather than assuming the skill will discover them on its own."
   },
 
   "brand": {

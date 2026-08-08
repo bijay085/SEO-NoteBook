@@ -2,10 +2,10 @@
 """Forensic page-fetch engine for the After-Foundational-Setup deep audit.
 
 Niche-agnostic. Fetches every target URL from config.json and emits measured
-metrics used by report_data.py / build_html.py / build_xlsx.py. Never estimates —
+metrics used by report_data.py / build_html.py / build_xlsx.py. Never estimates : 
 every number here is measured from the live HTML.
 
-Usage:  python fetch_pages.py [config.json]
+Usage: python fetch_pages.py [config.json]
 Outputs (next to config): pages_metrics.json, sections.json
 
 Metrics per page: raw/gzip bytes, inline CSS bytes (+ blocks), inline JS bytes,
@@ -41,7 +41,7 @@ def fetch(url):
         with urllib.request.urlopen(req, timeout=30) as resp:
             return resp.read().decode('utf-8', 'replace') if resp.status == 200 else ''
     except Exception as e:
-        print("  fetch failed", url, e)
+        print(" fetch failed", url, e)
         return ''
 
 
@@ -168,7 +168,7 @@ class Analyzer(HTMLParser):
         while node is not None and node.tag != tag:
             node = node.parent
         if node is not None:
-            node.end = self._off() + len(tag) + 3  # approx incl </tag>
+            node.end = self._off() + len(tag) + 3 # approx incl </tag>
             if node.parent is not None:
                 self.cur = node.parent
 
@@ -243,7 +243,7 @@ def analyze(url, cfg):
     try:
         az.feed(raw)
     except Exception as e:
-        print("  parse warn", url, e)
+        print(" parse warn", url, e)
     body = find_body(az.root)
     secs = []
     for child in body.children:
