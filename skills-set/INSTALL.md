@@ -1,6 +1,6 @@
 # Install on any AI agent
 
-This folder is the **seo-teacher plugin** root (Claude + Codex manifests, skills,
+This folder is the **seo-helper plugin** root (Claude + Codex manifests, skills,
 decision HTML, optional MCP). Skills use the open [Agent Skills](https://agentskills.io)
 format.
 
@@ -82,3 +82,5 @@ In any agent:
 > Load `seo-gsc-diagnosis` and summarize when to use it vs `seo-ecom-decline-investigation`.
 
 If it reads the skill and answers from the methodology, install worked.
+
+

@@ -1,6 +1,6 @@
-# SEO Teacher Plugin Setup
+# SEO Helper Plugin Setup
 
-This repo contains Bijay's SEO Teacher plugin: SEO decision rules, audit skills, and an optional local MCP decision server.
+This repo contains Bijay's SEO Helper plugin: SEO decision rules, audit skills, and an optional local MCP decision server.
 
 ## 1. Clone or Update the Repo
 
@@ -20,7 +20,7 @@ git pull
 The main plugin folder is:
 
 ```text
-plugins/seo-teacher
+plugins/seo-helper
 ```
 
 Install this folder, not the old `skills-set` snapshot.
@@ -30,13 +30,13 @@ Install this folder, not the old `skills-set` snapshot.
 Open Claude Code and run:
 
 ```text
-/plugin install <path-to>/SEO-NoteBook/plugins/seo-teacher
+/plugin install <path-to>/SEO-NoteBook/plugins/seo-helper
 ```
 
 Example on Windows:
 
 ```text
-/plugin install D:\SEO NoteBook\plugins\seo-teacher
+/plugin install D:\SEO NoteBook\plugins\seo-helper
 ```
 
 After updating the repo with `git pull`, restart or open a new Claude Code session so the latest plugin files are loaded.
@@ -46,7 +46,7 @@ After updating the repo with `git pull`, restart or open a new Claude Code sessi
 The Codex plugin manifest is here:
 
 ```text
-plugins/seo-teacher/.codex-plugin/plugin.json
+plugins/seo-helper/.codex-plugin/plugin.json
 ```
 
 The repo-local marketplace file is here:
@@ -55,10 +55,10 @@ The repo-local marketplace file is here:
 .agents/plugins/marketplace.json
 ```
 
-In Codex, use the plugin view/share flow for `seo-teacher`, or install from the marketplace entry that points to:
+In Codex, use the plugin view/share flow for `seo-helper`, or install from the marketplace entry that points to:
 
 ```text
-./plugins/seo-teacher
+./plugins/seo-helper
 ```
 
 When the plugin changes, update from Git and reinstall/refresh the plugin if your Codex app does not pick up local changes automatically.
@@ -68,7 +68,7 @@ When the plugin changes, update from Git and reinstall/refresh the plugin if you
 If an AI tool supports Agent Skills but not plugins, copy every folder under:
 
 ```text
-plugins/seo-teacher/skills
+plugins/seo-helper/skills
 ```
 
 into that tool's skills folder.
@@ -84,7 +84,7 @@ Common personal skill folders:
 On Windows, from the plugin folder you can run:
 
 ```powershell
-cd "D:\SEO NoteBook\plugins\seo-teacher"
+cd "D:\SEO NoteBook\plugins\seo-helper"
 .\install-skills.ps1
 ```
 
@@ -93,13 +93,13 @@ cd "D:\SEO NoteBook\plugins\seo-teacher"
 The local MCP server is:
 
 ```text
-plugins/seo-teacher/mcp/decision_server.py
+plugins/seo-helper/mcp/decision_server.py
 ```
 
 Install Python requirements:
 
 ```bash
-cd plugins/seo-teacher
+cd plugins/seo-helper
 pip install -r requirements.txt
 pip install -r mcp/requirements.txt
 ```
@@ -107,10 +107,10 @@ pip install -r mcp/requirements.txt
 Then add the MCP config from:
 
 ```text
-plugins/seo-teacher/mcp-hosts.example.json
+plugins/seo-helper/mcp-hosts.example.json
 ```
 
-Set the root/path value to your local `plugins/seo-teacher` folder.
+Set the root/path value to your local `plugins/seo-helper` folder.
 
 Smoke test:
 
@@ -123,13 +123,13 @@ python mcp/decision_server.py --self-test
 Try:
 
 ```text
-Load seo-decision-teacher. Traffic dropped on my Shopify store. What should I do first?
+Load seo-decision-helper. Traffic dropped on my Shopify store. What should I do first?
 ```
 
 Or:
 
 ```text
-Use SEO Teacher to clean this pasted SEO source and add only the useful decision rules.
+Use SEO Helper to clean this pasted SEO source and add only the useful decision rules.
 ```
 
 ## 7. Updating
@@ -142,3 +142,4 @@ git pull
 ```
 
 Then start a new chat/session or refresh the plugin. For local plugin hosts, a new session is the safest way to make sure updated skills and MCP tools are loaded.
+

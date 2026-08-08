@@ -1,13 +1,13 @@
 # Install on any AI agent
 
-This folder is the **seo-teacher plugin** root. In this repo the canonical path is `plugins/seo-teacher` (Claude + Codex manifests, skills,
+This folder is the **seo-helper plugin** root. In this repo the canonical path is `plugins/seo-helper` (Claude + Codex manifests, skills,
 decision HTML, optional MCP). Skills use the open [Agent Skills](https://agentskills.io)
 format.
 
 ## 0. Claude Code — install as a plugin (recommended)
 
 ```text
-/plugin install D:\SEO NoteBook\plugins\seo-teacher
+/plugin install D:\SEO NoteBook\plugins\seo-helper
 ```
 
 That loads `.claude-plugin/plugin.json`, all `skills/`, and `.mcp.json` (`seo-decision`).
@@ -36,7 +36,7 @@ Copy **every** folder under `skills/` into the host’s skills directory:
 
 ### Windows (PowerShell) — install to Claude + Cursor + Codex
 
-From this `plugins/seo-teacher` folder:
+From this `plugins/seo-helper` folder:
 
 ```powershell
 .\install-skills.ps1
@@ -82,4 +82,5 @@ In any agent:
 > Load `seo-gsc-diagnosis` and summarize when to use it vs `seo-ecom-decline-investigation`.
 
 If it reads the skill and answers from the methodology, install worked.
+
 

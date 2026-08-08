@@ -1,7 +1,7 @@
 {
   "name": "seo-helper",
   "version": "1.0.0",
-  "description": "SEO helper + decision system and audit skills by Bijay. Routes what to do next from the Action Decision notebook, then runs focused seo-* audits.",
+  "description": "SEO helper, decision system, source cleaner, and audit skills by Bijay. Routes SEO questions, pasted sources, files, and site issues into focused next actions.",
   "author": {
     "name": "Bijay"
   },
@@ -15,5 +15,3 @@
   ],
   "mcpServers": "./.mcp.json"
 }
-
-

@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "seo-teacher",
+      "name": "seo-helper",
       "source": {
         "source": "local",
-        "path": "./plugins/seo-teacher"
+        "path": "./plugins/seo-helper"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -18,3 +18,4 @@
     }
   ]
 }
+

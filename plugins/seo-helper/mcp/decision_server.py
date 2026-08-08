@@ -27,7 +27,7 @@ ROOT = Path(
 def _html_path() -> Path:
     candidates = [
         ROOT / "assets" / "SEO_Action_Decision_System.html",
-        ROOT / "skills" / "seo-decision-teacher" / "assets" / "SEO_Action_Decision_System.html",
+        ROOT / "skills" / "seo-decision-helper" / "assets" / "SEO_Action_Decision_System.html",
         Path(__file__).resolve().parents[1] / "assets" / "SEO_Action_Decision_System.html",
     ]
     for p in candidates:
@@ -311,3 +311,4 @@ if __name__ == "__main__":
         sys.exit(0)
     if not _run_fastmcp():
         _run_minimal_stdio()
+

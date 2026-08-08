@@ -1,7 +1,7 @@
 {
-  "name": "seo-teacher",
+  "name": "seo-helper",
   "version": "1.0.0",
-  "description": "SEO teacher + decision system and audit skills by Bijay. Routes what to do next from the Action Decision notebook, then runs focused seo-* audits.",
+  "description": "SEO helper, decision system, source cleaner, and audit skills by Bijay. Routes SEO questions, pasted sources, files, and site issues into focused next actions.",
   "author": {
     "name": "Bijay"
   },
@@ -15,9 +15,9 @@
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
-    "displayName": "SEO Teacher",
+    "displayName": "SEO Helper",
     "shortDescription": "SEO decision helper, source cleaner, and audit router.",
-    "longDescription": "Bundles Bijay SEO decision notebook, teacher workflow, focused audit skills, and an optional MCP decision server for routing SEO questions, pasted sources, files, and audit situations into practical next actions.",
+    "longDescription": "Bundles Bijay SEO decision notebook, source-handling workflow, focused audit skills, and an optional MCP decision server for routing SEO questions, pasted sources, files, and audit situations into practical next actions.",
     "developerName": "Bijay",
     "category": "Productivity",
     "capabilities": [
