@@ -9,6 +9,23 @@
 
 Author credit on reports: **Prepared by Bijay** (text **SEO** mark, no logo).
 
+## What It Helps With
+
+SEO Helper gives an AI agent a reusable SEO operating system instead of one-off generic advice.
+
+Use it for:
+
+- **Choosing the next SEO action:** traffic drops, weak rankings, new site planning, local/GBP, money pages, content refreshes, technical gates, and reporting.
+- **Turning pasted sources into rules:** summarize noisy Reddit posts, article notes, docs, and observations into compact decision rules, tables, or checklists.
+- **Analyzing files:** work from GSC exports, crawls, server logs, HTML, page lists, keyword files, and audit evidence.
+- **Routing audits:** select the correct included audit workflow when the issue needs deeper proof.
+- **Reducing token waste:** start small, load only the relevant notebook section or audit skill, and avoid repeating the full SEO knowledge base in every chat.
+- **Keeping output useful:** answer with What / Why / How / Evidence / Priority, then recommend the next measurable step.
+
+## How It Works
+
+The installed plugin has one entry point: `seo-decision-helper`. The agent uses it to understand the situation, consults `assets/SEO_Action_Decision_System.html` for decision rules, and then loads a specific `seo-*` audit skill only if the task needs deeper analysis. If the MCP server is connected, it can list sections, fetch a notebook section, and route a short SEO situation to the most relevant audit skills.
+
 ## Layout (this is the plugin root)
 
 ```
@@ -77,6 +94,4 @@ In any agent:
 ## Optional DataForSEO
 
 See `mcp-servers.json` / `mcp-hosts.example.json`. Env names only — no secrets in the pack.
-
-
 

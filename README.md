@@ -2,6 +2,23 @@
 
 SEO decision notebook + portable **seo-helper** plugin (skills + optional MCP) by **Bijay**.
 
+## What This Plugin Does
+
+SEO Helper is a single installable SEO decision assistant. It helps an AI agent decide what SEO action to take, which evidence to check, and which deeper audit workflow to use without making the user repeat the same context in every new chat.
+
+It helps with:
+
+- **SEO decisions:** decide what to do next for traffic drops, ranking problems, new websites, local SEO, money pages, topical maps, E-E-A-T, technical SEO, reporting, and content planning.
+- **Pasted sources:** clean Reddit threads, article notes, Google/Search Console observations, and other pasted information into compact, useful SEO rules instead of dumping raw text.
+- **File analysis:** guide the agent through GSC exports, crawl files, logs, HTML, reports, and audit evidence when a deeper diagnosis is needed.
+- **Audit routing:** choose the right included SEO audit skill, such as GSC diagnosis, render audit, CRO audit, topical map, backlink audit, log-file analysis, or cannibalization audit.
+- **Token optimization:** load only the entry helper, the needed notebook section, or the specific audit skill instead of loading every SEO rule at once.
+- **Consistent answers:** push the agent to answer with practical structure: What / Why / How / Evidence / Priority.
+
+## How It Works
+
+Install **one plugin folder**: `plugins/seo-helper`. Inside it, the agent starts with `seo-decision-helper`, uses the decision notebook for rules, and only opens a deeper `seo-*` audit skill when the task needs measurement or file-based proof. The optional MCP server can route a situation to the right notebook section and suggested audit skill.
+
 | Path | What it is |
 |---|---|
 | [`SEO_Action_Decision_System.html`](./SEO_Action_Decision_System.html) | Full SEO action / decision rules (open in browser) |
@@ -63,9 +80,4 @@ Full install notes: [`plugins/seo-helper/INSTALL.md`](./plugins/seo-helper/INSTA
 ## Note on MCP “link”
 
 The bundled MCP (`plugins/seo-helper/mcp/decision_server.py`) is **local** (runs on the user’s machine after clone). A public one-click MCP URL needs a separate hosted deploy — see `plugins/seo-helper/README.md`.
-
-
-
-
-
 
