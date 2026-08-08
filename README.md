@@ -23,10 +23,28 @@ Install **one plugin folder**: `plugins/seo-helper`. Inside it, the agent starts
 
 | Path | What it is |
 |---|---|
-| [`SEO_Action_Decision_System.html`](./SEO_Action_Decision_System.html) | Full SEO action / decision rules (open in browser) |
+| [`plugins/seo-helper/knowledge/SEO_Action_Decision_System.html`](./plugins/seo-helper/knowledge/SEO_Action_Decision_System.html) | Canonical editable knowledgebase used by the plugin |
+| [`SEO_Action_Decision_System.html`](./SEO_Action_Decision_System.html) | Generated standalone share/export copy (open in browser) |
+| [`scripts/export-share-html.ps1`](./scripts/export-share-html.ps1) | Refreshes the root share HTML from the canonical knowledgebase |
 | [`plugins/seo-helper/`](./plugins/seo-helper/) | **Plugin root** : install this folder in Claude / Codex; includes skills + optional MCP |
 | [`AGENTS.md`](./AGENTS.md) | Notes for agents working in this repo |
 
+## Updating the Knowledgebase
+
+Edit only:
+
+```text
+plugins/seo-helper/knowledge/SEO_Action_Decision_System.html
+```
+
+Then refresh the standalone share file:
+
+```powershell
+.\scripts\export-share-html.ps1
+.\scripts\export-share-html.ps1 -CheckOnly
+```
+
+That keeps the plugin knowledgebase and the root share HTML identical without manually editing two files.
 ## Share / install links
 
 **Repo:** https://github.com/bijay085/SEO-NoteBook  
