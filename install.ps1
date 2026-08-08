@@ -115,6 +115,16 @@ foreach ($t in $Targets) {
     }
 }
 
+# --- Sync .claude-plugin/skills/ (for Claude Desktop plugin marketplace) ---
+$claudePluginSkills = Join-Path $Root ".claude-plugin\skills"
+New-Item -ItemType Directory -Force -Path $claudePluginSkills | Out-Null
+foreach ($d in $dirs) {
+    $dest = Join-Path $claudePluginSkills $d.Name
+    if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
+    Copy-Item -Recurse -Force $d.FullName $dest
+}
+Write-Host "  .claude-plugin/skills/ synced ($($dirs.Count) skills)"
+
 # --- Commands --------------------------------------------------------------
 $CmdNsSrc = Join-Path $Root "commands\seo-helper"
 if (Test-Path $CmdNsSrc) {
