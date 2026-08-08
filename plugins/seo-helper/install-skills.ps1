@@ -42,26 +42,26 @@ foreach ($t in $Targets) {
         Write-Host "Installed $($d.Name) -> $dest"
     }
 }
-if (Test-Path $CommandsSrc) {
-    $commandFiles = Get-ChildItem -Path $CommandsSrc -Filter "seo-*.md"
-    if ($commandFiles) {
-        $commandTargets = @(
-            (Join-Path $env:USERPROFILE ".claude\commands")
-            (Join-Path $env:USERPROFILE ".cursor\commands")
-            (Join-Path $env:USERPROFILE ".codex\commands")
-            (Join-Path $env:USERPROFILE ".agents\commands")
-        )
+$CommandsNsSrc = Join-Path $CommandsSrc "seo-helper"
+if (Test-Path $CommandsNsSrc) {
+    $commandTargets = @(
+        (Join-Path $env:USERPROFILE ".claude\commands")
+        (Join-Path $env:USERPROFILE ".cursor\commands")
+        (Join-Path $env:USERPROFILE ".codex\commands")
+        (Join-Path $env:USERPROFILE ".agents\commands")
+    )
 
-        foreach ($cmdRoot in $commandTargets) {
-            New-Item -ItemType Directory -Force -Path $cmdRoot | Out-Null
-            # Remove old seo-helper.md alias if present
-            $oldCommand = Join-Path $cmdRoot "seo-helper.md"
-            if (Test-Path $oldCommand) { Remove-Item -Force $oldCommand }
-            foreach ($cmdFile in $commandFiles) {
-                $destCommand = Join-Path $cmdRoot $cmdFile.Name
-                Copy-Item -Force $cmdFile.FullName $destCommand
-                Write-Host "Installed /$($cmdFile.BaseName) command -> $destCommand"
-            }
+    foreach ($cmdRoot in $commandTargets) {
+        $nsDir = Join-Path $cmdRoot "seo-helper"
+        New-Item -ItemType Directory -Force -Path $nsDir | Out-Null
+        # Remove old flat seo-*.md aliases from previous installs
+        Get-ChildItem -Path $cmdRoot -Filter "seo-*.md" -File -ErrorAction SilentlyContinue | Remove-Item -Force
+        Remove-Item -Force (Join-Path $cmdRoot "seo-helper.md") -ErrorAction SilentlyContinue
+
+        Get-ChildItem -Path $CommandsNsSrc -Filter "*.md" | ForEach-Object {
+            $dest = Join-Path $nsDir $_.Name
+            Copy-Item -Force $_.FullName $dest
+            Write-Host "Installed /seo-helper:$($_.BaseName) -> $dest"
         }
     }
 }

@@ -21,7 +21,7 @@ if ((${#dirs[@]} == 0)); then
   exit 1
 fi
 
-cmd_src="$ROOT/commands"
+cmd_src="$ROOT/commands/seo-helper"
 
 cmd_root_for() {
   case "$1" in
@@ -49,11 +49,13 @@ for t in $TARGETS; do
   if [[ -d "$cmd_src" ]]; then
     cmd_root="$(cmd_root_for "$t" || true)"
     if [[ -n "$cmd_root" ]]; then
-      mkdir -p "$cmd_root"
-      rm -f "$cmd_root/seo-helper.md"
-      for f in "$cmd_src"/seo-*.md; do
-        cp "$f" "$cmd_root/$(basename "$f")"
-        echo "Installed /$(basename "$f" .md) command -> $cmd_root/$(basename "$f")"
+      ns_dir="$cmd_root/seo-helper"
+      mkdir -p "$ns_dir"
+      # Remove old flat seo-*.md files from previous installs
+      rm -f "$cmd_root"/seo-*.md "$cmd_root/seo-helper.md"
+      for f in "$cmd_src"/*.md; do
+        cp "$f" "$ns_dir/$(basename "$f")"
+        echo "Installed /seo-helper:$(basename "$f" .md) -> $ns_dir/$(basename "$f")"
       done
     fi
   fi
