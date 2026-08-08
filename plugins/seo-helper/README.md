@@ -41,7 +41,7 @@ plugins/seo-helper/ <- install THIS folder as the plugin
     ...
 ```
 
-Knowledgebase rule: `knowledge/SEO_Action_Decision_System.html` is the plugin source of truth. The repo root `SEO_Action_Decision_System.html` is a generated standalone share/export copy for people who do not use AI tools. Refresh it from the repo root with `scripts/export-share-html.ps1`. Do not add another copied notebook inside a skill folder.
+Knowledgebase rule: `knowledge/SEO_Action_Decision_System.html` is the plugin source of truth. The repo root `SEO_Action_Decision_System.html` is only a standalone share/export copy for people who do not use AI tools. Do not add another copied notebook inside a skill folder.
 
 Why not one flat file? Agents load **skills by folder**. The router skill is the single entry point; audits stay separate so the model only pulls what it needs.
 
