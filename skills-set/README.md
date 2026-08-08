@@ -1,61 +1,79 @@
-# SEO Skills — Portable Export
+# SEO Teacher Plugin
 
-Personal SEO audit skill pack (authored by Bijay). Uses the open
-[Agent Skills](https://agentskills.io) format (`SKILL.md`) so the **same folders**
-work in Claude, Cursor, Codex/GPT, Gemini CLI, Copilot, and chat UIs (ChatGPT /
-Claude / Grok Projects) via upload.
+**One plugin** for Claude, Cursor, Codex/GPT, and chat UIs:
 
-Reports use a neutral **SEO** text mark and **Prepared by Bijay** credit — no company logo.
+1. **`seo-decision-teacher`** — SEO teacher / “what should I do next?” coach  
+2. **Decision notebook** — `assets/SEO_Action_Decision_System.html`  
+3. **15 audit skills** — `skills/seo-*` (GSC, CRO, render, topical map, …)  
+4. **Optional MCP** — `mcp/decision_server.py` (section lookup + situation router)
 
-Start here:
+Author credit on reports: **Prepared by Bijay** (text **SEO** mark, no logo).
 
-- **[INSTALL.md](INSTALL.md)** — install paths for every major agent + chat UIs  
-- **[AGENT_RUNTIME.md](AGENT_RUNTIME.md)** — portable tools, exports, cache, branding  
-- `install-skills.ps1` / `install-skills.sh` — one-shot copy into Claude + Cursor + Codex
+## Layout (this is the plugin root)
 
-## What's inside
+```
+skills-set/                    ← install THIS folder as the plugin
+  .claude-plugin/plugin.json   ← Claude Code plugin
+  .codex-plugin/plugin.json    ← Codex / GPT plugin
+  .mcp.json                    ← MCP for Claude plugin load
+  assets/SEO_Action_Decision_System.html
+  mcp/decision_server.py
+  skills/
+    seo-decision-teacher/      ← start here for teaching / decisions
+    seo-gsc-diagnosis/
+    ...
+```
 
-- `skills/` — 15 self-contained `seo-*` skills (`SKILL.md` + scripts/references/templates)
-- `requirements.txt` — consolidated Python deps for skill scripts
-- `mcp-servers.json` — DataForSEO MCP declaration (env **names** only, no secrets)
+Why not one flat file? Agents load **skills by folder**. The teacher skill is the
+single entry point; audits stay separate so the model only pulls what it needs.
 
-| Skill | Purpose |
-|---|---|
-| seo-accessibility-completeness-audit | Accessibility + completeness / topical-coverage audit |
-| seo-affiliate-and-review-audit | Affiliate-link health + review-content/schema audit |
-| seo-after-foundational-setup-audit | Deep per-page forensic SEO / technical / content audit |
-| seo-cro-conversion-audit | CRO audit with Clarity behavioral corroboration |
-| seo-ecom-decline-investigation | Ecommerce organic-decline investigation (GSC decomposition) |
-| seo-eeat-authorship-audit | E-E-A-T + authorship audit (42-item checklist) |
-| seo-initial-analysis | First-engagement SEO analysis deliverable set |
-| seo-off-page-audit | Inbound backlink + outbound link audit |
-| seo-parallel-audit | Run multiple seo-* audits and merge one deliverable |
-| seo-render-audit | Raw HTML vs rendered DOM + robots/llms bot-access audit |
-| seo-sandbox-effect-analysis | Indexed-but-not-graduating diagnosis |
-| seo-gsc-diagnosis | Fact-first GSC-led ecommerce SEO diagnosis |
-| seo-topical-map | Topical authority map + demand-gated page plan |
-| seo-cannibalization-audit | Keyword cannibalization verdicts from GSC time series |
-| seo-log-file-analysis | Server log forensic crawl / budget / indexability audit |
+## Install
 
-## Quick setup
+### Claude Code (plugin)
+
+From a Claude session (path adjusted to your machine):
+
+```text
+/plugin install D:\SEO NoteBook\skills-set
+```
+
+Or add as a local marketplace/plugin directory per Claude Code docs, then enable **seo-teacher**.
+
+### Cursor / Codex (skills + MCP)
 
 ```powershell
-# Windows — install into Claude + Cursor + Codex personal skills dirs
+cd "D:\SEO NoteBook\skills-set"
 .\install-skills.ps1
 pip install -r requirements.txt
+pip install -r mcp\requirements.txt
 ```
 
-```bash
-# macOS / Linux
-./install-skills.sh
-pip3 install -r requirements.txt
+Add MCP from `mcp-hosts.example.json` (set `ROOT` to this folder) into Cursor / Codex MCP settings.
+
+### ChatGPT / Grok / Claude Projects (chat UI)
+
+Upload at least:
+
+- `skills/seo-decision-teacher/SKILL.md`
+- `assets/SEO_Action_Decision_System.html`
+- (optional) any `seo-*` audit you need
+
+Instruction line:
+
+> You are my SEO teacher. Follow `seo-decision-teacher/SKILL.md`. Use the decision HTML for rules. Answer with What / Why / How / Evidence / Priority. Only run a deep audit skill when measurement is required.
+
+Full detail: [INSTALL.md](INSTALL.md) · runtime rules: [AGENT_RUNTIME.md](AGENT_RUNTIME.md)
+
+## Smoke tests
+
+```powershell
+python mcp\decision_server.py --self-test
 ```
 
-Then open [INSTALL.md](INSTALL.md) for ChatGPT / Grok project upload and optional MCP connectors.
+In any agent:
 
-## Honest limits
+> Load seo-decision-teacher. Traffic dropped on my Shopify store — what should I do first?
 
-- **Native skills folders** (Claude Code, Cursor, Codex, etc.): best experience — agent auto-discovers `SKILL.md`.
-- **Chat UIs**: upload the skill (or zip) into project knowledge and tell the agent to follow that `SKILL.md`.
-- **Live data**: GSC / DataForSEO / Clarity / browser are optional. Missing connector → degrade that layer and say so; never invent metrics.
-- Secrets stay in host env / project `.env`, never inside this pack.
+## Optional DataForSEO
+
+See `mcp-servers.json` / `mcp-hosts.example.json`. Env names only — no secrets in the pack.

@@ -1,12 +1,25 @@
 # Install on any AI agent
 
-This pack uses the open [Agent Skills](https://agentskills.io) format. One
-`skills/seo-*/` folder works everywhere that reads `SKILL.md`.
+This folder is the **seo-teacher plugin** root (Claude + Codex manifests, skills,
+decision HTML, optional MCP). Skills use the open [Agent Skills](https://agentskills.io)
+format.
 
-## 1. Python (once, for scripted skills)
+## 0. Claude Code — install as a plugin (recommended)
+
+```text
+/plugin install D:\SEO NoteBook\skills-set
+```
+
+That loads `.claude-plugin/plugin.json`, all `skills/`, and `.mcp.json` (`seo-decision`).
+
+Codex/GPT: use `.codex-plugin/plugin.json` with your Codex plugin/marketplace flow,
+or copy skills via `install-skills.ps1` below.
+
+## 1. Python (once, for scripted skills + MCP)
 
 ```bash
 pip install -r requirements.txt
+pip install -r mcp/requirements.txt
 ```
 
 ## 2. Coding agents (native skills folders)

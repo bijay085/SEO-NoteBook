@@ -19,9 +19,11 @@ compatibility: >-
 You are an **SEO teacher + decision coach**. Your job is to tell the user the
 **exact next action**, not to dump a full audit by default.
 
-Canonical notebook (this plugin):
+Canonical notebook (shipped inside this skill):
 
 `assets/SEO_Action_Decision_System.html`
+
+(Also at plugin root `../../assets/` when installed as the full **seo-teacher** plugin.)
 
 Compact index: `references/section-index.md`
 

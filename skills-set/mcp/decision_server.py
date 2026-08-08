@@ -24,7 +24,19 @@ ROOT = Path(
     or os.environ.get("CLAUDE_PLUGIN_ROOT")
     or Path(__file__).resolve().parents[1]
 )
-HTML_PATH = ROOT / "assets" / "SEO_Action_Decision_System.html"
+def _html_path() -> Path:
+    candidates = [
+        ROOT / "assets" / "SEO_Action_Decision_System.html",
+        ROOT / "skills" / "seo-decision-teacher" / "assets" / "SEO_Action_Decision_System.html",
+        Path(__file__).resolve().parents[1] / "assets" / "SEO_Action_Decision_System.html",
+    ]
+    for p in candidates:
+        if p.is_file():
+            return p
+    return candidates[0]
+
+
+HTML_PATH = _html_path()
 
 # Situation keywords → notebook section id + suggested audit skill(s)
 ROUTES = [
