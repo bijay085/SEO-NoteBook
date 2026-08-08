@@ -846,6 +846,17 @@
         <li>Myth: SEO has secret sauce. Reality: durable SEO is mostly correct prioritization, useful pages, technical access, trust, links/mentions, UX, and iteration.</li>
       </ul>
 
+      <h3>SEO Influencer and Advice Credibility Filter</h3>
+      <p>Use this when SEO advice comes from influencers, social posts, viral videos, or gurus. Do not trust follower count, subscriber count, comment volume, or confidence as evidence. Trust verifiable work, context, and repeatable reasoning.</p>
+      <table>
+        <tr><th>Signal</th><th>What It Means</th><th>Decision</th></tr>
+        <tr><td>Big audience but weak evidence.</td><td>Reach is not expertise.</td><td>Ask for examples, affected URLs, data, method, limits, and when the advice fails.</td></tr>
+        <tr><td>Generic engagement or strange ratios.</td><td>Social proof may be inflated or irrelevant.</td><td>Do not use engagement as a reason to follow SEO advice.</td></tr>
+        <tr><td>Specific tests, failures, client outcomes, or methodology.</td><td>More useful than personality content.</td><td>Extract the decision rule and adapt it to the current site context.</td></tr>
+        <tr><td>One universal checklist.</td><td>Likely overgeneralized.</td><td>Check business model, niche, competition, page type, market, and evidence before applying.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> the best SEO advice explains what to do, why it works, where it applies, what data proves it, and what risk or exception exists.</p>
+
       <h3>Page Title Length and Rewrite Rule</h3>
       <p>Use this when someone asks whether a title must stay near 60 characters. Treat 60 characters as a display guideline, not a ranking law. The title should serve page targeting, intent, query language, and click clarity.</p>
       <table>
@@ -6773,6 +6784,19 @@
         <li>Myth: canonical fixes all duplicate or weak content. Reality: it only helps when the preferred URL signal matches what the content and site architecture are already saying.</li>
       </ul>
 
+      <h3>Post-Migration Traffic Loss Rule</h3>
+      <p>Use this when organic traffic drops after a CMS, design, platform, URL, or domain migration. A short reevaluation window can be normal, but the diagnosis must prove whether the loss is normal volatility or a structural migration fault.</p>
+      <table>
+        <tr><th>Check</th><th>Why It Matters</th><th>Action</th></tr>
+        <tr><td>Old URL to new URL mapping.</td><td>Small URL changes, trailing slashes, capitalization, parameters, and path changes can break signals.</td><td>Crawl old sitemap URLs and confirm each old URL 301s directly to the correct new URL, not a 302, chain, soft 404, or homepage.</td></tr>
+        <tr><td>Rendered HTML parity.</td><td>Changing CMS can change DOM, headings, links, body copy, and render behavior even when the page looks similar.</td><td>Compare top pre-migration pages to current rendered HTML, headings, content, links, metadata, and schema.</td></tr>
+        <tr><td>Internal link equity.</td><td>New navigation or hierarchy can push former money pages deeper and reduce internal importance.</td><td>Compare crawl depth, internal link count, anchors, breadcrumbs, nav links, and hub links before and after.</td></tr>
+        <tr><td>Performance and UX.</td><td>A new theme or page builder can slow important landing pages.</td><td>Check Core Web Vitals, especially LCP and INP, for top organic landing pages.</td></tr>
+        <tr><td>Structured data and snippets.</td><td>CMS migrations often drop FAQ, review, product, local, organization, or breadcrumb schema.</td><td>Validate rich-result eligibility and compare lost search appearances in GSC.</td></tr>
+        <tr><td>Timeline.</td><td>Some reassessment is normal, but long or severe losses need investigation.</td><td>Monitor 3 to 8 weeks, but investigate immediately if important URLs 404, noindex, canonicalize wrong, lose content, lose links, or drop far beyond expected movement.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> do not panic-publish new content or buy links to compensate. First fix redirects, parity, internal links, indexability, render, schema, and performance.</p>
+
       <h3>WordPress to Static HTML Migration SEO Rule</h3>
       <p>Use this when someone asks about moving a WordPress site to static HTML. The risk is not the platform change itself. The risk is changing URLs, metadata, internal links, canonicals, schema, redirects, rendering, forms, and content parity.</p>
       <table>
@@ -6846,6 +6870,18 @@
         <li>AI can help refactor scripts or replace small libraries, but the fix must be tested in the actual browser and page flow.</li>
         <li>Myth: INP is fixed only by reducing total page size. Reality: the main issue is often long tasks, event handlers, hydration, third-party scripts, or inefficient DOM updates.</li>
       </ul>
+
+      <h3>Screaming Frog Robots Blocked Crawl Rule</h3>
+      <p>Use this when robots.txt blocks the whole site and Screaming Frog cannot crawl. Separate robots blocking from server blocking, crawler settings, and missing crawlable links.</p>
+      <table>
+        <tr><th>Situation</th><th>Meaning</th><th>Next Action</th></tr>
+        <tr><td>robots.txt has User-agent: * and Disallow: /.</td><td>Normal crawlers should not crawl the site.</td><td>For an authorized audit, use Screaming Frog robots settings to ignore robots.txt or ignore but report status so the report still flags blocked URLs.</td></tr>
+        <tr><td>Ignore robots is enabled but crawl still fails.</td><td>Something else is blocking the crawl.</td><td>Check status codes, especially 403, 401, 429, 5xx, firewall, WAF, CDN bot rules, IP blocks, login walls, and rate limits.</td></tr>
+        <tr><td>Start URL is 200 but deeper pages are missing.</td><td>The crawler may not see links in raw HTML.</td><td>Check whether internal links are real href links, whether JavaScript rendering is needed, and whether internal hyperlinks extraction is enabled.</td></tr>
+        <tr><td>Crawler user-agent is blocked.</td><td>Server rules may reject SEO spider or Googlebot user agents.</td><td>Try a normal browser user-agent, slow crawl speed, add delay, or request allowlisting from the client.</td></tr>
+        <tr><td>Audit needs real Google behavior.</td><td>Ignoring robots shows possible site structure, not what Google can crawl.</td><td>Report both: audit crawl with override and live Googlebot-access reality from robots, status codes, and URL Inspection if available.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> only bypass robots.txt when authorized. If ignore-robots fails, diagnose server access, user-agent blocking, JavaScript links, noindex/canonical settings, and crawl configuration.</p>
 
       <h3>Agentic Browsing Technical Rule</h3>
       <p>Use this when a site passes normal Lighthouse SEO, best practices, or performance checks but fails an "Agentic Browsing" check. Treat agentic browsing as experimental machine-interaction readiness, not a normal ranking factor or standard SEO score.</p>
@@ -7965,4 +8001,3 @@
   </main>
 </body>
 </html>
-

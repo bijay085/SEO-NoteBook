@@ -39,7 +39,7 @@ HTML_PATH = _html_path()
 
 # Situation keywords → notebook section id + suggested audit skill(s)
 ROUTES = [
-    (["traffic down", "ranking down", "clicks down", "decline", "drop", "lost traffic", "ranking fluctuation", "rankings fluctuating", "homepage ranking", "homepage leaning", "cannibalization"],
+    (["traffic down", "ranking down", "clicks down", "decline", "drop", "lost traffic", "lost traffic after migration", "ranking fluctuation", "rankings fluctuating", "homepage ranking", "homepage leaning", "cannibalization"],
      "decline-diagnosis", ["seo-gsc-diagnosis", "seo-ecom-decline-investigation"]),
     (["new site", "new domain", "new project", "what is this business", "entity"],
      "domain-understanding", ["seo-initial-analysis"]),
@@ -53,7 +53,7 @@ ROUTES = [
      "content-eeat", ["seo-eeat-authorship-audit"]),
     (["cannibal", "duplicate url", "same keyword two pages"],
      "decline-diagnosis", ["seo-cannibalization-audit"]),
-    (["render", "javascript", "js seo", "raw html"],
+    (["render", "javascript", "js seo", "raw html", "robots.txt", "robots blocked", "screaming frog", "crawl blocked"],
      "technical-seo", ["seo-render-audit"]),
     (["log file", "crawl budget", "bot crawl"],
      "technical-seo", ["seo-log-file-analysis"]),
@@ -79,8 +79,10 @@ ROUTES = [
      "technical-seo", ["seo-gsc-diagnosis"]),
     (["b2b", "nurture", "funnel", "seo tool", "best value", "seo clients", "client acquisition"],
      "weekly-reporting", []),
-    (["wordpress to static", "static html", "migration"],
+    (["wordpress to static", "static html", "migration", "cms migration", "post migration", "wordpress migration", "wix migration"],
      "technical-seo", ["seo-render-audit"]),
+    (["seo influencer", "seo guru", "guru advice", "viral seo advice", "advice credibility"],
+     "source-rules", []),
     (["forecast", "kpi", "projection"],
      "kpi-forecasting", []),
     (["weekly report", "reporting"],
