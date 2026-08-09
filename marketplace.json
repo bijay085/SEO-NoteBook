@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
   "name": "SEO NoteBook",
-  "description": "SEO Helper — practical SEO decision system by Bijay. Covers traffic drops, GSC diagnosis, topical maps, technical audits, E-E-A-T, and more.",
+  "description": "SEO Helper, a practical SEO decision system by Bijay. Covers traffic drops, GSC diagnosis, topical maps, technical audits, E-E-A-T, and more.",
   "plugins": [
     {
       "id": "seo-helper",
