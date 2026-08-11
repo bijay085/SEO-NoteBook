@@ -1,9 +1,0 @@
-source_id,title,url,publisher,accessed,evidence_basis,notes
-SRC-CHROME-AXTREE,Full accessibility tree in Chrome DevTools,https://developer.chrome.com/blog/full-accessibility-tree,Google/Chrome,2026-07,Standard,source 1 : accessibility tree
-SRC-HTML-ARIA,ARIA in HTML,https://www.w3.org/TR/html-aria/,W3C,2026-08,Standard,source 2 : allowed/prohibited ARIA per element (gap #2 fix)
-SRC-HTML-AAM,HTML Accessibility API Mappings 1.0,https://www.w3.org/TR/html-aam-1.0/,W3C,2026-07,Standard,element→implicit role (Engine A used this)
-SRC-WAI-ARIA,WAI-ARIA 1.2,https://www.w3.org/TR/wai-aria-1.2/,W3C,2026-07,Standard,roles/states/properties
-SRC-LIGHTHOUSE,Lighthouse : DOM size audit,https://developer.chrome.com/docs/lighthouse/performance/dom-size/,Google,2026-08,Standard,source for DOM-count rules (gap #4 fix)
-SRC-SEL-482254,Visual semantics: the missing piece of topical authority,https://searchengineland.com/visual-semantics-topical-authority-482254,Search Engine Land,2026-07,Interpretation,source 4 : only 8/37 claims verified; see references/master-claims.md
-SRC-SEL-482980,How semantics and topical authority improve local SEO,https://searchengineland.com/how-semantics-and-topical-authority-improve-local-seo-482980,Search Engine Land,2026-07,Interpretation,source 3 : UNVERIFIED (gap #3); rules from it carry evidence_basis=Interpretation
-SRC-VS-ENGINE,Visual-Semantics-Research audit engine (distilled rules),local://Visual-Semantics-Research,Bijay,2026-07,Research,provenance for COMP/accessibility rules distilled from Engine B
