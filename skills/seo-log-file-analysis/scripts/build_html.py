@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Render the branded HTML deliverable.
 
 Content comes from `<output_dir>/analysis.json` : every measured finding with
@@ -15,6 +14,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "shared"))
 import report_data as RD # noqa: E402
 from auto_report import build_report # noqa: E402
 from report_kit import render_html # noqa: E402
@@ -60,8 +60,8 @@ def load_analysis(outdir):
 
 def main():
     authored, _dropped = _strip_examples(RD.REPORT)
-    outdir = (sys.argv[1] if len(sys.argv) > 1
-              else authored.get("output_dir", "./Log-Analysis"))
+    raw_out = sys.argv[1] if len(sys.argv) > 1 else authored.get("output_dir", "./Log-Analysis")
+    outdir = raw_out if isinstance(raw_out, str) and raw_out else "./Log-Analysis"
     os.makedirs(outdir, exist_ok=True)
 
     analysis = load_analysis(outdir)

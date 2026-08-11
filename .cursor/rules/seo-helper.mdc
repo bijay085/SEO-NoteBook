@@ -1,0 +1,9 @@
+---
+description: SEO decision routing and audit skills (SEO Helper plugin) — use when the user asks about traffic drops, rankings, GSC/indexing issues, topical maps, technical SEO, E-E-A-T, or which SEO audit to run.
+alwaysApply: false
+---
+
+When the user describes an SEO problem, first check the `skills/` directory in this
+plugin for a matching `seo-*` skill (e.g. `seo-gsc-diagnosis`, `seo-topical-map`,
+`seo-render-audit`) and follow that skill's SKILL.md instructions. If unsure which
+skill fits, read `skills/seo-router/SKILL.md` first — it routes to the right one.

@@ -5,7 +5,7 @@ section, every finding as Issue·Evidence·Solution·Execution). A log audit als
 has to ship the raw measured half : the tabs a client actually filters and
 sorts: which URLs, which bots, which day. That is what this adds.
 
-Separate module on purpose: `report_kit.py` is shared byte-identical across
+Separate module on purpose: `shared/report_kit.py` is the one renderer for
 every seo-* skill, so log-specific sheets must never be added to it.
 
 Tabs appended, and only when the data exists (no hollow skeletons):

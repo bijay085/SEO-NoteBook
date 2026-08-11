@@ -177,12 +177,14 @@ def _label_url_mismatch(label, url_regex):
 
 def build(clarity_dir, site_url=None):
     root = Path(clarity_dir)
-    pages, integrity, window = {}, [], ""
+    pages: dict[str, dict[str, object]] = {}
+    integrity: list = []
+    window = ""
     for sub in sorted(p for p in root.iterdir() if p.is_dir()):
         click_f, scroll_f, att_f = (_find(sub, "Click"), _find(sub, "Scroll"), _find(sub, "Attention"))
         if not any((click_f, scroll_f, att_f)):
             continue
-        rec = {"folder_label": sub.name}
+        rec: dict[str, object] = {"folder_label": sub.name}
         url_regex = ""
         if click_f:
             c = _click(click_f); rec["click"] = c; url_regex = c["matched_url_regex"]

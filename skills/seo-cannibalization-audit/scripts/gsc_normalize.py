@@ -21,7 +21,9 @@ import argparse
 import json
 import math
 import re
+from datetime import datetime
 from pathlib import Path
+from typing import cast
 from urllib.parse import parse_qsl, urlencode, urlparse, urlsplit, urlunsplit
 
 import numpy as np
@@ -43,6 +45,38 @@ ALIASES = {
     'ctr': ['ctr', 'click_through_rate'],
     'searchappearance': ['searchappearance', 'search_appearance', 'appearance'],
 }
+
+
+def _as_frame(obj) -> pd.DataFrame:
+    return obj if isinstance(obj, pd.DataFrame) else pd.DataFrame(obj)
+
+
+def _as_series(obj) -> pd.Series:
+    return obj if isinstance(obj, pd.Series) else pd.Series(obj)
+
+
+def _numeric_filled(obj, fill=0) -> pd.Series:
+    s = _as_series(obj)
+    raw = np.asarray(pd.to_numeric(s, errors='coerce'), dtype=float)
+    raw = np.where(np.isnan(raw), float(fill), raw)
+    return pd.Series(raw, index=s.index)
+
+
+def _as_timestamp(val) -> pd.Timestamp:
+    fallback = cast(pd.Timestamp, pd.Timestamp(datetime.now().date()))
+    if isinstance(val, pd.Series):
+        val = val.iloc[0] if not val.empty else None
+    if val is None:
+        return fallback
+    try:
+        if pd.isna(val):
+            return fallback
+    except (ValueError, TypeError):
+        pass
+    ts = pd.Timestamp(str(val))
+    if not isinstance(ts, pd.Timestamp) or pd.isna(ts):
+        return fallback
+    return cast(pd.Timestamp, ts)
 
 
 def _canon(col):
@@ -409,7 +443,8 @@ def build_pages(matrix, cfg, end_date):
         queries=('query', 'nunique'),
     ).reset_index()
 
-    has_date = 'date' in matrix.columns and matrix['date'].notna().any()
+    has_date = ('date' in matrix.columns
+                and bool(np.asarray(matrix['date'].notna(), dtype=bool).any()))
     recent_cut = pd.Timestamp(end_date) - pd.Timedelta(days=cfg['recent_window_days'])
 
     pos_90d, trend_label, trend_slope, first_click, last_click = {}, {}, {}, {}, {}
@@ -487,42 +522,47 @@ def main():
     work.mkdir(parents=True, exist_ok=True)
 
     frames = [load_rows(m) for m in args.matrix]
-    matrix = pd.concat([f for f in frames if not f.empty], ignore_index=True)
+    matrix = _as_frame(pd.concat([f for f in frames if not f.empty], ignore_index=True))
     _require(matrix, ['page', 'query', 'clicks', 'impressions'], 'matrix')
     if 'position' not in matrix.columns:
         matrix['position'] = np.nan
     for c in ('clicks', 'impressions', 'position'):
         matrix[c] = pd.to_numeric(matrix[c], errors='coerce')
-    matrix = matrix.dropna(subset=['page', 'query'])
-    raw_url_count = matrix['page'].nunique()
-    matrix['page'] = matrix['page'].map(canonical_url)
-    urls_merged_by_canonical = raw_url_count - matrix['page'].nunique()
-    matrix['clicks'] = matrix['clicks'].fillna(0)
-    matrix['impressions'] = matrix['impressions'].fillna(0)
+    matrix = _as_frame(matrix.dropna(subset=['page', 'query']))
+    raw_url_count = int(_as_series(matrix['page']).nunique())
+    matrix['page'] = _as_series(matrix['page']).map(canonical_url)
+    urls_merged_by_canonical = raw_url_count - int(_as_series(matrix['page']).nunique())
+    matrix['clicks'] = _numeric_filled(matrix['clicks'])
+    matrix['impressions'] = _numeric_filled(matrix['impressions'])
     if 'date' in matrix.columns:
         matrix['date'] = pd.to_datetime(matrix['date'], errors='coerce')
-        if matrix['date'].notna().any():
-            matrix = matrix[matrix['date'].notna()]
+        date_ok = _as_series(matrix['date']).notna()
+        if bool(np.asarray(date_ok, dtype=bool).any()):
+            matrix = _as_frame(matrix.loc[date_ok])
         else:
-            matrix = matrix.drop(columns=['date'])
+            matrix = _as_frame(matrix.drop(columns=['date']))
 
     inputs = raw_cfg.get('inputs', {})
     patterns = inputs.get('exclude_url_patterns') or cfg['exclude_url_patterns']
     excluded_urls = []
     if patterns:
-        hit = matrix['page'].str.contains('|'.join(re.escape(p) for p in patterns),
-                                          case=False, na=False)
-        excluded_urls = sorted(set(matrix.loc[hit, 'page']))
-        matrix = matrix[~hit]
+        hit = _as_series(matrix['page']).str.contains(
+            '|'.join(re.escape(p) for p in patterns), case=False, na=False)
+        excluded_urls = sorted(set(_as_series(matrix.loc[hit, 'page'])))
+        matrix = _as_frame(matrix.loc[~np.asarray(hit, dtype=bool)])
     include = inputs.get('include_urls') or cfg['include_urls']
     if include:
-        matrix = matrix[matrix['page'].isin(set(include))]
+        matrix = _as_frame(matrix.loc[np.isin(np.asarray(matrix['page']), list(include))])
     if matrix.empty:
         raise SystemExit('no rows left after URL filtering : check exclude_url_patterns')
 
     has_date = 'date' in matrix.columns
-    end_date = (pd.Timestamp(args.end_date) if args.end_date
-                else (matrix['date'].max() if has_date else pd.Timestamp.today().normalize()))
+    if args.end_date:
+        end_date = _as_timestamp(args.end_date)
+    elif has_date:
+        end_date = _as_timestamp(_as_series(matrix['date']).max())
+    else:
+        end_date = pd.Timestamp.today().normalize()
 
     pages = build_pages(matrix, cfg, end_date)
     max_urls = int(cfg.get('max_urls') or 0)
@@ -530,7 +570,7 @@ def main():
     if max_urls and len(pages) > max_urls:
         dropped_for_scale = list(pages['page'][max_urls:])
         pages = pages.iloc[:max_urls].reset_index(drop=True)
-        matrix = matrix[matrix['page'].isin(set(pages['page']))]
+        matrix = _as_frame(matrix.loc[np.isin(np.asarray(matrix['page']), list(pages['page']))])
 
     site = args.site or inputs.get('gsc_property', '')
     brand_tokens = detect_brand_tokens(site, cfg.get('brand_tokens') or inputs.get('brand_tokens'))
@@ -545,20 +585,20 @@ def main():
         ap_df = load_rows(args.appearance)
         if args.page_totals:
             tot = load_rows(args.page_totals)
-            totals = (dict(zip(tot['page'], pd.to_numeric(tot['impressions'], errors='coerce').fillna(0)))
+            totals = (dict(zip(_as_series(tot['page']), _numeric_filled(tot['impressions'])))
                       if {'page', 'impressions'} <= set(tot.columns) else {})
         else:
-            totals = dict(zip(pages['page'], pages['impressions_window']))
+            totals = dict(zip(_as_series(pages['page']), _as_series(pages['impressions_window'])))
         if not ap_df.empty and 'searchappearance' in ap_df.columns:
-            ap_df['impressions'] = pd.to_numeric(ap_df['impressions'], errors='coerce').fillna(0)
+            ap_df['impressions'] = _numeric_filled(ap_df['impressions'])
             appearance = appearance_share_per_page(ap_df, totals)
     (work / 'appearance.json').write_text(json.dumps(appearance, indent=1), encoding='utf-8')
 
     meta = {
-        'site': site, 'end_date': str(pd.Timestamp(end_date).date()),
+        'site': site, 'end_date': str(end_date.date()),
         'has_date_dimension': bool(has_date),
         'urls_analyzed': len(pages), 'rows': len(matrix),
-        'queries_distinct': int(matrix['query'].nunique()),
+        'queries_distinct': int(_as_series(matrix['query']).nunique()),
         'brand_tokens': brand_tokens,
         'brand_only_queries_dropped': len(universe['brand_only_queries']),
         'urls_merged_by_canonicalisation': int(urls_merged_by_canonical),

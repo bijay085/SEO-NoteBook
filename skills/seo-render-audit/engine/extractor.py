@@ -9,21 +9,29 @@ def _soup(html: str) -> BeautifulSoup:
     return BeautifulSoup(html, "lxml")
 
 
+def _attr_str(val, default: str = "") -> str:
+    if val is None:
+        return default
+    if isinstance(val, list):
+        return " ".join(str(x) for x in val) if val else default
+    return str(val)
+
+
 def _meta(soup: BeautifulSoup, name: str) -> Optional[str]:
     tag = soup.find("meta", attrs={"name": name})
     if tag:
-        return tag.get("content", "").strip() or None
+        return _attr_str(tag.get("content")).strip() or None
     return None
 
 
 def _og(soup: BeautifulSoup, prop: str) -> Optional[str]:
     tag = soup.find("meta", property=prop)
-    return tag.get("content", "").strip() if tag else None
+    return _attr_str(tag.get("content")).strip() or None if tag else None
 
 
 def _canonical(soup: BeautifulSoup) -> Optional[str]:
     tag = soup.find("link", rel="canonical")
-    return tag.get("href", "").strip() if tag else None
+    return _attr_str(tag.get("href")).strip() or None if tag else None
 
 
 def _jsonld(soup: BeautifulSoup) -> List[dict]:
@@ -39,7 +47,7 @@ def _jsonld(soup: BeautifulSoup) -> List[dict]:
 def _links(soup: BeautifulSoup, base_domain: str) -> List[str]:
     hrefs = []
     for a in soup.find_all("a", href=True):
-        href = a["href"].strip()
+        href = _attr_str(a.get("href")).strip()
         if href.startswith("/") or base_domain in href:
             hrefs.append(href)
     return list(set(hrefs))
@@ -101,8 +109,8 @@ def extract_signals(
     # ── META TAGS ─────────────────────────────────────────────────────────────
     signals.append(sig(
         "title", "Meta Tags", "Title Tag",
-        raw.title.string.strip() if raw.title else None,
-        rend.title.string.strip() if rend.title else None,
+        _attr_str(raw.title.string).strip() or None if raw.title else None,
+        _attr_str(rend.title.string).strip() or None if rend.title else None,
     ))
     signals.append(sig(
         "meta_description", "Meta Tags", "Meta Description",

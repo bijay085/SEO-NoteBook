@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Safely register seo-helper-router MCP into AI desktop app configs.
 
 Supports:

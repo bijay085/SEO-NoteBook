@@ -4,6 +4,6 @@ Statistics-first investigation of an ecommerce organic decline: GSC decompositio
 
 Load and follow the full skill instructions:
 
-`C:/Users/bijay/.claude/skills/seo-ecom-decline-investigation/SKILL.md`
+`${CLAUDE_PLUGIN_ROOT}/skills/seo-ecom-decline-investigation/SKILL.md`
 
 After reading the SKILL.md, follow its workflow exactly. Use the skill's reference files and scripts as instructed within it.

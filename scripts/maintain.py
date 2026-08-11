@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Maintenance helper for the SEO Helper plugin.
 
 Commands:

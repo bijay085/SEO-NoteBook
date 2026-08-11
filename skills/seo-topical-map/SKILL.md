@@ -172,7 +172,7 @@ branded. The XLSX/JSON feed the off-page workflow.
 
 ## Setup
 ```
-pip install -r "$TM/requirements.txt" # just openpyxl
+pip install -r "${CLAUDE_PLUGIN_ROOT}/requirements.txt"
 ```
 
 ## Rules

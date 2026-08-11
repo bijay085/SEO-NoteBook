@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
 """SEO Helper Router MCP : query the Action Decision System knowledgebase by section.
 
 Works with Claude Code plugins (CLAUDE_PLUGIN_ROOT), Cursor, Codex, or any MCP host.
-Stdlib + beautifulsoup4. Optional: `mcp` package (FastMCP). Falls back to a tiny
+Stdlib only (`html.parser`). Optional: `mcp` package (FastMCP). Falls back to a tiny
 stdio JSON-RPC loop if `mcp` is not installed.
 """
 from __future__ import annotations
@@ -11,13 +10,8 @@ import json
 import os
 import re
 import sys
+from html.parser import HTMLParser
 from pathlib import Path
-
-try:
-    from bs4 import BeautifulSoup
-except ImportError: # pragma: no cover
-    print("beautifulsoup4 required: pip install beautifulsoup4", file=sys.stderr)
-    sys.exit(1)
 
 ROOT = Path(
     os.environ.get("SEO_HELPER_ROOT")
@@ -36,6 +30,13 @@ def _html_path() -> Path:
 
 
 HTML_PATH = _html_path()
+
+try:
+    from gsc_connector import fetch_search_analytics, is_configured as _gsc_is_configured
+    _GSC_AVAILABLE = _gsc_is_configured()
+except ImportError:
+    fetch_search_analytics = None  # type: ignore[assignment]
+    _GSC_AVAILABLE = False
 
 # Situation keywords → notebook section id + suggested audit skill(s)
 ROUTES = [
@@ -90,46 +91,103 @@ ROUTES = [
 ]
 
 
-def _load_soup() -> BeautifulSoup:
+_SECTIONS_CACHE: dict = {}
+
+
+class _SectionParser(HTMLParser):
+    """Collect top-level `<section id="...">` blocks and their visible text."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.sections: list[dict] = []
+        self._depth = 0
+        self._cur_id: str | None = None
+        self._parts: list[str] = []
+        self._title: str | None = None
+        self._title_tag: str | None = None
+        self._title_parts: list[str] = []
+        self._skip_depth = 0
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag in ("script", "style"):
+            self._skip_depth += 1
+        if tag == "section":
+            self._depth += 1
+            if self._depth == 1:
+                attr = {k: v for k, v in attrs if v is not None}
+                sid = attr.get("id")
+                if sid:
+                    self._cur_id = sid
+                    self._parts = []
+                    self._title = None
+                    self._title_tag = None
+                    self._title_parts = []
+        if self._cur_id and self._title is None and tag in ("h1", "h2"):
+            self._title_tag = tag
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in ("script", "style") and self._skip_depth:
+            self._skip_depth -= 1
+            return
+        if self._title_tag and tag == self._title_tag:
+            self._title = " ".join("".join(self._title_parts).split()) or None
+            self._title_tag = None
+            self._title_parts = []
+        if tag == "section" and self._depth:
+            if self._depth == 1 and self._cur_id:
+                text = "\n".join(
+                    ln.strip() for ln in "".join(self._parts).splitlines() if ln.strip()
+                )
+                self.sections.append({
+                    "id": self._cur_id,
+                    "title": self._title or self._cur_id,
+                    "text": text,
+                })
+                self._cur_id = None
+            self._depth -= 1
+
+    def handle_data(self, data: str) -> None:
+        if self._skip_depth or not self._cur_id:
+            return
+        self._parts.append(data)
+        if self._title_tag:
+            self._title_parts.append(data)
+
+
+def _load_sections() -> list[dict]:
     if not HTML_PATH.is_file():
         raise FileNotFoundError(f"Decision notebook not found: {HTML_PATH}")
-    return BeautifulSoup(HTML_PATH.read_text(encoding="utf-8"), "lxml")
+    cached = _SECTIONS_CACHE.get("sections")
+    if cached is not None:
+        return cached
+    parser = _SectionParser()
+    parser.feed(HTML_PATH.read_text(encoding="utf-8"))
+    parser.close()
+    _SECTIONS_CACHE["sections"] = parser.sections
+    return parser.sections
 
 
 def list_sections() -> list[dict]:
-    soup = _load_soup()
-    out = []
-    for sec in soup.select("section[id]"):
-        h = sec.find(["h2", "h1"])
-        out.append({
-            "id": sec.get("id"),
-            "title": h.get_text(" ", strip=True) if h else sec.get("id"),
-        })
-    return out
+    return [{"id": sec["id"], "title": sec["title"]} for sec in _load_sections()]
 
 
 def get_section(section_id: str, max_chars: int = 12000) -> dict:
-    soup = _load_soup()
-    sec = soup.find("section", id=section_id)
-    if sec is None:
-        # fuzzy: match title substring
-        needle = section_id.lower().strip()
-        for candidate in soup.select("section[id]"):
-            h = candidate.find(["h2", "h1"])
-            title = h.get_text(" ", strip=True).lower() if h else ""
-            if needle in candidate.get("id", "") or needle in title:
-                sec = candidate
-                section_id = candidate.get("id")
+    sections = _load_sections()
+    needle = section_id.lower().strip()
+    match = next((sec for sec in sections if sec["id"] == section_id), None)
+    if match is None:
+        for sec in sections:
+            if needle in sec["id"].lower() or needle in sec["title"].lower():
+                match = sec
                 break
-    if sec is None:
-        return {"error": f"Section not found: {section_id}", "available": [s["id"] for s in list_sections()]}
-    h = sec.find(["h2", "h1"])
-    text = sec.get_text("\n", strip=True)
+    if match is None:
+        return {"error": f"Section not found: {section_id}", "available": [s["id"] for s in sections]}
+    text = match["text"]
     if len(text) > max_chars:
         text = text[:max_chars] + "\n\n[truncated : ask for a narrower subsection or raise max_chars]"
     return {
-        "id": section_id,
-        "title": h.get_text(" ", strip=True) if h else section_id,
+        "id": match["id"],
+        "title": match["title"],
         "path": str(HTML_PATH),
         "text": text,
     }
@@ -151,10 +209,14 @@ def route_situation(situation: str) -> dict:
             "suggested_skills": [],
             "next_step": "Call get_section('decision-router') then answer with What/Why/How/Evidence/Priority.",
         }
-    score, section_id, skills, keys = hits[0]
-    return {
+    top = hits[0]
+    runner_up = hits[1] if len(hits) > 1 else None
+    score, section_id, skills, keys = top
+    confidence = "high" if (not runner_up or score > runner_up[0]) else "low"
+    result = {
         "mode": "routed",
         "section_id": section_id,
+        "confidence": confidence,
         "matched_keywords": [k for k in keys if k in s],
         "suggested_skills": skills,
         "next_step": (
@@ -162,6 +224,13 @@ def route_situation(situation: str) -> dict:
             f"then optionally run skills: {', '.join(skills) if skills else '(none : answer from notebook only)'}."
         ),
     }
+    if confidence == "low" and runner_up:
+        result["alternate_section_id"] = runner_up[1]
+        result["next_step"] += (
+            f" Confidence is low ({section_id} tied/close with {runner_up[1]}) : "
+            "ask one clarifying question before committing to a section."
+        )
+    return result
 
 
 def list_audit_skills() -> list[dict]:
@@ -183,6 +252,25 @@ def list_audit_skills() -> list[dict]:
             desc = (m2.group(1) if m2 else "").strip()
         out.append({"name": d.name, "description": desc[:300]})
     return out
+
+
+def check_install_health() -> dict:
+    """Run scripts/maintain.py validate and return structured pass/fail."""
+    import subprocess
+    maintain = ROOT / "scripts" / "maintain.py"
+    try:
+        result = subprocess.run(
+            [sys.executable, str(maintain), "validate"],
+            cwd=str(ROOT), text=True, capture_output=True, timeout=30, check=False,
+        )
+    except Exception as e:
+        return {"ok": False, "errors": [f"Could not run maintain.py: {e}"]}
+    ok = result.returncode == 0
+    errors = [line[7:] for line in result.stderr.splitlines() if line.startswith("ERROR: ")]
+    return {"ok": ok, "errors": errors, "raw": result.stdout.strip() or result.stderr.strip()}
+
+
+_check_install_health = check_install_health
 
 
 # --- MCP surface -----------------------------------------------------------
@@ -219,12 +307,33 @@ TOOLS = {
         "schema": {"type": "object", "properties": {}},
         "handler": lambda _a: list_audit_skills(),
     },
+    "check_install_health": {
+        "description": "Validate the SEO Helper install: manifests, knowledgebase, MCP server. Run this first if anything seems broken.",
+        "schema": {"type": "object", "properties": {}},
+        "handler": lambda _a: check_install_health(),
+    },
 }
+
+if _GSC_AVAILABLE and fetch_search_analytics is not None:
+    _gsc_fetch = fetch_search_analytics
+    TOOLS["fetch_gsc_data"] = {
+        "description": "Optional: fetch Search Console data directly if GSC_CREDENTIALS_PATH is configured.",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "site_url": {"type": "string"},
+                "start_date": {"type": "string"},
+                "end_date": {"type": "string"},
+            },
+            "required": ["site_url", "start_date", "end_date"],
+        },
+        "handler": lambda a: _gsc_fetch(a["site_url"], a["start_date"], a["end_date"], []),
+    }
 
 
 def _run_fastmcp() -> bool:
     try:
-        from mcp.server.fastmcp import FastMCP
+        from mcp.server.fastmcp import FastMCP  # pyright: ignore[reportMissingImports]
     except ImportError:
         return False
 
@@ -249,6 +358,17 @@ def _run_fastmcp() -> bool:
     def list_seo_audit_skills() -> list:
         """List bundled seo-* audit skills."""
         return list_audit_skills()
+
+    @mcp.tool()
+    def check_install_health() -> dict:
+        """Validate the SEO Helper install and report any problems."""
+        return _check_install_health()
+
+    if _GSC_AVAILABLE and fetch_search_analytics is not None:
+        @mcp.tool()
+        def fetch_gsc_data(site_url: str, start_date: str, end_date: str) -> dict:
+            """Optional: fetch Search Console data if GSC_CREDENTIALS_PATH is configured."""
+            return _gsc_fetch(site_url, start_date, end_date, [])
 
     mcp.run()
     return True
@@ -298,6 +418,9 @@ def _run_minimal_stdio() -> None:
         elif method == "tools/call":
             name = params.get("name")
             args = params.get("arguments") or {}
+            if not isinstance(name, str):
+                reply(msg_id, error={"code": -32602, "message": "tools/call requires a string name"})
+                continue
             meta = TOOLS.get(name)
             if not meta:
                 reply(msg_id, error={"code": -32601, "message": f"Unknown tool: {name}"})

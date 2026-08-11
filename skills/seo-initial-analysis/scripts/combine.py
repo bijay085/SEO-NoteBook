@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Combine branded section HTMLs into one compiled Initial Analysis report.
 
 Usage:

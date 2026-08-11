@@ -24,7 +24,7 @@ Built 2026-08-02 from MERGE_BLUEPRINT.md. Data engine COMPLETE.
 
 ## DONE : scripts (blueprint step 9)
 - `scripts/measure.py` : deterministic DOM/landmark/heading/alt measurement (stdlib).
-- `scripts/build_report.py` : A to F report via reused `report_kit.py` + `charts.py`.
+- `scripts/build_report.py` : A to F report via `shared/report_kit.py`.
 - `scripts/build_wireframe.py` : required annotated SVG wireframe (Miro-or-equivalent).
 - All three self-tested on fixtures (report: 6 A to F blocks + accordions + chart;
   wireframe: tagged regions + rule-linked QA checklist).

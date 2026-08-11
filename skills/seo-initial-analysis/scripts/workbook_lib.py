@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """branded XLSX helpers for the Initial Analysis master workbook.
 
 openpyxl primitives so the team's execute-from workbook matches the HTML reports:
@@ -14,6 +13,8 @@ SHEET CONTENT is client-specific (you fill it per run); this lib supplies the lo
     W.write_rows(ws, hr, [["Entity", "Food Photography"]])
     W.widths(ws, [26, 60]); W.save(wb, "00-Acme-Master-Workbook.xlsx")
 """
+from typing import Literal
+
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
@@ -28,11 +29,15 @@ STATUS = {"done": GREEN, "in-progress": ORANGE, "blocked": RED, "todo": MUTED,
 def _fill(hex_):
     return PatternFill("solid", fgColor=hex_)
 
-def _side(hex_, style="thin"):
+def _side(hex_, style: Literal["thin", "medium", "thick"] = "thin"):
     return Side(style=style, color=hex_)
 
 def new_book():
-    wb = Workbook(); wb.remove(wb.active); return wb
+    wb = Workbook()
+    ws = wb.active
+    if ws is not None:
+        wb.remove(ws)
+    return wb
 
 def add_sheet(wb, title, tab_color=YELLOW):
     ws = wb.create_sheet(title[:31])

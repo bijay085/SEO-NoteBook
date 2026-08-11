@@ -4,6 +4,6 @@ GSC triage skill: diagnose indexed-but-no-impressions, click drops, impression s
 
 Load and follow the full skill instructions:
 
-`C:/Users/bijay/.claude/skills/seo-gsc-diagnosis/SKILL.md`
+`${CLAUDE_PLUGIN_ROOT}/skills/seo-gsc-diagnosis/SKILL.md`
 
 After reading the SKILL.md, follow its workflow exactly. Use the skill's reference files and scripts as instructed within it.

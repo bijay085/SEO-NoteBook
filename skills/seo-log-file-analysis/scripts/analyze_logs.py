@@ -246,12 +246,19 @@ def summarise_sources(files, roles, primary_roles, log):
     return out
 
 
+def _read_text(source) -> str:
+    with LP.open_text(source) as fh:
+        text = fh.read()
+    if isinstance(text, bytes):
+        return text.decode("utf-8", "replace")
+    return str(text)
+
+
 def read_sitemap_urls(source):
     """Extract <loc> values from a sitemap XML file."""
     import re
     try:
-        with LP.open_text(source) as fh:
-            text = fh.read()
+        text = _read_text(source)
     except Exception:
         return []
     return re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", text, re.I)
@@ -260,25 +267,25 @@ def read_sitemap_urls(source):
 def read_gsc_csv(path):
     """GSC 'Pages' export -> {url: impressions}. Accepts any column order."""
     import csv
+    import io
     out = {}
     try:
-        with LP.open_text(path) as fh:
-            reader = csv.DictReader(fh)
-            cols = {c: (c or "").lower() for c in (reader.fieldnames or [])}
-            url_col = next((o for o, l in cols.items()
-                            if "page" in l or "url" in l or "address" in l), None)
-            imp_col = next((o for o, l in cols.items() if "impress" in l), None)
-            if not url_col:
-                return {}
-            for row in reader:
-                u = (row.get(url_col) or "").strip()
-                if not u:
-                    continue
-                try:
-                    imp = int(float(str(row.get(imp_col, 0) or 0).replace(",", "")))
-                except (ValueError, TypeError):
-                    imp = 0
-                out[u] = imp
+        reader = csv.DictReader(io.StringIO(_read_text(path)))
+        cols = {c: (c or "").lower() for c in (reader.fieldnames or [])}
+        url_col = next((o for o, l in cols.items()
+                        if "page" in l or "url" in l or "address" in l), None)
+        imp_col = next((o for o, l in cols.items() if "impress" in l), None)
+        if not url_col:
+            return {}
+        for row in reader:
+            u = (row.get(url_col) or "").strip()
+            if not u:
+                continue
+            try:
+                imp = int(float(str(row.get(imp_col, 0) or 0).replace(",", "")))
+            except (ValueError, TypeError):
+                imp = 0
+            out[u] = imp
     except Exception:
         return {}
     return out

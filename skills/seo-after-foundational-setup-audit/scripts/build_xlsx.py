@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
 """Render the branded XLSX deliverable from report_data.REPORT (parity with HTML).
 Usage: python build_xlsx.py [output_dir]"""
 import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "shared"))
 import report_data as RD # noqa: E402
 from report_kit import render_xlsx # noqa: E402
 from build_html import _fname # noqa: E402

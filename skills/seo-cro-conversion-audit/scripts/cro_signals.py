@@ -143,8 +143,10 @@ def _score(p: dict) -> dict:
     page = 3 + 2 * p["has_form"] + 2 * p["pricing"] + min(3, p["avg_words"] // 700)
     uiux = 4 + 2 * (p["hero_frac"] >= 0.5) + 1 * p["has_sticky"]
     cov = 2 + min(6, p["service_pages"] * 2) + (1 if p["pages"] > 1 else 0)
-    scores = {"UI/UX": _clamp(uiux), "Coverage": _clamp(cov), "Page": _clamp(page),
-              "CTA": _clamp(cta), "Trust": _clamp(trust)}
+    scores: dict[str, float] = {
+        "UI/UX": _clamp(uiux), "Coverage": _clamp(cov), "Page": _clamp(page),
+        "CTA": _clamp(cta), "Trust": _clamp(trust),
+    }
     scores["Overall"] = round(sum(scores[d] for d in DIMENSIONS) / len(DIMENSIONS), 1)
     return scores
 

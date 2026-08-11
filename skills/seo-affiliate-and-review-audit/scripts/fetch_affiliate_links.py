@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 fetch_affiliate_links.py : deterministic engine for the seo-affiliate-and-review-audit skill.
 
@@ -193,13 +192,15 @@ def discover_pages(cfg, env):
     ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
     urls = []
     for loc in root.findall(".//s:sitemap/s:loc", ns):
+        if not loc.text:
+            continue
         child, _, _, _ = fetch_html(loc.text.strip(), env, use_bee=False)
         try:
             croot = ET.fromstring(child)
         except ET.ParseError:
             continue
-        urls += [u.text.strip() for u in croot.findall(".//s:url/s:loc", ns)]
-    urls += [u.text.strip() for u in root.findall(".//s:url/s:loc", ns)]
+        urls += [u.text.strip() for u in croot.findall(".//s:url/s:loc", ns) if u.text]
+    urls += [u.text.strip() for u in root.findall(".//s:url/s:loc", ns) if u.text]
     return urls
 
 
@@ -231,12 +232,21 @@ def main():
         soup = BeautifulSoup(html, "lxml")
         schema_rows.append({"page_url": url, "types": parse_jsonld(soup)})
         for a in soup.find_all("a", href=True):
-            href = urljoin(final_url, a["href"].strip())
+            raw_href = a.get("href")
+            if not isinstance(raw_href, str):
+                continue
+            href = urljoin(final_url, raw_href.strip())
             net = classify_network(href, networks, amazon_tag)
             if not net:
                 continue # only inventory monetized links
             st, fin = check_destination(href, dest_cache)
-            rel = " ".join(a.get("rel", [])) if a.get("rel") else ""
+            rel_attr = a.get("rel")
+            if isinstance(rel_attr, list):
+                rel = " ".join(str(x) for x in rel_attr)
+            elif isinstance(rel_attr, str):
+                rel = rel_attr
+            else:
+                rel = ""
             rows.append({
                 "page_url": url,
                 "anchor": a.get_text(" ", strip=True)[:120],

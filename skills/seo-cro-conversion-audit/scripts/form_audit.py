@@ -24,6 +24,14 @@ _ROLE = [
 ]
 
 
+def _attr_str(val, default: str = "") -> str:
+    if val is None:
+        return default
+    if isinstance(val, list):
+        return " ".join(str(x) for x in val) if val else default
+    return str(val)
+
+
 def _label_for(field, soup) -> str:
     fid = field.get("id")
     if fid:
@@ -32,7 +40,7 @@ def _label_for(field, soup) -> str:
             return lab.get_text(" ", strip=True)
     for attr in ("placeholder", "aria-label", "title"):
         if field.get(attr):
-            return field.get(attr).strip()
+            return _attr_str(field.get(attr)).strip()
     parent_lab = field.find_parent("label")
     if parent_lab:
         return parent_lab.get_text(" ", strip=True)
@@ -40,12 +48,12 @@ def _label_for(field, soup) -> str:
 
 
 def _role_of(field, label) -> str:
-    hay = f"{field.get('type','')} {field.get('name','')} {label}"
+    hay = f"{_attr_str(field.get('type'))} {_attr_str(field.get('name'))} {label}"
     if field.name == "textarea":
         return "message"
-    if (field.get("type") or "").lower() == "email":
+    if _attr_str(field.get("type")).lower() == "email":
         return "email"
-    if (field.get("type") or "").lower() == "tel":
+    if _attr_str(field.get("type")).lower() == "tel":
         return "phone"
     for role, rx in _ROLE:
         if rx.search(hay):
@@ -58,9 +66,9 @@ def _pick_form(soup):
     best, best_score = None, -1
     for form in soup.find_all("form"):
         fields = form.select("input, textarea, select")
-        real = [f for f in fields if (f.get("type") or "text").lower()
+        real = [f for f in fields if _attr_str(f.get("type"), "text").lower()
                 not in ("hidden", "submit", "button", "search", "image")]
-        if any((f.get("type") or "").lower() == "search" for f in fields):
+        if any(_attr_str(f.get("type")).lower() == "search" for f in fields):
             continue
         score = len(real) + 2 * bool(form.select('textarea')) + \
             2 * bool(form.select('input[type="email"]'))
@@ -79,7 +87,8 @@ def build(page_path, form_url=None):
                 "fields": [], "static_findings": 0, "test_plan": []}
     fields, static = [], 0
     for f in form.select("input, textarea, select"):
-        ftype = (f.get("type") or ("textarea" if f.name == "textarea" else "text")).lower()
+        default_type = "textarea" if f.name == "textarea" else "text"
+        ftype = _attr_str(f.get("type"), default_type).lower()
         if ftype in ("hidden", "submit", "button", "image"):
             continue
         label = _label_for(f, soup)

@@ -8,6 +8,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "shared"))
 
 import report_data as RD # noqa: E402
 from build_data_tabs import append_data_tabs # noqa: E402
@@ -41,8 +42,8 @@ def _strip_examples(rep):
 
 def main():
     authored, dropped = _strip_examples(RD.REPORT)
-    outdir = (sys.argv[1] if len(sys.argv) > 1
-              else authored.get("output_dir", "./Log-Analysis"))
+    raw_out = sys.argv[1] if len(sys.argv) > 1 else authored.get("output_dir", "./Log-Analysis")
+    outdir = raw_out if isinstance(raw_out, str) and raw_out else "./Log-Analysis"
     os.makedirs(outdir, exist_ok=True)
     # Naming resolves from the same source as the HTML so the two files cannot
     # drift apart. The SECTIONS deliberately do not: in a spreadsheet the

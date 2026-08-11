@@ -13,8 +13,7 @@
   being counted in `person_schema.present/count`, even though `sameAs_count`
   found it via a separate path : fixed by folding the author node into the
   persons list before counting).
-- `scripts/build_report.py` + `scripts/report_kit.py` (shared, reused from
-  `seo-accessibility-completeness-audit`) : end-to-end self-test with 6 sample
+- `scripts/build_report.py` + `shared/report_kit.py` : end-to-end self-test with 6 sample
   findings across 5 pillars produced valid, tag-balanced HTML with jump-nav,
   accordions, per-pillar SVG charts, and all four Issue/Evidence/Solution/
   Execution fields present.

@@ -86,8 +86,10 @@ def main():
         res['flags'].append("NO Organization/LocalBusiness JSON-LD on the homepage : Google has no structured "
                             "entity anchor. This is the classic 'dead brand entity trap' starting point.")
     # HTML-level corroboration (independent of schema, which is authorable)
+    title_m = re.search(r'<title[^>]*>(.*?)</title>', html, re.S|re.I)
+    title_txt = (title_m.group(1) if title_m else "") or ""
     res['html_signals']={
-        'title': (re.search(r'<title[^>]*>(.*?)</title>', html, re.S|re.I) or [None,''])[1].strip()[:140],
+        'title': title_txt.strip()[:140],
         'has_about_link': bool(re.search(r'href=["\'][^"\']*about', html, re.I)),
         'mentions_founded_or_since': bool(re.search(r'\b(founded|established|since)\b\s*\d{4}', html, re.I)),
     }

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Forensic page-fetch engine for the After-Foundational-Setup deep audit.
 
 Niche-agnostic. Fetches every target URL from config.json and emits measured

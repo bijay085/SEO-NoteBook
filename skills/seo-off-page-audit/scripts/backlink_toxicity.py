@@ -68,6 +68,8 @@ def read_table(path):
         from openpyxl import load_workbook # present; imported only when needed
         wb = load_workbook(p, read_only=True, data_only=True)
         ws = wb.active
+        if ws is None:
+            return []
         it = ws.iter_rows(values_only=True)
         header = next(it, None) or []
         headers = [str(h).strip().lower() if h is not None else "" for h in header]

@@ -30,6 +30,7 @@ import lzma
 import os
 import re
 from datetime import datetime
+from typing import TextIO, cast
 
 LOG_SUFFIXES = (".log", ".txt", ".json", ".jsonl", ".csv", ".tsv", ".gz", ".bz2", ".xz")
 METHODS = ("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH")
@@ -103,16 +104,18 @@ def expand_paths(paths):
     return discover_logs(paths)[0]
 
 
-def open_text(path):
+def open_text(path) -> TextIO:
     """Open plain or compressed logs as text, never raising on bad bytes."""
     low = str(path).lower()
     if low.endswith(".gz"):
-        return gzip.open(path, "rt", errors="ignore")
-    if low.endswith(".bz2"):
-        return bz2.open(path, "rt", errors="ignore")
-    if low.endswith(".xz"):
-        return lzma.open(path, "rt", errors="ignore")
-    return open(path, "r", errors="ignore")
+        fh = gzip.open(path, "rt", encoding="utf-8", errors="ignore")
+    elif low.endswith(".bz2"):
+        fh = bz2.open(path, "rt", encoding="utf-8", errors="ignore")
+    elif low.endswith(".xz"):
+        fh = lzma.open(path, "rt", encoding="utf-8", errors="ignore")
+    else:
+        fh = open(path, "r", encoding="utf-8", errors="ignore")
+    return cast(TextIO, fh)
 
 
 # ── format detection ────────────────────────────────────────────────────────
@@ -495,13 +498,14 @@ def parse_file(filepath, log=print, collect=True):
     log(f" Format detected: {fmt.upper()}")
     for i, s in enumerate(samples[:3]):
         log(f" [{i+1}] {s[:150]}{'...' if len(s) > 150 else ''}")
-    records, total, failed = ([] if collect else None), 0, 0
+    records: list | None = [] if collect else None
+    total, failed = 0, 0
     for rec in iter_records(filepath, log=log, fmt=fmt):
         total += 1
         if rec is None:
             failed += 1
             continue
-        if collect:
+        if records is not None:
             records.append(rec)
     parsed = total - failed
     if parsed == 0 and total > 0:
@@ -509,7 +513,7 @@ def parse_file(filepath, log=print, collect=True):
         recovered = 0
         for rec in iter_last_resort(filepath):
             recovered += 1
-            if collect:
+            if records is not None:
                 records.append(rec)
         failed = max(total - recovered, 0)
         parsed = recovered

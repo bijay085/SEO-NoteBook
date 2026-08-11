@@ -27,8 +27,12 @@ def palette(cfg):
 _thin=Side(style='thin', color='E6E6E6')
 BORDER=Border(left=_thin,right=_thin,top=_thin,bottom=_thin)
 
-def new_book(): 
-    wb=Workbook(); wb.remove(wb.active); return wb
+def new_book():
+    wb=Workbook()
+    ws=wb.active
+    if ws is not None:
+        wb.remove(ws)
+    return wb
 def sheet(wb, title): return wb.create_sheet(title[:31])
 
 def band(ws, title, sub='', cfg=None, width=8):

@@ -12,6 +12,8 @@ Colors follow built-in report branding palette exactly : see that skill for the 
 
 No external AI/LLM API is called anywhere in this file.
 """
+from typing import Any, cast
+
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 from openpyxl.drawing.image import Image as XLImage
@@ -28,12 +30,17 @@ TEXT = "1C1C1C"
 ORANGE = "E67E22"
 
 
+def _box_border(style="thin", color="DDDDDD"):
+    side = Side(style=cast(Any, style), color=color)
+    return Border(left=side, right=side, top=side, bottom=side)
+
+
 def thin(color="DDDDDD"):
-    return Border(*[Side(style="thin", color=color)] * 4)
+    return _box_border("thin", color)
 
 
 def all_border(style="thin", color="333333"):
-    return Border(*[Side(style=style, color=color)] * 4)
+    return _box_border(style, color)
 
 
 def header_band(ws, title, meta, logo_path, last_col=12):

@@ -938,6 +938,26 @@
         <tr><td>How should AI help?</td><td>Use AI for QA, not stuffing.</td><td>Ask AI to find missing subtopics, unclear sections, and unnatural repetition. Do not ask it to hit a density target.</td></tr>
       </table>
       <p><strong>Decision rule:</strong> if a page is not ranking, do not raise keyword density first. Check SERP intent, page type, title/H1 targeting, content completeness, internal links, authority, and CTR signals.</p>
+      <h3>Article Keyword Count and Query Fan-Out Rule</h3>
+      <p>Use this when someone asks how many primary, secondary, or long-tail keywords belong in an article of a given word count. Word count does not determine a safe keyword count or repetition limit.</p>
+      <table>
+        <tr><th>Question</th><th>Decision</th><th>Check</th></tr>
+        <tr><td>How many primary keywords?</td><td>Choose one primary intent and query cluster for the page. Closely related variants can belong to the same cluster.</td><td>If the terms produce different SERP intent or page types, use another page only when it has a distinct purpose.</td></tr>
+        <tr><td>How many secondary or long-tail terms?</td><td>No fixed number. Include subtopics and variants only where they help complete the answer.</td><td>Every section must support the primary intent. Remove side topics that deserve another page or add no user value.</td></tr>
+        <tr><td>How many exact-match repetitions?</td><td>No fixed threshold.</td><td>Use the term where needed for clarity, then use natural language, pronouns, entities, attributes, examples, and specific terminology.</td></tr>
+        <tr><td>How long should the article be?</td><td>Long enough to satisfy the intent, no longer.</td><td>Do not start with a 3,000-word target unless the topic and SERP require that depth.</td></tr>
+      </table>
+      <h4>Manual Query Fan-Out Process</h4>
+      <ol>
+        <li>Start with the main user problem, entity, product, or task.</li>
+        <li>Collect real query variations from GSC, autocomplete, People Also Ask, related searches, forums, reviews, customer questions, support logs, competitor headings, and the live SERP.</li>
+        <li>Fan out by user need: definition, comparison, attributes, benefits, risks, cost, process, examples, alternatives, troubleshooting, compatibility, location, and next action.</li>
+        <li>Group queries by shared intent and SERP overlap. Remove duplicates, irrelevant questions, and terms with no evidence of demand or user value.</li>
+        <li>Assign each group to the current page, a supporting page, a product or service page, or no page.</li>
+        <li>Write the clearest supported answer. Add reliable sources, first-party evidence, tables, steps, or examples where they improve understanding.</li>
+        <li>Measure normal search performance in GSC and treat AI citations or prompt tracking as directional evidence, not a guaranteed outcome.</li>
+      </ol>
+      <p><strong>Decision rule:</strong> query fan-out is a research and intent-mapping method, not a formula for AI Overview inclusion. No tool, keyword count, or exact-match frequency guarantees citation by an AI system.</p>
       <h3>Underrated SEO Action Rule</h3>
       <p>Use this when looking for practical actions that can produce results without inventing a new strategy. These are not universal hacks. Apply them only when they match the page type, business model, and evidence.</p>
       <table>
@@ -1143,6 +1163,18 @@
         <li>Myth: one ranking factor explains performance. Reality: ranking is the result of signals, larger factors, and context interacting.</li>
       </ul>
 
+      <h3>SEO Skill Development and Proof-of-Work Rule</h3>
+      <p>Use this when an SEO specialist wants to expand from one narrow function, such as off-page work, into on-page, technical, analytics, local, content, or AI visibility work. Courses can teach concepts, but job readiness requires applied diagnosis, prioritization, implementation, and evidence.</p>
+      <ol>
+        <li>Keep the existing specialty as a strength. Add adjacent skills in layers instead of trying to master every discipline at once.</li>
+        <li>Use a small site, sandbox, volunteer project, or authorized client environment where mistakes are recoverable. Set up GSC, GA4, a crawler, backups, and change tracking.</li>
+        <li>Start with ten representative URLs. For each, document crawlability, indexation, status, canonical, intent, title and H1, internal links, duplication, rendered content, structured data where relevant, and conversion role.</li>
+        <li>Write a hypothesis and priority before changing anything. Record the URL, problem, evidence, proposed fix, owner, risk, date, and success metric.</li>
+        <li>Implement safe changes, validate the live result, and monitor GSC, crawl data, analytics, rankings, or conversions over an appropriate period.</li>
+        <li>Build a portfolio from redacted before-and-after evidence, including failed tests and what changed in the diagnosis. Do not invent outcomes or expose confidential data.</li>
+        <li>For interviews, explain why a change mattered, what evidence supported it, who needed to implement it, how it was validated, and what happened next.</li>
+      </ol>
+      <p><strong>Decision rule:</strong> knowing a checklist is not the same as operating SEO. Practical competence is the ability to find a real problem, distinguish symptoms from causes, prioritize it, communicate it, implement or ticket it safely, and measure the outcome.</p>
       <h3>Small Business Ranking Improvement Decision Rule</h3>
       <p>Use this when a small business asks whether it can reach page 1, whether to DIY, hire an agency, hire a freelancer, or buy Google Ads. Do not start by promising rankings. First define the business model, target queries, competition, budget, time, and success metric.</p>
       <table>
@@ -1183,6 +1215,26 @@
         </tr>
       </table>
 
+      <h3>Build the Website, Hire, or Use a Hybrid Rule</h3>
+      <p>Use this when a small business is deciding whether to build a new site itself or pay a professional. Separate website production from SEO strategy. A polished template does not guarantee useful architecture, correct intent mapping, crawlability, conversion tracking, or local visibility.</p>
+      <table>
+        <tr><th>Situation</th><th>Best Default</th><th>Required Safeguard</th></tr>
+        <tr><td>Simple brochure site, low budget, enough learning time, and low launch risk.</td><td>DIY can be reasonable.</td><td>Define the sitemap, page purpose, ownership, analytics, GSC, backups, forms, mobile QA, and maintenance before launch.</td></tr>
+        <tr><td>SEO is an important lead channel, competition is meaningful, or the site needs many services, locations, bookings, accounts, ecommerce, or integrations.</td><td>Hire qualified help for strategy and high-risk implementation.</td><td>Demand a keyword-to-page map, technical acceptance criteria, conversion plan, documentation, and evidence of relevant work.</td></tr>
+        <tr><td>Owner can build and maintain pages but lacks SEO or UX judgment.</td><td>Use a hybrid model.</td><td>Pay for architecture, search-intent mapping, wireframes, technical review, and launch QA, then keep routine publishing in-house.</td></tr>
+        <tr><td>Owner has neither time nor operational interest.</td><td>Hire, but retain control.</td><td>Business must own the domain, hosting, CMS admin, analytics, GSC, GBP, creative files, credentials, backups, and exit documentation.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> compare the full cost of learning, building, troubleshooting, and maintenance with the cost and risk of hiring. Do not spend the entire budget on visual design while leaving architecture, local SEO, measurement, and ongoing maintenance unfunded.</p>
+      <h3>SEO or PPC First Decision Rule</h3>
+      <p>Use this when a small business has a limited budget and must decide whether to start with organic search, paid search, or both. Do not default to an equal budget split.</p>
+      <table>
+        <tr><th>Condition</th><th>Best Default</th><th>Evidence Needed</th></tr>
+        <tr><td>Leads are needed quickly and clear commercial search demand exists.</td><td>Run a small, controlled PPC test while implementing SEO foundations.</td><td>Keyword intent, cost per click, landing-page conversion, lead quality, close rate, margin, and capacity.</td></tr>
+        <tr><td>Budget cannot absorb uncertain paid acquisition or the landing page is weak.</td><td>Fix offer, tracking, credibility, GBP or local footprint, and conversion path before scaling ads.</td><td>Call and form tracking, page QA, reviews, business profiles, and historical conversion data.</td></tr>
+        <tr><td>Business has time, useful expertise, and demand that compounds through content or local visibility.</td><td>Invest steadily in SEO while keeping expectations tied to milestones, not immediate leads.</td><td>GSC baseline, indexed money pages, target demand, competition, conversions, and realistic resources.</td></tr>
+        <tr><td>Paid search produces qualified profitable leads.</td><td>Use its query, offer, location, device, and landing-page data to guide SEO priorities.</td><td>Search-term reports, negatives, conversion quality, revenue, and assisted conversion data.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> SEO and PPC can support each other, but they have different economics. PPC buys immediate tests and visibility while funding continues. SEO can compound but takes time and has uncertain outcomes. Allocate by cash flow, urgency, demand, unit economics, competition, and measurement quality.</p>
       <h3>In-House, Agency, Freelancer, or Hybrid SEO Rule</h3>
       <p>Use this when deciding who should execute SEO work. Do not decide only by cost. Decide by business context, required expertise, volume of work, speed, risk, and ownership.</p>
       <table>
@@ -1373,6 +1425,17 @@
         <li>After 3 months, replace assumption-heavy forecasts with observed data trends where possible.</li>
       </ol>
 
+      <h3>AI-Assisted Predictive SEO Rule</h3>
+      <p>Use this when AI is proposed for predicting emerging search demand. AI can detect patterns, cluster language, surface anomalies, and rank opportunities. It cannot turn incomplete historical data into certain future demand.</p>
+      <table>
+        <tr><th>Stage</th><th>Use AI For</th><th>Human and Data Check</th></tr>
+        <tr><td>Signal collection.</td><td>Combine GSC queries, Google Trends, site search, sales and support language, community discussions, paid-search terms, seasonality, and relevant market events.</td><td>Confirm dates, geography, source coverage, tracking changes, sample size, and whether the signals describe the same audience.</td></tr>
+        <tr><td>Pattern detection.</td><td>Cluster new wording, rising modifiers, related entities, recurring problems, and changes in intent.</td><td>Inspect raw examples and live SERPs. A language change may reflect news, bots, reporting noise, or a short event rather than durable demand.</td></tr>
+        <tr><td>Opportunity scoring.</td><td>Rank topics by observed growth, business fit, conversion role, current authority, competition, and content gap.</td><td>Keep known inputs separate from assumptions. Do not let predicted volume override weak buyer value or poor strategic fit.</td></tr>
+        <tr><td>Test design.</td><td>Draft a landing page, update, content brief, PPC test, email test, or monitoring query set.</td><td>Choose the smallest reversible test with a baseline, success threshold, owner, cost, and review date.</td></tr>
+        <tr><td>Calibration.</td><td>Compare predicted direction with actual impressions, clicks, rankings, conversions, and demand after the test period.</td><td>Record false positives and missed opportunities, then update weights and confidence. Do not hide failed predictions.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> label outputs as signals, hypotheses, scenarios, or forecasts, not facts. A predictive SEO system becomes useful only when predictions are time-stamped, tested against observed outcomes, and recalibrated.</p>
       <h3>Forecast Timeline</h3>
       <table>
         <tr>
@@ -1556,6 +1619,29 @@
       </table>
       <p><strong>Decision rule:</strong> the easiest first sale is often a focused local diagnostic or fix package, not a full monthly retainer.</p>
 
+      <h3>Impact-Based SEO Work Cadence Rule</h3>
+      <p>Use this when an SEO or digital marketer is busy but unclear about what to do next. Do not optimize for filling eight hours. Organize work around a small number of measurable business or search outcomes.</p>
+      <ol>
+        <li>Set one primary 30 to 90 day business outcome with the owner, such as qualified leads, revenue, trials, bookings, or retention.</li>
+        <li>Choose two or three weekly priorities that can move that outcome. Separate execution, measurement, experiments, maintenance, and dependencies.</li>
+        <li>Start with existing winners, losses, conversion leaks, technical blockers, and near-win pages before creating unrelated work.</li>
+        <li>For experiments, define the hypothesis, target metric, baseline, owner, duration, and stop or continue rule before starting.</li>
+        <li>Track blocked work and approvals explicitly. Escalate unresolved dependencies instead of replacing them with low-impact busywork.</li>
+        <li>Automate repeatable reporting and collection only after the definitions and QA are stable. AI can assist production, but the operator remains responsible for inputs, decisions, and verification.</li>
+      </ol>
+      <p><strong>Decision rule:</strong> productivity is movement in agreed outcomes with controlled learning, not task volume, meetings, reports, or content quantity.</p>
+
+      <h3>Executive SEO and AI Channel Evidence Rule</h3>
+      <p>Use this when a board or executive asks whether SEO should be reduced or replaced by AI visibility work. Do not defend the channel with slogans, industry seniority, podcasts, or global usage statistics alone. Show the company's own economics and customer behavior.</p>
+      <table>
+        <tr><th>Evidence</th><th>Required View</th><th>Decision Use</th></tr>
+        <tr><td>Organic search contribution.</td><td>Qualified leads, revenue, assisted conversions, conversion rate, customer value, branded and non-brand mix, and trend over comparable periods.</td><td>Shows current business value and whether performance is growing, stable, or declining.</td></tr>
+        <tr><td>AI referral and visibility contribution.</td><td>Verified referral sessions, leads, revenue, cited pages, brand mentions, prompt set, method, and tracking limitations.</td><td>Shows whether AI is material, emerging, or still directional for this business.</td></tr>
+        <tr><td>Incremental economics.</td><td>Cost, team time, content and technical investment, marginal return, payback period, and opportunity cost by channel.</td><td>Prevents comparing free-looking organic traffic with only media spend or comparing incomplete attribution as exact truth.</td></tr>
+        <tr><td>Search behavior change.</td><td>GSC clicks, impressions, CTR, query mix, SERP features, AI Overviews, conversion paths, and customer research.</td><td>Separates channel decline from CTR compression, demand change, tracking faults, or a shift in discovery surfaces.</td></tr>
+        <tr><td>Forward plan.</td><td>Protect, improve, test, reduce, or stop actions with owners, milestones, forecast ranges, and decision dates.</td><td>Gives leadership a resource decision, not a debate about whether SEO is dead.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> SEO and AI visibility often share crawlability, clear entities, useful content, reputation, and external proof, but their traffic and attribution must be measured separately. Keep, expand, reduce, or stop investment based on incremental business value and strategic risk, not channel ideology.</p>
       <h3>New Client SEO Reporting Rule</h3>
       <p>Use this when someone asks how to report SEO results to a new client. Lead with business outcomes and decision context, then show SEO signals. Do not send a vanity dashboard with no action.</p>
       <table>
@@ -1798,6 +1884,22 @@
         <li>Myth: planning for months before launch is safer. Reality: over-planning delays feedback. Launch a coherent version, measure, then improve.</li>
       </ul>
 
+      <h3>Multiple Brands in the Same Industry Rule</h3>
+      <p>Use this when one owner operates several websites or brands in the same industry. Do not clone one successful content plan across every domain without defining why each brand exists and which audience or commercial role it serves.</p>
+      <table>
+        <tr><th>Decision</th><th>Question</th><th>Action</th></tr>
+        <tr><td>Portfolio role.</td><td>Is the site a broad retailer, manufacturer brand, specialist, budget option, premium option, regional brand, acquired legacy brand, or lead-capture property?</td><td>Write a one-sentence audience, offer, assortment, positioning, and conversion role for each domain.</td></tr>
+        <tr><td>Priority.</td><td>Which domain produces the most profit, has the strongest demand, or faces the greatest technical and commercial risk?</td><td>Protect the main revenue site first, but use marginal return and strategic value rather than revenue alone when allocating work.</td></tr>
+        <tr><td>Query ownership.</td><td>Which brand is the best answer for each query cluster and page type?</td><td>Create a cross-domain map of target intent, ranking URL, current performance, product fit, audience, funnel stage, and primary owner.</td></tr>
+        <tr><td>Overlap.</td><td>Would two brands serve the same searcher with the same offer and near-duplicate content?</td><td>Differentiate by audience, assortment, expertise, format, price, geography, use case, comparison role, or customer journey. Consolidate brands only through a deliberate business and migration decision.</td></tr>
+        <tr><td>Shared operations.</td><td>Can research, product facts, imagery, subject expertise, or technical components be reused?</td><td>Share source inputs and systems, but create original brand-specific pages, proof, internal links, CTAs, policies, and voice.</td></tr>
+      </table>
+      <ul>
+        <li>Multiple owned domains ranking for the same query are not automatically cannibalization because they are separate sites. They can still waste budget, confuse positioning, divide authority, or create duplicate-content and reputation risks.</li>
+        <li>Do not hide common ownership where disclosure is required or useful to users. Avoid artificial cross-link networks, doorway sites, copied reviews, or fake independent comparisons.</li>
+        <li>Measure each domain by incremental profit, qualified traffic, assisted conversions, brand demand, and maintenance cost. Taking several SERP positions is useful only if it adds business value rather than shifting the same customer between owned brands.</li>
+      </ul>
+      <p><strong>Decision rule:</strong> assign every important query and content asset a primary portfolio role. Accept overlap only when each brand provides a genuinely different and useful option.</p>
       <h3>New Domain Content Volume Rule</h3>
       <p>Use this when deciding whether a new website should launch or scale with 10, 50, 100, 500, or more pages. There is no universal safe page count. Too much content means more pages than the site can make useful, differentiated, index-worthy, internally linked, and maintained.</p>
       <table>
@@ -2218,6 +2320,16 @@
       </table>
       <p><strong>Decision rule:</strong> do not stuff keywords. Make the page useful for someone close to a decision, then support it with internal links, topical coverage, and authority signals.</p>
 
+      <h3>Prelaunch Keyword-to-Page and Cannibalization Rule</h3>
+      <p>Use this before an agency or service website creates many similar pages. Map each commercially useful query cluster to one primary URL only after checking the live SERP.</p>
+      <ol>
+        <li>Group terms by intent, ranking page type, and SERP overlap, not by wording alone.</li>
+        <li>If two phrases return substantially the same results and satisfy the same buyer need, cover them on one strong page unless the business can prove a distinct service or user journey.</li>
+        <li>Create separate service or location pages only when each has distinct demand, purpose, proof, content, conversion path, and internal-link role.</li>
+        <li>Before launch, record the primary query cluster, secondary variants, page type, parent page, supporting pages, and conversion goal for every planned URL.</li>
+        <li>After launch, use GSC by query and page to detect multiple URLs alternating for the same intent. Consolidate, retarget, or clarify internal links when overlap weakens performance.</li>
+      </ol>
+      <p><strong>Decision rule:</strong> do not create a page for every keyword variation. Cannibalization is demonstrated by competing URLs and overlapping intent, not by similarity of wording alone. Duplicate or thin pages are not automatically a penalty, but they can dilute relevance, links, crawl focus, and maintenance quality.</p>
       <h3>Indexed but No Impressions Rule</h3>
       <p>Use this when a page is indexed but receives no impressions. Indexed only means Google can store the URL. It does not prove the page is eligible, relevant, or strong enough to appear for searched queries.</p>
       <table>
@@ -2524,6 +2636,32 @@
         </tr>
       </table>
 
+      <h3>Competitor Visible for the Business Name Rule</h3>
+      <p>Use this when a competitor appears for the business name. First classify the result as an ad, organic result, local result, or a generic service query. Do not treat every case as an SEO failure.</p>
+      <table>
+        <tr><th>Finding</th><th>Meaning</th><th>Action</th></tr>
+        <tr><td>Competitor appears with an Ad or Sponsored label.</td><td>The competitor may be bidding on the name as a keyword.</td><td>Separate paid visibility from organic performance. Review the ad text, landing page, country, and applicable trademark policy. Trademark ownership does not automatically prevent keyword bidding.</td></tr>
+        <tr><td>Registered trademark is used in competitor ad copy in a potentially confusing way.</td><td>A platform trademark complaint may be relevant, subject to region and policy.</td><td>Preserve screenshots, query, date, country, ad text, trademark registration, and owner details. Use the advertising platform's official complaint process. Get legal advice for infringement questions.</td></tr>
+        <tr><td>Unique business name, but the official site or GBP loses organically.</td><td>Indexing, entity consistency, relevance, reputation, or authority may be weak.</td><td>Check homepage indexation and canonical, exact-name title/H1 where natural, GBP verification, Organization or LocalBusiness facts, consistent profiles/citations, branded mentions, reviews, and GSC branded queries.</td></tr>
+        <tr><td>Name is a generic service phrase such as a category plus location or audience.</td><td>The query may behave as a non-brand commercial search.</td><td>Do not expect trademark or entity signals alone to secure position one. Compete on local relevance, proximity, prominence, page quality, reviews, links, and differentiated brand demand.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> verify the exact query, result type, country, device, and GSC impressions before changing the site. If the site has no branded impressions, check indexation and demand. If it has impressions but loses visibility, diagnose SERP intent, entity consistency, authority, and reputation.</p>
+      <h3>Single-Location Geographic Targeting Rule</h3>
+      <p>Use this when a business with one real office must choose between a specific neighborhood, a borough or city area, and a broad region. Website targeting and map-pack coverage are related but not interchangeable. Proximity can limit local-pack visibility even when a broader location page ranks organically.</p>
+      <table>
+        <tr><th>Layer</th><th>Default Role</th><th>Required Evidence</th></tr>
+        <tr><td>Exact physical neighborhood or town.</td><td>Primary local identity when it accurately describes the office and customers recognize the name.</td><td>GBP address, website contact details, directions, local proof, competitor grid, customer language, and conversion data.</td></tr>
+        <tr><td>Borough, city district, or adjacent area.</td><td>Secondary target when the business genuinely serves it and the search intent differs from the exact neighborhood.</td><td>Demand, service reach, travel behavior, distinct SERP, useful local content, and a real conversion case.</td></tr>
+        <tr><td>Broad region.</td><td>Supporting organic target or regional service explanation, not a claim of map-pack coverage across the whole region.</td><td>Buyer use of the term, commercial value, competitive SERP, service feasibility, and page differentiation.</td></tr>
+      </table>
+      <ol>
+        <li>Run a local grid or manual location checks around the real office. If visibility is weak next to the office, diagnose eligibility, category, relevance, competitors, prominence, website alignment, and profile quality before changing geography.</li>
+        <li>Anchor business identity to the most precise truthful location. Expand outward only where a broader page serves a distinct search need and can contain useful local proof.</li>
+        <li>Do not create many thin pages or stuff a broad region across the site because a keyword tool reports volume. Search volume may be estimated or missing for neighborhood terms.</li>
+        <li>For regulated, medical, therapy, legal, or privacy-sensitive services, follow professional and platform rules when requesting reviews. Do not pressure clients, reveal sensitive relationships, or treat review scarcity as permission to fabricate proof.</li>
+        <li>When public reviews are constrained, strengthen other legitimate signals: credentials, directories, associations, local links, accurate citations, service specificity, office information, policies, expert content, and conversion clarity.</li>
+      </ol>
+      <p><strong>Decision rule:</strong> choose location targets by truthful identity, actual client behavior, proximity, demand, conversion value, and the ability to create distinct useful pages. No fixed radius or location-name hierarchy guarantees map-pack rankings.</p>
       <h3>Local Website Before More SEO Rule</h3>
       <p>Use this when a local business asks for more SEO, backlinks, blogs, citations, or AI visibility but the website page itself does not help a stranger decide to call, visit, book, or request a quote.</p>
       <table>
@@ -4587,6 +4725,43 @@
         <li>Use slow deliberate changes. Do not react to every week-over-week dip unless there is a real incident.</li>
       </ul>
 
+      <h3>Cross-Platform AI Visibility Expectation Rule</h3>
+      <p>Use this when a client expects the brand to appear consistently in every AI answer engine. Platforms can use different indexes, retrieval providers, model versions, source sets, interfaces, geography, personalization, and prompt interpretation. Uniform placement is not a controllable KPI.</p>
+      <table>
+        <tr><th>Layer</th><th>Action</th><th>Measurement</th></tr>
+        <tr><td>Shared foundation.</td><td>Maintain crawlable HTML, clear entities, accurate facts, original evidence, strong intent match, useful answer structure, reputation, and legitimate third-party corroboration.</td><td>Technical access, source accuracy, citations, brand mentions, referrals, conversions, and wrong-fact rate.</td></tr>
+        <tr><td>Audience priority.</td><td>Select the engines and prompt families actual prospects use. Do not divide effort equally across platforms without demand or business evidence.</td><td>Customer research, analytics, CRM source notes, assisted conversions, market and country relevance.</td></tr>
+        <tr><td>Platform diagnosis.</td><td>When competitors repeatedly appear and the brand does not, map the recurring sources, page types, claims, freshness, and authority used for that prompt intent.</td><td>Repeated fresh-session runs with fixed prompts, controlled variables, cited URLs, competitor presence, and source recurrence.</td></tr>
+        <tr><td>Expectation.</td><td>Report coverage and trend by platform and intent, with uncertainty.</td><td>Presence rate, recommendation context, citation share, accuracy, qualified referrals, and business outcome over time.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> optimize for the discovery surfaces that matter to buyers, not universal AI presence. Never guarantee placement across all engines, and do not assert which index or retrieval provider a platform uses without current first-party verification.</p>
+      <h3>AI Crawler Access and Purpose Rule</h3>
+      <p>Use this when someone assumes that allowing or blocking one named AI bot directly controls citations in every AI answer. Different crawlers can support training, search indexing, user-triggered retrieval, product features, or other purposes. Access behavior and controls vary by provider and can change.</p>
+      <table>
+        <tr><th>Check</th><th>Reason</th><th>Required Evidence</th></tr>
+        <tr><td>Identify the exact bot and documented purpose.</td><td>A training crawler is not automatically the same as a live retrieval bot or search crawler.</td><td>Current first-party crawler documentation, user agent, IP verification method, robots token, and product behavior.</td></tr>
+        <tr><td>Check every access layer.</td><td>robots.txt can allow a crawler while CDN, WAF, rate limits, authentication, JavaScript, or origin errors still block retrieval.</td><td>Raw HTTP tests, rendered content, server and CDN logs, firewall events, status codes, and response parity.</td></tr>
+        <tr><td>Confirm policy and business choice.</td><td>Allowing access may affect privacy, content licensing, cost, security, and publisher policy.</td><td>Legal and product requirements, sensitive paths, terms, bot policy, and approved allow or block decision.</td></tr>
+        <tr><td>Separate access from visibility.</td><td>Successful fetches do not guarantee indexing, citation, recommendation, clicks, or conversions.</td><td>Fetch evidence, repeated prompt observations, cited sources, referrals, brand mentions, and business outcomes tracked separately.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> never state that blocking a particular training crawler makes a site invisible to an entire AI product without current first-party proof. Diagnose the exact retrieval path and honor the site's security, privacy, and licensing policy before changing crawler access.</p>
+      <h3>AI Referral Traffic Decline Diagnosis Rule</h3>
+      <p>Use this when referrals from ChatGPT, Perplexity, Gemini, Copilot, or another answer engine fall while Google or total traffic remains stable or grows. Diagnose AI discovery separately. A referral decline does not prove lost citations, crawler blocking, weaker content, or a Google algorithm effect.</p>
+      <table>
+        <tr><th>Check</th><th>Possible Meaning</th><th>Evidence</th></tr>
+        <tr><td>Tracking and classification.</td><td>Referrers, app webviews, redirects, privacy controls, channel rules, or analytics changes may hide or reclassify visits.</td><td>GA4 source and medium, landing pages, referral exclusions, consent changes, server logs, and known referral domains.</td></tr>
+        <tr><td>Citations versus clicks.</td><td>The brand may still be cited or mentioned, but more complete answers can reduce click-through.</td><td>Repeat a fixed historical prompt set with the same model, interface, account state, country, and date. Record mentions, citations, wording, and link availability separately from visits.</td></tr>
+        <tr><td>Source substitution.</td><td>An answer engine may replace the page with a competitor, forum, video, report, directory, or fresher source.</td><td>Compare previous and current cited sources, claim coverage, freshness, third-party corroboration, and prompt intent.</td></tr>
+        <tr><td>Access or retrieval.</td><td>A robots rule, WAF, CDN, status, rendering, authentication, or crawler policy change may affect some retrieval systems.</td><td>Change history, robots.txt, HTTP responses, rendered content, server or CDN logs, verified crawler documentation, and platform-specific controls.</td></tr>
+        <tr><td>Demand and product behavior.</td><td>Prompt demand, answer design, link presentation, seasonality, or user behavior may have changed.</td><td>Comparable-period prompt monitoring, branded search, direct traffic, assisted conversions, customer source notes, and external trend evidence.</td></tr>
+      </table>
+      <ol>
+        <li>Confirm that the decline is real and large enough to analyze. AI referral samples are often small and volatile.</li>
+        <li>Identify the affected source, landing page, period, country, device, and conversions. Do not combine every AI referrer into one explanation.</li>
+        <li>Separate retrieval, citation, recommendation, click, and conversion. These are different stages with different failure modes.</li>
+        <li>Change content or access only after a repeated pattern points to a specific cause. Do not add FAQ blocks, schema, recency labels, or crawler permissions blindly.</li>
+      </ol>
+      <p><strong>Decision rule:</strong> if normal search grows while only AI referrals fall, investigate AI measurement, source selection, answer completeness, and demand before treating it as a sitewide SEO emergency. Human prompt behavior cannot be reconstructed exactly from crawler fetches or referral logs.</p>
       <h3>AI Citation and Brand Presence Rule</h3>
       <p>Use this when someone says AI citations do not matter because users rarely click them. Do not measure AI visibility only by citation clicks. A citation, mention, or recommendation can create brand awareness, consideration, branded search, and later conversion even when the user Googles the brand instead of clicking the cited URL.</p>
       <table>
@@ -5126,6 +5301,17 @@
         <li>After publishing, feed 60 to 90 days of GSC data back into the workflow and decide whether to refine, internally link, consolidate, expand, or leave the page alone.</li>
       </ol>
       <p><strong>Template exception:</strong> direct AI drafting can be acceptable for repeatable ecommerce or directory templates when the style guide, field data, and QA rules are strict.</p>
+      <h3>AI Content Pipeline Maintenance Rule</h3>
+      <p>Use this when an AI-assisted workflow generates social posts, briefs, outlines, articles, metadata, or other recurring content. The draft generator is only one component. Long-term value depends on source quality, topic judgment, voice control, review, publishing safety, monitoring, and maintenance.</p>
+      <table>
+        <tr><th>Failure Mode</th><th>Control</th><th>Evidence</th></tr>
+        <tr><td>Competent but repetitive output.</td><td>Use a maintained voice guide, approved and rejected examples, audience language, format variation, repetition checks, and a human editor with authority to reject.</td><td>Duplicate phrases, structural sameness, editor revision rate, audience response, and brand review.</td></tr>
+        <tr><td>Confident factual or brand error.</td><td>Require source fields, fact checks, claim citations, prohibited-claim rules, and human approval before publication.</td><td>Source log, factual correction rate, compliance review, incident history, and rollback record.</td></tr>
+        <tr><td>Weak topic selection or generic hooks.</td><td>Keep strategy human-owned and grounded in GSC, customer questions, product changes, campaigns, sales objections, research, and current business priorities.</td><td>Topic acceptance rate, qualified traffic, engagement, conversions, and content-gap rationale.</td></tr>
+        <tr><td>Prompt or workflow drift.</td><td>Version prompts, models, tools, examples, schemas, and acceptance tests. Review after business, topic, model, or platform changes.</td><td>Change log, output-quality samples, failure trends, model version, cost, latency, and editor time.</td></tr>
+        <tr><td>Automation saves drafting time but not total effort.</td><td>Measure the whole workflow, including research, editing, approvals, publishing, rework, maintenance, and incident handling.</td><td>Time per approved asset, cost per useful output, revision depth, rejection rate, and business outcome.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> automate blank-page and repetitive work, not accountability. Do not enable unattended publishing merely because first drafts look acceptable. Budget for ongoing tuning and editorial review rather than treating the pipeline as a one-time build.</p>
       <h3>Agentic SEO Reality Check Rule</h3>
       <p>Use this when someone asks whether agentic SEO really works or whether it is only AI-generated noise. The answer depends on what is automated. Automating research, QA, monitoring, and workflow can help. Automating authority, strategy, originality, and publishing judgment is the danger zone.</p>
       <table>
@@ -5476,6 +5662,22 @@
         <tr><td>Click depth from important pages.</td><td>Important for discovery, priority, and internal equity.</td><td>Move important pages closer through navigation, hubs, breadcrumbs, and contextual links.</td></tr>
       </table>
       <p><strong>Decision rule:</strong> strict silos are less important than clear architecture. Cross-link when it helps the user and reinforces meaning; reduce noisy links that exist only because templates made them easy.</p>
+      <h3>AI-Built Small Business Website Outcome Audit Rule</h3>
+      <p>Use this when an AI-built or template-based SMB website looks generic but may still perform adequately. Do not diagnose the site by whether an expert can recognize the tool or template. Evaluate whether it helps users trust the business, complete the intended task, and avoid unnecessary operational work.</p>
+      <table>
+        <tr><th>Area</th><th>Check</th><th>Business Measure</th></tr>
+        <tr><td>Offer clarity.</td><td>What the business does, who it serves, service area, scope, price or quote factors, availability, process, and next step are explicit.</td><td>Qualified contact rate, wrong-fit leads, abandonment, and sales objections.</td></tr>
+        <tr><td>Human and business proof.</td><td>Real people, credentials, licenses, awards, experience, work examples, policies, reviews, photos, and verifiable differentiators are present where relevant.</td><td>Trust-related questions, lead quality, conversion assistance, branded search, and review sentiment.</td></tr>
+        <tr><td>Task completion.</td><td>Phone, form, booking, directions, checkout, accessibility, mobile usability, speed, tracking, and confirmation flows work.</td><td>Form delivery, call completion, bookings, errors, page speed, and support incidents.</td></tr>
+        <tr><td>Information burden.</td><td>The site answers the questions customers repeatedly call, email, or message about in a trustworthy way.</td><td>Repetitive inquiries, support time, staff interruptions, no-shows, and billable capacity recovered.</td></tr>
+        <tr><td>Search differentiation.</td><td>Pages contain specific claims, expertise, services, proof, local context, and original facts rather than interchangeable headings and generic paragraphs.</td><td>Relevant impressions, qualified clicks, citations, branded mentions, and conversion by landing page.</td></tr>
+      </table>
+      <ul>
+        <li>A custom visual design is not automatically better. A familiar template can be effective when content, trust, accessibility, speed, and conversion paths are strong.</li>
+        <li>Bookings or revenue may stay flat when the business is already at capacity. Operational time saved, better lead fit, fewer repetitive calls, and lower support cost can still be valid outcomes.</li>
+        <li>Do not invent an annual value from hours saved. Measure the actual frequency, staff cost, billable utilization, capacity constraints, and whether the saved time is used productively.</li>
+      </ul>
+      <p><strong>Decision rule:</strong> the problem is not that AI built the site. The problem is missing business context, proof, QA, or a measurable user job. Sell and prioritize fixes around observable cost and outcomes, not aesthetic contempt for a tool.</p>
       <h3>AI-Built Website Launch and Ranking Rule</h3>
       <p>Use this when a site is built mostly with Claude, ChatGPT, Codex, Cursor, or another AI coding workflow and the owner wants indexing, rankings, organic traffic, or AI citations. AI can speed up build and content production, but SEO success still depends on page selection, keyword clustering, technical setup, useful data, validation, and patient testing.</p>
       <table>
@@ -6080,6 +6282,31 @@
         <li>Keep ads away from interrupting the answer, headings, comparison tables, forms, and important visuals.</li>
       </ol>
 
+      <h3>Analytics Spam and Country Blocking Rule</h3>
+      <p>Use this when GA4 shows a sudden wave of suspicious visits from one country while organic search also changes. Analytics spam and an SEO decline can occur at the same time, but one does not prove the other.</p>
+      <ol>
+        <li>Use GSC for Google Search impressions and clicks. Use GA4 only after separating source, medium, hostname, landing page, engagement, events, browser, device, and geography.</li>
+        <li>Check server or CDN logs before calling visits bots. Ghost spam may hit analytics without requesting the site, while real bots leave server requests.</li>
+        <li>Create analysis segments or filters that preserve raw data. Do not permanently delete historical data or block an entire country only to make reports look clean.</li>
+        <li>Before any country block, measure legitimate users, customers, revenue, search demand, backlinks, partners, and verified crawler access from that region.</li>
+        <li>If abuse is real, prefer targeted WAF rules, rate limits, bot challenges, endpoint protection, or hostname/referral controls. Verify that Googlebot and real users still receive normal responses.</li>
+      </ol>
+      <p><strong>Decision rule:</strong> diagnose search loss in GSC by page, query, country, device, and search appearance. Diagnose suspicious traffic separately in analytics and logs. A country block is a security control with SEO and business risk, not an analytics cleanup method.</p>
+      <h3>Public Newsletter Archive SEO Rule</h3>
+      <p>Use this when deciding whether past newsletter issues should remain email-only or become public web pages. A public archive can demonstrate value before signup, extend the life of useful issues, earn search visibility, support sharing, and create more sponsor inventory. It can also expose thin, duplicated, dated, private, or sponsor-sensitive content.</p>
+      <table>
+        <tr><th>Condition</th><th>Decision</th><th>Implementation</th></tr>
+        <tr><td>Issue contains durable original information that can satisfy a search or reader need.</td><td>Publish an indexable canonical web version.</td><td>Use a stable URL, unique title and H1, publication and update dates, author, readable HTML, internal links, archive navigation, and a relevant subscription CTA.</td></tr>
+        <tr><td>Email and web versions are substantially the same.</td><td>Choose one canonical public URL.</td><td>Avoid creating multiple indexable copies through campaign previews, tracking URLs, platform mirrors, parameters, or copied blog posts.</td></tr>
+        <tr><td>Issue is short, promotional, duplicate, expired, private, member-only, or contractually restricted.</td><td>Keep it out of search or consolidate it.</td><td>Use access control, noindex where appropriate, or a useful archive summary. Do not expose subscriber data, private links, coupon terms, or licensed material.</td></tr>
+        <tr><td>Archive contains many weak issues.</td><td>Do not index every issue automatically.</td><td>Create a curated archive hub and index only issues with standalone value. Merge related evergreen lessons when that serves users better.</td></tr>
+      </table>
+      <ul>
+        <li>Link the archive from normal navigation or the footer only when users can benefit from it. Add topic, series, or date browsing without creating uncontrolled thin taxonomy pages.</li>
+        <li>Measure organic entrances, newsletter signup rate, assisted conversions, returning readers, sponsor views and clicks where contractually relevant, unsubscribes, and whether archive visitors still value email delivery.</li>
+        <li>Anecdotal signup growth does not prove every newsletter should publish its archive. Test public, partial, delayed, or selected-issue access against the publication's business model.</li>
+      </ul>
+      <p><strong>Decision rule:</strong> publish past issues when each public URL earns its place as a useful page and supports the newsletter's acquisition or trust goal. Do not turn an inbox dump into a low-value indexable archive.</p>
       <h3>New Niche Blog Writing Process</h3>
       <ol>
         <li>Start with market research outside SEO tools: forums, reviews, competitor FAQs, social comments, sales calls, support questions, interviews, and real customer language.</li>
@@ -6225,6 +6452,16 @@
       <h3>Change Cadence Rule</h3>
       <p>After a meaningful content change, wait about 2 to 4 weeks before judging early movement unless there is a technical emergency. Track GSC weekly. Do not rewrite everything at once. Change, measure, learn, repeat.</p>
 
+      <h3>Short-Lived Search Spike Validation Rule</h3>
+      <p>Use this when a new or previously quiet site gains a large number of impressions or clicks over a few days. A short spike is evidence of exposure, not proof of durable rankings, content quality, technical excellence, backlink irrelevance, or a repeatable strategy.</p>
+      <ol>
+        <li>Confirm the data in GSC, then segment by page, query, country, device, search type, and date.</li>
+        <li>Check whether the spike came from one page, one query family, fresh or trending demand, Discover, images, a SERP test, or unusual geography.</li>
+        <li>Compare GA4 and server logs for engaged sessions, real landing-page requests, conversions, and obvious automation. Do not assume competitor-analysis bots explain GSC clicks without evidence.</li>
+        <li>Measure whether visibility survives for several weeks and whether returning query sets, average position, CTR, and conversions stabilize.</li>
+        <li>Do not start bulk link building merely because visibility later falls. Diagnose intent, freshness, quality, internal links, technical state, and authority before choosing the response.</li>
+      </ol>
+      <p><strong>Decision rule:</strong> label a result a durable case study only after the spike persists, the source is understood, business or user value is demonstrated, and important alternative explanations have been checked.</p>
       <h3>Stable Growth Milestone Rule</h3>
       <p>When a site reaches a traffic milestone, such as 1,000 daily clicks, check whether the growth is stable or only a time-sensitive spike.</p>
       <table>
@@ -6825,6 +7062,18 @@
       </ul>
 
 
+      <h3>Google Search Favicon Disappearance Rule</h3>
+      <p>Use this when a favicon works in the browser but disappears from Google results, especially when subdomains still show their own icons. Search display is selected and cached by Google, so a valid site icon does not guarantee that it will appear in every result.</p>
+      <table>
+        <tr><th>Check</th><th>What to Verify</th><th>Action</th></tr>
+        <tr><td>Homepage declaration.</td><td>The root homepage contains a valid <code>&lt;link rel="icon"&gt;</code> reference in rendered HTML and does not point to the wrong host, environment, or removed file.</td><td>Use one stable crawlable icon URL and correct HTML. Compare root and subdomain declarations separately.</td></tr>
+        <tr><td>File response.</td><td>Icon URL returns a clean 200 response without login, blocked redirect, expired signature, hotlink protection, wrong MIME behavior, or intermittent CDN error.</td><td>Test normal browser and Googlebot access, headers, redirects, cache, and logs.</td></tr>
+        <tr><td>Image eligibility.</td><td>Square image, supported format, stable URL, and dimensions compatible with Google's current favicon guidance.</td><td>Follow current official Google documentation rather than relying on a remembered minimum size.</td></tr>
+        <tr><td>Crawl controls.</td><td>Homepage and favicon are not blocked by robots.txt, WAF, CDN bot settings, authentication, or resource rules.</td><td>Remove accidental blocks and verify response parity.</td></tr>
+        <tr><td>Host and canonical signals.</td><td>HTTP and HTTPS, www and non-www, canonical host, redirects, homepage status, and subdomain setup are consistent.</td><td>Fix conflicting host behavior. A working subdomain favicon does not prove the root setup is correct.</td></tr>
+        <tr><td>Google refresh.</td><td>All technical checks pass but the SERP still lacks the icon.</td><td>Request homepage recrawl once, document the date, and wait. Do not repeatedly change files or request indexing.</td></tr>
+      </table>
+      <p><strong>Decision rule:</strong> treat a missing favicon as a presentation issue unless other crawling, indexing, or host symptoms exist. Verify eligibility and access, then allow time for recrawl and cache refresh. Do not promise a display date.</p>
       <h3>Non-Obvious Technical Failure Rule</h3>
       <p>Use this when rankings, crawling, or indexing look broken but normal SEO checks do not explain it. Many SEO emergencies are actually infrastructure, reporting, security, CMS, CDN, DNS, cache, or JavaScript failures.</p>
       <table>

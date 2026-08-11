@@ -418,7 +418,7 @@ def assess_redundant(ongoing, cfg):
     why = []
     if is_buried:
         why.append(f'median position {median_pos:.0f} (buried)')
-    if is_outclicked:
+    if is_outclicked and weak_share is not None:
         why.append(f"only {weak_share * 100:.0f}% of the pair's clicks")
     return {'verdict': True, 'weak_side': dom_weak, 'shared_count': n,
             'median_pos': median_pos, 'weak_click_share': weak_share,

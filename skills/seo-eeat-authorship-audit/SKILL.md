@@ -86,12 +86,10 @@ resolution) comes from `scripts/measure.py`, not eyeballing.
   and optionally HEAD-checks the author link. Self-tested against a synthetic
   fixture before shipping.
 - `scripts/build_report.py findings.json [metrics.json] [out.html]` : renders
-  the A to F report, grouped by pillar, via `report_kit.py` (shared renderer,
-  reused from `seo-accessibility-completeness-audit` rather than
-  re-implemented).
-- `scripts/report_kit.py` : shared HTML/XLSX renderer (jump-nav, `<details>`
+  the A to F report, grouped by pillar, via `shared/report_kit.py`.
+- `shared/report_kit.py` : shared HTML/XLSX renderer (jump-nav, `<details>`
   accordions : no custom JS, matches the workspace lesson that native
-  `<details>` survives theme-JS interference better than scripted accordions : 
+  `<details>` survives theme-JS interference better than scripted accordions :
   inline SVG bar charts).
 
 ## Guardrails

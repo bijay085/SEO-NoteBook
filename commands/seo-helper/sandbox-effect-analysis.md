@@ -4,6 +4,6 @@ Sandbox and trust-ramp analysis: new domain delay, backlink trust signals, brand
 
 Load and follow the full skill instructions:
 
-`C:/Users/bijay/.claude/skills/seo-sandbox-effect-analysis/SKILL.md`
+`${CLAUDE_PLUGIN_ROOT}/skills/seo-sandbox-effect-analysis/SKILL.md`
 
 After reading the SKILL.md, follow its workflow exactly. Use the skill's reference files and scripts as instructed within it.

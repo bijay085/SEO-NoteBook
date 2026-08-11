@@ -17,7 +17,7 @@ GOOGLEBOT_UA = (
 
 
 async def _fetch_rendered_async(url: str) -> dict:
-    from playwright.async_api import async_playwright # lazy : optional dep
+    from playwright.async_api import async_playwright  # pyright: ignore[reportMissingImports]
 
     result = {"html": "", "render_time_ms": 0,
               "console_errors": [], "error": None}
@@ -52,7 +52,7 @@ def fetch_rendered(url: str) -> dict:
     """Sync wrapper. Returns a clean error dict if Playwright isn't installed,
     so the caller falls back to raw-only (the audit still runs, flagged)."""
     try:
-        import playwright # noqa: F401
+        import playwright  # pyright: ignore[reportMissingImports]
     except ImportError:
         return {
             "html": "", "render_time_ms": 0, "console_errors": [],

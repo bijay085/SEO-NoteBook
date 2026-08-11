@@ -26,6 +26,21 @@ import pandas as pd
 
 from cannib_config import load_cfg
 
+
+def _as_int(val, default: int = 0) -> int:
+    """Coerce a pandas cell (scalar, NA, or 1-length Series) to int."""
+    if isinstance(val, pd.Series):
+        val = default if val.empty else val.iloc[0]
+    if val is None:
+        return default
+    try:
+        n = float(val)
+    except (TypeError, ValueError):
+        return default
+    if math.isnan(n):
+        return default
+    return int(n)
+
 # Priority = the cascade order the client works top-down.
 STATUS_ORDER = {
     'duplicate': 1, 'ongoing cannibal': 2, 'affected_handoff (loser)': 3,
@@ -279,7 +294,7 @@ def main():
         if u in handled:
             continue
         handled.add(u)
-        if int(r['clicks_window'] or 0) == 0:
+        if _as_int(r['clicks_window']) == 0:
             status = 'standalone (0 clicks)'
             action = ('Impressions but no clicks : check title, meta description, intent match '
                       'and position. Not cannibalization.')
@@ -297,12 +312,12 @@ def main():
     actionable = plan[plan['priority'] <= 6]
     summary = {
         'site': meta.get('site', ''), 'end_date': meta.get('end_date', ''),
-        'urls_analyzed': int(meta.get('urls_analyzed', len(pages))),
+        'urls_analyzed': _as_int(meta.get('urls_analyzed', len(pages))),
         'pairs_judged': pv.get('pairs_judged', 0),
         'verdict_distribution': pv.get('distribution', {}),
         'clusters_with_cannibals': len(cluster_rows),
         'actionable_pages': int(len(actionable)),
-        'clicks_at_stake': int(actionable['clicks_window'].sum()),
+        'clicks_at_stake': _as_int(actionable['clicks_window'].sum()),
         'weak_ongoing_not_clustered': weak_ongoing,
         'topics': len(set(topic_map.values())),
         'queries_distinct': meta.get('queries_distinct', 0),

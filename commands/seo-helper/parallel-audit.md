@@ -4,6 +4,6 @@ Run multiple SEO audits in parallel across a set of pages. Use when you need to 
 
 Load and follow the full skill instructions:
 
-`C:/Users/bijay/.claude/skills/seo-parallel-audit/SKILL.md`
+`${CLAUDE_PLUGIN_ROOT}/skills/seo-parallel-audit/SKILL.md`
 
 After reading the SKILL.md, follow its workflow exactly. Use the skill's reference files and scripts as instructed within it.

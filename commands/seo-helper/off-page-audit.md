@@ -4,6 +4,6 @@ Off-page and backlink audit: link quality, toxic links, anchor diversity, compet
 
 Load and follow the full skill instructions:
 
-`C:/Users/bijay/.claude/skills/seo-off-page-audit/SKILL.md`
+`${CLAUDE_PLUGIN_ROOT}/skills/seo-off-page-audit/SKILL.md`
 
 After reading the SKILL.md, follow its workflow exactly. Use the skill's reference files and scripts as instructed within it.

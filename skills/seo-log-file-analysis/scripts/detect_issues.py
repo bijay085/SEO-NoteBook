@@ -126,7 +126,8 @@ def detect_issues(agg):
         segs = url_class.get(u) or {}
         if not segs:
             return "All"
-        return SEG_LABELS.get(max(segs, key=segs.get), max(segs, key=segs.get))
+        top_seg, _ = max(segs.items(), key=lambda kv: kv[1])
+        return SEG_LABELS.get(top_seg, top_seg)
 
     # ── A: HTTP ERRORS ──────────────────────────────────────────────────────
     for u, hits in url_hits.items():

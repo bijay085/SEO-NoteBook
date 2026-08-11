@@ -1,6 +1,6 @@
 {
   "name": "seo-helper",
-  "version": "1.0.0+codex.20260808163539",
+  "version": "1.0.0",
   "description": "Practical SEO decision system with 17 audit skills. Routes traffic drops, GSC issues, topical maps, cannibalization, rendering, and more.",
   "author": {
     "name": "bijay085"

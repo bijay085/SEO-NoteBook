@@ -52,6 +52,13 @@ for t in $TARGETS; do
     echo "Installed $name -> $dest_root/$name"
   done
 
+  if [[ -d "$ROOT/shared" ]]; then
+    rm -rf "$(dirname "$dest_root")/shared" "$dest_root/shared"
+    cp -R "$ROOT/shared" "$(dirname "$dest_root")/shared"
+    cp -R "$ROOT/shared" "$dest_root/shared"
+    echo "Installed shared/ for $t"
+  fi
+
   if [[ -d "$cmd_src" ]]; then
     cmd_root="$(cmd_root_for "$t" || true)"
     if [[ -n "$cmd_root" ]]; then
@@ -72,5 +79,5 @@ echo "Done. Also run: pip install -r \"$ROOT/requirements.txt\""
 echo "To activate MCP tools in Claude Desktop, add seo-helper-router to"
 echo "  ~/.config/Claude/claude_desktop_config.json (Linux)"
 echo "  ~/Library/Application Support/Claude/claude_desktop_config.json (macOS)"
-echo "  command: python, args: [\"$ROOT/server/seo_router_server.py\"]"
+echo "  command: python3, args: [\"$ROOT/server/seo_router_server.py\"]"
 echo "  env: { SEO_HELPER_ROOT: \"$ROOT\" }"

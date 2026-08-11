@@ -80,8 +80,6 @@ if (-not $SkipPythonPackages) {
     Write-Host "Installing Python packages..."
     & $pythonCmd -m pip install --upgrade pip --quiet
     & $pythonCmd -m pip install -r (Join-Path $Root "requirements.txt") --quiet
-    $srvReq = Join-Path $Root "server\requirements.txt"
-    if (Test-Path $srvReq) { & $pythonCmd -m pip install -r $srvReq --quiet }
 }
 
 # --- Skills ----------------------------------------------------------------
@@ -132,17 +130,22 @@ foreach ($t in $Targets) {
         }
         Write-Host "  namespace skills -> $nsRoot ($($dirs.Count) skills as /seo-helper:*)"
     }
-}
 
-# --- Sync .claude-plugin/skills/ (for Claude Desktop plugin marketplace) ---
-$claudePluginSkills = Join-Path $Root ".claude-plugin\skills"
-New-Item -ItemType Directory -Force -Path $claudePluginSkills | Out-Null
-foreach ($d in $dirs) {
-    $dest = Join-Path $claudePluginSkills $d.Name
-    if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
-    Copy-Item -Recurse -Force $d.FullName $dest
+    $sharedSrc = Join-Path $Root "shared"
+    if (Test-Path $sharedSrc) {
+        # Flat: ~/.claude/skills/<skill>/scripts is 3 levels below ~/.claude
+        # Namespace: ~/.claude/skills/seo-helper/<leaf>/scripts is 3 levels below ~/.claude/skills
+        $sharedDests = @(
+            (Join-Path (Split-Path $destRoot -Parent) "shared")
+            (Join-Path $destRoot "shared")
+        )
+        foreach ($sharedDest in $sharedDests) {
+            if (Test-Path $sharedDest) { Remove-Item -Recurse -Force $sharedDest }
+            Copy-Item -Recurse -Force $sharedSrc $sharedDest
+        }
+        Write-Host "  shared/ -> $($sharedDests -join ', ')"
+    }
 }
-Write-Host "  .claude-plugin/skills/ synced ($($dirs.Count) skills)"
 
 # --- Commands --------------------------------------------------------------
 $CmdNsSrc = Join-Path $Root "commands\seo-helper"

@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List
 from models import URLAuditResult
 
@@ -9,7 +9,7 @@ def build_json(results: List[URLAuditResult], output_path: str):
         "audit_meta": {
             "tool": "SEO Render Audit",
             "version": "2.0",
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             "reasoning": "claude-native (in-context; no external LLM API)",
         },
         "urls": [],

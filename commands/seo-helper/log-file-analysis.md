@@ -4,6 +4,6 @@ Log file analysis: Googlebot crawl budget, crawl frequency, status codes, bot vs
 
 Load and follow the full skill instructions:
 
-`C:/Users/bijay/.claude/skills/seo-log-file-analysis/SKILL.md`
+`${CLAUDE_PLUGIN_ROOT}/skills/seo-log-file-analysis/SKILL.md`
 
 After reading the SKILL.md, follow its workflow exactly. Use the skill's reference files and scripts as instructed within it.

@@ -1,6 +1,6 @@
 ---
 name: seo-helper
-description: SEO Helper by Bijay. Use when the user types /seo, /seo-helper, /seo:router, /seo:gsc-diagnosis, /seo:topical-map, or asks for SEO decisions, source cleanup, traffic drops, indexed but no impressions, GSC/GA4/crawl file analysis, technical SEO, local SEO, AEO/GEO, topical maps, and choosing the right SEO audit. This is the main friendly Codex entry. It routes to seo-router and uses the canonical SEO_Action_Decision_System.html knowledgebase.
+description: SEO Helper by Bijay. Use when the user types /seo, /seo-helper, /seo:router, /seo:gsc-diagnosis, or /seo:topical-map. Routes to seo-router.
 ---
 
 # SEO Helper

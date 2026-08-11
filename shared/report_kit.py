@@ -1,4 +1,7 @@
-"""seo report kit : shared SEO deliverable renderer (pure stdlib for HTML).
+"""Canonical SEO deliverable renderer (pure stdlib for HTML).
+
+One copy lives at repo-root `shared/report_kit.py`. Skill scripts add that
+folder to sys.path. Do not copy this file into individual skill folders.
 
 render_html(report) -> str standalone branded HTML (jump-nav, <details>
                                   accordions, Issue·Evidence·Solution·Execution
@@ -314,6 +317,8 @@ def render_xlsx(report, path):
 
     wb = Workbook()
     ov = wb.active
+    if ov is None:
+        ov = wb.create_sheet("Overview")
     ov.title = _safe_sheet("Overview", used)
     ov["A1"] = "SEO"
     ov["A1"].font = Font(name="Arial", bold=True, size=14, color=BK)

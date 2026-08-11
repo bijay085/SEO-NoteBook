@@ -74,6 +74,24 @@ VALID_INTENTS = {'transactional', 'commercial', 'informational', 'navigational',
                  'news', 'unknown'}
 
 
+def _cell_str(val) -> str:
+    if isinstance(val, pd.Series):
+        val = '' if val.empty else val.iloc[0]
+    return '' if val is None else str(val)
+
+
+def _cell_int(val, default: int = 0) -> int:
+    if isinstance(val, pd.Series):
+        val = default if val.empty else val.iloc[0]
+    try:
+        n = float(val)
+    except (TypeError, ValueError):
+        return default
+    if n != n:
+        return default
+    return int(n)
+
+
 def rule_intent(url, queries=()):
     path = (urlparse(url).path or '/').lower()
     if path in ('/', ''):
@@ -232,7 +250,7 @@ def cmd_prepare(args):
     batch = int(cfg.get('entity_batch_size', 30))
     page_items = []
     for _, r in pages.iterrows():
-        url = r['page']
+        url = _cell_str(r['page'])
         qs = list(top_click_qs.get(url, []))[:12]
         if not qs:
             qs = sorted(impr_map.get(url, {}), key=lambda q: -impr_map[url][q])[:12]
@@ -240,8 +258,8 @@ def cmd_prepare(args):
             'url': url,
             'slug': urlparse(url).path,
             'top_queries': qs,
-            'clicks': int(r['clicks_window']),
-            'impressions': int(r['impressions_window']),
+            'clicks': _cell_int(r['clicks_window']),
+            'impressions': _cell_int(r['impressions_window']),
             'rule_intent': rule_intent(url, qs),
         })
     batches = [page_items[i:i + batch] for i in range(0, len(page_items), batch)]

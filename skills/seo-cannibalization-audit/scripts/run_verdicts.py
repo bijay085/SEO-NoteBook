@@ -32,7 +32,10 @@ import pandas as pd
 
 import detectors as D
 from cannib_config import load_cfg
-from gsc_normalize import load_rows, normalize_brand_query, unique_click_share, url_twin
+from gsc_normalize import (
+    _as_frame, _as_series, _numeric_filled, load_rows, normalize_brand_query,
+    unique_click_share, url_twin,
+)
 from judgment import intents_compatible
 
 
@@ -55,13 +58,13 @@ def load_weekly(path, brand_tokens, q_to_topic):
     for c in ('clicks', 'impressions', 'position'):
         if c not in df.columns:
             df[c] = 0.0
-        df[c] = pd.to_numeric(df[c], errors='coerce').fillna(0.0)
+        df[c] = _numeric_filled(df[c])
     df['date'] = pd.to_datetime(df['date'], errors='coerce')
-    df = df[df['date'].notna()].copy()
-    df['query'] = df['query'].map(lambda q: normalize_brand_query(q, brand_tokens))
-    df = df[df['query'] != '']
+    df = _as_frame(df.loc[_as_series(df['date']).notna()])
+    df['query'] = _as_series(df['query']).map(lambda q: normalize_brand_query(q, brand_tokens))
+    df = _as_frame(df.loc[_as_series(df['query']) != ''])
     if q_to_topic:
-        df['query'] = df['query'].map(lambda q: q_to_topic.get(q, q))
+        df['query'] = _as_series(df['query']).map(lambda q: q_to_topic.get(q, q))
     return D.to_weekly_per_query(df)
 
 

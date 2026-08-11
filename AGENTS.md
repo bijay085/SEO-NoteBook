@@ -56,10 +56,8 @@ Do not change, remove, rename, or "simplify" the Codex plugin icon files or path
 - Do not change those paths to ../skills/ or ../.mcp.json; ChatGPT Desktop/Codex skill discovery expects plugin-root-relative paths.
 - Keep both root fallback files: `assets/icon.png` and `assets/logo.png`.
 - Keep both manifest-local files: `.codex-plugin/assets/icon.png` and `.codex-plugin/assets/logo.png`.
-- Keep `.agents/plugins/marketplace.json` pointing the marketplace card logo to `./assets/logo.png`.
-- Keep the repo root as the development plugin root. For the repo marketplace package, use the plugin-creator canonical package path `.agents/plugins/plugins/seo-helper/` so ChatGPT Desktop installs the folder that directly contains `.codex-plugin/`, `skills/`, `assets/`, and `.mcp.json`.
-- Do not add stale personal marketplace entries or local installed plugin copies under `C:\Users\bijay\.agents\plugins\plugins\seo-helper`.
-- Keep the marketplace package under `.agents/plugins/plugins/seo-helper/` synced with root plugin metadata and skill names. ChatGPT Desktop/Codex plugin previews read this package.
+- Keep the repo root as the development plugin root. Skills live only in `skills/`.
+- `.agents/` is a local install cache. Do not commit it, do not track it, and do not keep a packaged copy under `.agents/plugins/plugins/seo-helper/`. It is gitignored.
 - Keep every `SKILL.md` YAML frontmatter limited to `name` and `description`; the `name` must match the skill folder exactly.
 
 ## Source Handling
@@ -75,9 +73,10 @@ When the user pastes noisy sources:
 ## Update Workflow
 
 1. Edit `knowledge/SEO_Action_Decision_System.html`.
-2. Run `python scripts/maintain.py rebuild-index`.
-3. Run `python scripts/maintain.py validate`.
+2. Run `python3 scripts/maintain.py rebuild-index`.
+3. Run `python3 scripts/maintain.py validate`.
 4. Commit and push.
+5. Run `python3 -m pytest tests/` before pushing.
 
 ## Writing Rules
 

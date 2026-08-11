@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
     from charts import chart_html
 except Exception:
-    def chart_html(*a, **k):
+    def chart_html(*a, **k) -> str:
         return ""
 
 YELLOW="F5C518"; BLACK="0A0A0A"; DARK="1A1A1A"; WHITE="FFFFFF"; MUT="888888"
@@ -127,7 +127,8 @@ def _sheet(wb, title, headers, rows, tab=YELLOW):
     for i,h in enumerate(headers,1):
         c=ws.cell(1,i,h); c.font=Font(name="Arial",bold=True,size=10,color=YELLOW)
         c.fill=PatternFill("solid",fgColor=BLACK); c.alignment=Alignment(vertical="center",wrap_text=True)
-        c.border=Border(*[Side(style="thin",color="333333")]*4)
+        _side=Side(style="thin",color="333333")
+        c.border=Border(left=_side, right=_side, top=_side, bottom=_side)
         ws.column_dimensions[get_column_letter(i)].width=min(46,max(10,len(h)+4))
     ws.row_dimensions[1].height=28
     for r,row in enumerate(rows,2):
@@ -135,7 +136,8 @@ def _sheet(wb, title, headers, rows, tab=YELLOW):
         for i,v in enumerate(row,1):
             c=ws.cell(r,i,v); c.font=Font(name="Arial",size=10,color=TEXT)
             c.fill=PatternFill("solid",fgColor=sh); c.alignment=Alignment(vertical="top",wrap_text=True)
-            c.border=Border(*[Side(style="thin",color="DDDDDD")]*4)
+            _side=Side(style="thin",color="DDDDDD")
+            c.border=Border(left=_side, right=_side, top=_side, bottom=_side)
     ws.freeze_panes="A2"; return ws
 
 def cmd_export(a):
@@ -146,7 +148,10 @@ def cmd_export(a):
     pages=d.get("pages",[]); review=d.get("review",[])
     os.makedirs(a.out, exist_ok=True)
 
-    wb=Workbook(); wb.remove(wb.active)
+    wb=Workbook()
+    _ws=wb.active
+    if _ws is not None:
+        wb.remove(_ws)
     # Topical Map (overview)
     ov=wb.create_sheet("Topical Map"); ov.sheet_view.showGridLines=False; ov.sheet_properties.tabColor=YELLOW
     ov.column_dimensions['A'].width=26; ov.column_dimensions['B'].width=70

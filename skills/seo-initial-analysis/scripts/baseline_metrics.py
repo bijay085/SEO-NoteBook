@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Process the Baseline Snapshot raw pulls (GSC, backlinks, Lighthouse, rankings, GBP)
 into the initial-analysis baseline summary + detail tables.
 

@@ -35,7 +35,7 @@ fallback).
 
 ## Setup
 ```
-pip install -r "${SKILL_DIR:-.}/requirements.txt"
+pip install -r "${CLAUDE_PLUGIN_ROOT}/requirements.txt"
 ```
 No API keys. No Chromium download unless you opt into the Playwright fallback.
 

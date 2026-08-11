@@ -5,6 +5,7 @@ findings.json: {"client","period","summary","findings":[{rule_id,scope,element,
   verdict,severity,observed,expected,consequence,solution,execution,evidence_basis}]}"""
 import sys, json, os
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "shared"))
 from report_kit import render_html
 from collections import Counter
 

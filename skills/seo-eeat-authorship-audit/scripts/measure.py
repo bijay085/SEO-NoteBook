@@ -13,7 +13,11 @@ Person schema + sameAs count, Review/AggregateRating schema presence (presence
 only : not a fabrication check), published/modified dates, policy-page links,
 HTTPS, and whether a discovered author link resolves.
 """
-import sys, json, re, urllib.request
+import json
+import re
+import sys
+import urllib.error
+import urllib.request
 from html.parser import HTMLParser
 
 SUSPICIOUS_BYLINE = re.compile(r"^(admin|administrator|webmaster|staff|team|user\d+|[a-z]+\d{4,})$", re.I)
@@ -144,7 +148,7 @@ def measure(src, check_links=True):
     policy = {key: any(any(k in (l.get("href", "") + l.get("text", "")).lower() for k in kws) for l in p.links)
               for key, kws in POLICY_KEYWORDS.items()}
 
-    dates = {"published": None, "modified": None}
+    dates: dict[str, str | None] = {"published": None, "modified": None}
     if article:
         dates["published"] = article.get("datePublished")
         dates["modified"] = article.get("dateModified")

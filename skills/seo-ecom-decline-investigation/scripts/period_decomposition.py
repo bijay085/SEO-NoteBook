@@ -38,6 +38,7 @@ import sys
 import os
 import json
 import warnings
+from typing import Any
 warnings.filterwarnings("ignore")
 
 import numpy as np
@@ -71,8 +72,8 @@ def load_export(path):
             key_col = cols[cand]
             break
     if key_col is None:
-        key_col = df.columns[0] # fall back to first column, whatever it's named
-    df = df.rename(columns={key_col: "key"})
+        key_col = str(df.columns[0])  # fall back to first column, whatever it's named
+    df = df.rename(columns={str(key_col): "key"})
     df["key"] = df["key"].astype(str).str.strip()
     for want in ["Clicks", "Impressions", "Position"]:
         match = next((c for c in df.columns if c.lower() == want.lower()), None)
@@ -355,9 +356,9 @@ def load_daily(period):
     df = load_export(period.get("date_csv"))
     if df is None:
         return None
-    df = df.rename(columns={"key": "Date"})
+    df = pd.DataFrame(df).rename(columns={"key": "Date"})
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
-    return df.dropna(subset=["Date"])
+    return pd.DataFrame(df.dropna(subset=["Date"]))
 
 
 def main():
@@ -382,9 +383,11 @@ def main():
         d = load_daily(p)
         if d is not None:
             daily_frames.append(d)
-            clicks_pd = d["Clicks"].sum() / days
-            impr_pd = d["Impressions"].sum() / days
-            ctr = d["Clicks"].sum() / d["Impressions"].sum() if d["Impressions"].sum() else float("nan")
+            clicks_sum = float(np.nansum(np.asarray(d["Clicks"], dtype=float)))
+            impr_sum = float(np.nansum(np.asarray(d["Impressions"], dtype=float)))
+            clicks_pd = clicks_sum / days
+            impr_pd = impr_sum / days
+            ctr = clicks_sum / impr_sum if impr_sum else float("nan")
             print(f" {p['name']:15s} ({p['start']} -> {p['end']}, {days}d): "
                   f"clicks/day={clicks_pd:8.1f} impr/day={impr_pd:9.1f} CTR={ctr:.3%}")
             headline[p["name"]] = {"clicks_per_day": clicks_pd, "impr_per_day": impr_pd, "ctr": ctr, "days": days}
@@ -398,7 +401,7 @@ def main():
     base_dv = load_export(base.get("device_csv"))
     base_daily = load_daily(base)
 
-    results = {"headline": headline, "pairwise": {}}
+    results: dict[str, Any] = {"headline": headline, "pairwise": {}}
     for p in periods[1:]:
         q = load_export(p.get("query_csv"))
         c = load_export(p.get("country_csv"))

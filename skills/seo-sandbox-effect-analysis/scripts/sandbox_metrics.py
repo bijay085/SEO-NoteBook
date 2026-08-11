@@ -247,7 +247,7 @@ def main():
         tp = sorted(({'page':(p.get('page') or ''),'clicks':int(_num(p.get('clicks'))),
                       'impr':int(_num(p.get('impressions'))),'ctr':round(_num(p.get('ctr')),2),
                       'position':round(_num(p.get('position')),1)} for p in pages),
-                    key=lambda x:-x['clicks'])[:30]
+                    key=lambda x: -int(x['clicks']))[:30]
         data['top_pages'] = tp
 
     has_baseline = bool((cfg.get('period',{}) or {}).get('baseline_start'))
